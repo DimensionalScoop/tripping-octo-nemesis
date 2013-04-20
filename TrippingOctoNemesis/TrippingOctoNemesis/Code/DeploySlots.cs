@@ -15,14 +15,12 @@ namespace TrippingOctoNemesis
 {
     public class DeploySlots
     {
-        public int TotalFlyers;
-        public Color[] Color;
+        public int TotalFlyers { get { return Flyers.Count; } }
+        public List<SpaceShip> Flyers = new List<SpaceShip>();
 
-        public DeploySlots()
+        public DeploySlots(params SpaceShip[] flyers)
         {
-            TotalFlyers = 4;
-            Color = new Color[TotalFlyers];
-            for (int i = 0; i < TotalFlyers; i++) Color[i] = Microsoft.Xna.Framework.Color.White;
+            Flyers = flyers.ToList();
         }
     }
 }

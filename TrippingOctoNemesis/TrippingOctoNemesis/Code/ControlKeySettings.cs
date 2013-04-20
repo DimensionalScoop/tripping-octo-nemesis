@@ -19,8 +19,10 @@ namespace TrippingOctoNemesis
         public Keys Down;
         public Keys Left;
         public Keys Right;
-        public Keys Fire;
+        public Keys Control;
         public Keys ActionOk;
+
+        public Keys[] NumberKeys;
 
 
         public static ControlKeySettings DefaultPlayerOne()
@@ -31,8 +33,9 @@ namespace TrippingOctoNemesis
                 Down = Keys.S,
                 Left = Keys.A,
                 Right = Keys.D,
-                Fire = Keys.Space,
-                ActionOk = Keys.LeftShift
+                Control = Keys.LeftShift,
+                ActionOk = Keys.Space,
+                NumberKeys=new Keys[]{Keys.D1,Keys.D2,Keys.D3,Keys.D4}
             };
         }
 
@@ -44,8 +47,9 @@ namespace TrippingOctoNemesis
                 Down = Keys.Down,
                 Left = Keys.Left,
                 Right = Keys.Right,
-                Fire = Keys.NumPad0,
-                ActionOk = Keys.LeftControl
+                Control = Keys.NumPad0,
+                ActionOk = Keys.LeftControl,
+                NumberKeys=new Keys[]{Keys.NumPad1,Keys.NumPad2,Keys.NumPad3,Keys.NumPad4}
             };
         }
     }

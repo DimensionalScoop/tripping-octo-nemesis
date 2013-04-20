@@ -15,6 +15,24 @@ namespace TrippingOctoNemesis
 {
     public class SpaceShip
     {
+        public enum Condition { InHangar, Airborne, Deployed, ReturningPhase1, ReturningPhase2, Repairing }
+        public Condition Status = Condition.InHangar;
+        public Color StatusColor
+        {
+            get
+            {
+                switch (Status)
+                {
+                    case SpaceShip.Condition.InHangar: return Color.AntiqueWhite;
+                    case SpaceShip.Condition.Deployed: return Color.DarkOrange;
+                    case SpaceShip.Condition.Airborne: return Color.Lerp(Color.Red, Color.LightBlue, Hitpoints / (float)MaxHitpoints);
+                    case SpaceShip.Condition.Repairing: return Color.Lerp(Color.MediumVioletRed, Color.GreenYellow, Hitpoints / (float)MaxHitpoints);
+                    case SpaceShip.Condition.ReturningPhase1: return Color.Gray;
+                    case SpaceShip.Condition.ReturningPhase2: return Color.Gray;
+                    default: throw new NotImplementedException();
+                }
+            }
+        }
         public bool IntPosition;
         public Vector2 Position=new Vector2(100,100);
         public Vector2 TargetPosition = new Vector2(500, 500);
@@ -25,38 +43,76 @@ namespace TrippingOctoNemesis
         public Vector2 Direction { get { return new Vector2((float)Math.Cos(Angle), (float)Math.Sin(Angle)); } }
         public float Speed = 120;
         public float AngleSpeed=12;
+        public float ReturnAngleSpeed = 24;
+        public float NormalAngleSpeed = 12;
+        public float DeploySpeed=250;
+        public float NormalSpeed=120;
+        public MotherShip Carrier;
 
         public Weapon Weapon;
-        public int Hitpoints;
-        public int MaxHitpoints;
+        public int Hitpoints = 10;
+        public int MaxHitpoints = 10;
         public TimeSpan ActionTimer;
         public TimeSpan LaunchTime;
+        public readonly TimeSpan LaunchDuration = TimeSpan.FromSeconds(1);
 
         public Sprite Sprite = new Sprite("s\\ship");
         public Color Color = Color.White;
         public float Scale = 1f;
 
+        const float fractionColorBrightness = 0.5f;
+
         List<Vector2> track = new List<Vector2>();
         protected int TrackLenght = 50;
         protected Vector2[] EnginePositions = new Vector2[2];
-        Random random = new Random();
+        protected static Random random = new Random();
+
+        public event Action<SpaceShip> HitpointsChanged;
+        public event Action<SpaceShip> ReachedTarget;
+        public event Action<SpaceShip> StatusChanged;
+
+        static readonly int targetMarginSquared=20^2;
 
 
-        public event Action WasDamaged;
 
-        public SpaceShip()
+        public SpaceShip(Fraction fraction)
         {
-            EnginePositions[0] = Vector2.Zero;//new Vector2(-Sprite.TextureOrigin.X, Sprite.TextureOrigin.Y);
-            EnginePositions[1] = Vector2.Zero;//new Vector2(Sprite.TextureOrigin.X, Sprite.TextureOrigin.Y);
+            EnginePositions[0] = Vector2.Zero;
+            Fraction = fraction;
+            Color = Color.Lerp(Color.White,Fraction.Color,fractionColorBrightness);
         }
 
         public virtual void Update(GameTime gameTime,Hud hud)
         {
-            CalcTrack();
+            if (Status != Condition.InHangar && Status != Condition.Repairing)
+            {
+                CalcTrack();
+                CalcTarget(gameTime, hud);
+                CalcMovement(gameTime);
+            }
 
-            CalcTarget(gameTime, hud);
+            CalcDeploy(gameTime);
 
-            CalcMovement(gameTime);
+            if (Status == Condition.ReturningPhase1)
+                TargetPosition = Carrier.Position + new Vector2(0, 100);
+            else if (Status == Condition.ReturningPhase2)
+                TargetPosition = Carrier.Position + new Vector2(0, Carrier.Sprite.TextureOrigin.Y / 2);
+        }
+
+        private void CalcDeploy(GameTime gameTime)
+        {
+            if (Status == Condition.Deployed)
+            {
+                var t = gameTime.TotalGameTime - LaunchTime;
+                Speed = MathHelper.SmoothStep(DeploySpeed, NormalSpeed, (float)(t.TotalSeconds / LaunchDuration.TotalSeconds));
+
+                if (gameTime.TotalGameTime > LaunchTime + LaunchDuration)
+                {
+                    Status = Condition.Airborne;
+                    StatusChanged(this);
+                    Speed = NormalSpeed;
+                }
+            }
         }
 
         protected void CalcMovement(GameTime gameTime)
@@ -82,16 +138,72 @@ namespace TrippingOctoNemesis
             {
                 float targetAngle = (float)Math.Atan2((TargetPosition - Position).Y, (TargetPosition - Position).X);
                 float difference = MathHelper.WrapAngle(targetAngle - Angle);
+                CalcNewAngle(gameTime, difference);
+
+                if (KeepScreenPosition) TargetPosition -= hud.CameraDelta;
+
+                if(ReachedTarget!=null&&Vector2.DistanceSquared(Position,TargetPosition)<targetMarginSquared)
+                {
+                    var methods = ReachedTarget.GetInvocationList();
+                    ReachedTarget=null;
+                    foreach (var elem in methods) elem.DynamicInvoke(this);
+                }
+            }
+        }
+
+        private void CalcNewAngle(GameTime gameTime, float difference)
+        {
+            if (Status == Condition.ReturningPhase1 || Status == Condition.ReturningPhase2)
+            {
+                Angle = MathHelper.WrapAngle(Angle + difference * (float)gameTime.ElapsedGameTime.TotalSeconds * AngleSpeed/2);
+            }
+            else
+            {
                 Angle = MathHelper.WrapAngle(Angle + difference * (float)gameTime.ElapsedGameTime.TotalSeconds * AngleSpeed
                     * MathHelper.SmoothStep(0, 1, MathHelper.Clamp((TargetPosition - Position).LengthSquared() / 40000, 0, 1))
                     );//TODO: add better steering behavior
-
-                if (KeepScreenPosition) TargetPosition -= hud.CameraDelta;
             }
+        }
+
+        public void Deploy(Vector2 origin, Vector2 target, GameTime gameTime)
+        {
+            Status = Condition.Deployed;
+            StatusChanged(this);
+            Position = origin;
+            TargetPosition = target;
+            Angle=-MathHelper.PiOver2;
+            LaunchTime = gameTime.TotalGameTime;
+            Speed = DeploySpeed;
+            track.Clear();
+        }
+
+        public void Return()
+        {
+            Status = Condition.ReturningPhase1;
+            StatusChanged(this);
+            TargetPosition = Carrier.Position + new Vector2(0, 100);
+            ReachedTarget += ReturningPhase1End;
+        }
+
+        void ReturningPhase1End(SpaceShip none)
+        {
+            Status = Condition.ReturningPhase2;
+            StatusChanged(this);
+            TargetPosition = Carrier.Position + new Vector2(0, Carrier.Sprite.TextureOrigin.Y/2);
+            ReachedTarget += ReturningPhase2End;
+        }
+
+        void ReturningPhase2End(SpaceShip none)
+        {
+            Status = Condition.InHangar;
+            StatusChanged(this);
+            track.Clear();
         }
 
         public virtual void Draw(SpriteBatch spriteBatch, Hud hud, GameTime gameTime)
         {
+            if (Status == Condition.InHangar || Status == Condition.Repairing) return;
+
             spriteBatch.Draw(Sprite, IntPosition ? (Position + hud.Camera).Round() : Position + hud.Camera, null, Color, MathHelper.PiOver2 + Angle, Sprite.TextureOrigin, Scale, SpriteEffects.None, 0);
             for (int i = 0; i < track.Count; i++)
             {

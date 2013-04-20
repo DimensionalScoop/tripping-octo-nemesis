@@ -19,7 +19,7 @@ namespace TrippingOctoNemesis
         EffectProvider _effect;
         StarField stars;
 
-        Player[] Player = new Player[1];
+        Player[] Player = new Player[2];
         Hud hud;
 
 
@@ -44,8 +44,23 @@ namespace TrippingOctoNemesis
             Sprite.Initialize(Content, GraphicsDevice);
             Font.Initialize(Content);
 
-            Player[0] = new Player(new MotherShip(hud){IntPosition=true}) { Keys = ControlKeySettings.DefaultPlayerOne() };
-            Player[0].SpaceShips.Add(new SpaceShip());
+            CreatePlayer(0,ControlKeySettings.DefaultPlayerOne());
+            CreatePlayer(1, ControlKeySettings.DefaultPlayerTwo());
+        }
+
+        private void CreatePlayer(int p,ControlKeySettings keys)
+        {
+            Player[p] = new Player() { Keys = keys };
+
+            var motherShip = new MotherShip(hud, Player[p]) { Position = new Vector2(300 + 300 * p, 500) };
+            Player[p].AssignMotherShip(motherShip);
+
+            for (int i = 0; i < 4; i++)
+            {
+                var ship = new SpaceShip(Player[p]) { Carrier = motherShip };
+                Player[p].AddShip(ship);
+                motherShip.Slots[i] = new DeploySlots(ship);
+            }
         }
 
         protected override void Update(GameTime gameTime)
