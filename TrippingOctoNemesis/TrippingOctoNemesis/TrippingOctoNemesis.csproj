@@ -110,13 +110,16 @@
     <Compile Include="Code\ControlKeySettings.cs" />
     <Compile Include="Code\DeploySlots.cs" />
     <Compile Include="Code\Hud.cs" />
+    <Compile Include="Code\D1Enemy.cs" />
     <Compile Include="Code\Main\Game1.cs" />
     <Compile Include="Code\Map.cs" />
     <Compile Include="Code\Fraction.cs" />
     <Compile Include="Code\MotherShip.cs" />
+    <Compile Include="Code\OctoNemesisEnemy.cs" />
     <Compile Include="Code\Player.cs" />
     <Compile Include="Code\SpaceShip.cs" />
     <Compile Include="Code\Weapon.cs" />
+    <Compile Include="Code\DrawOrder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Code\Main\Program.cs" />
   </ItemGroup>

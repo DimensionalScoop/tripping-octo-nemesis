@@ -15,6 +15,29 @@ namespace TrippingOctoNemesis
 {
     public class Fraction:X45Game.Strategics.Player
     {
-        public virtual void Draw(SpriteBatch spriteBatch, Hud hud, GameTime gameTime) { }
+        protected List<SpaceShip> SpaceShips = new List<SpaceShip>();
+        
+        protected TimeSpan lastUpdate;
+
+
+        public virtual void AddShip(SpaceShip ship)
+        {
+            SpaceShips.Add(ship);
+        }
+
+        public sealed override void Update(GameTime gameTime)
+        {
+            throw new Exception();
+        }
+        public virtual void Update(GameTime gameTime, Hud hud)
+        {
+            base.Update(gameTime);
+
+            lastUpdate = gameTime.TotalGameTime;
+        }
+
+        public virtual void Draw(SpriteBatch spriteBatch, Hud hud, GameTime gameTime) 
+        {
+        }
     }
 }

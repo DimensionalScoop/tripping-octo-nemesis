@@ -19,7 +19,10 @@ namespace TrippingOctoNemesis
         EffectProvider _effect;
         StarField stars;
 
+        List<SpaceShip> Ships = new List<SpaceShip>();
+        List<Fraction> Fractions = new List<Fraction>();
         Player[] Player = new Player[2];
+        Fraction[] Enemys = new Fraction[1];
         Hud hud;
 
 
@@ -46,6 +49,16 @@ namespace TrippingOctoNemesis
 
             CreatePlayer(0,ControlKeySettings.DefaultPlayerOne());
             CreatePlayer(1, ControlKeySettings.DefaultPlayerTwo());
+            CreateEnemy(0);
+
+            Fractions.AddRange(Player);
+            Fractions.AddRange(Enemys);
+        }
+
+        private void CreateEnemy(int p)
+        {
+            Enemys[0] = new Fraction();
+            Ships.Add(new D1Enemy(hud,Enemys[0]) { Position = new Vector2(300, -200),TargetPosition=new Vector2(500, 200)});
         }
 
         private void CreatePlayer(int p,ControlKeySettings keys)
@@ -54,11 +67,13 @@ namespace TrippingOctoNemesis
 
             var motherShip = new MotherShip(hud, Player[p]) { Position = new Vector2(300 + 300 * p, 500) };
             Player[p].AssignMotherShip(motherShip);
+            Ships.Add(motherShip);
 
             for (int i = 0; i < 4; i++)
             {
                 var ship = new SpaceShip(Player[p]) { Carrier = motherShip };
                 Player[p].AddShip(ship);
+                Ships.Add(ship);
                 motherShip.Slots[i] = new DeploySlots(ship);
             }
         }
@@ -70,7 +85,8 @@ namespace TrippingOctoNemesis
 
             stars.MoveCamera(new Vector2(0,1));
 
-            foreach (var elem in Player) elem.Update(gameTime,hud);
+            Ships.ForEach(p=>p.Update(gameTime, hud, Ships));
+            Fractions.ForEach(p=>p.Update(gameTime,hud));
 
             base.Update(gameTime);
         }
@@ -81,9 +97,10 @@ namespace TrippingOctoNemesis
 
             base.Draw(gameTime);
 
-            spriteBatch.Begin(SpriteSortMode.BackToFront,BlendState.NonPremultiplied);
+            spriteBatch.Begin(SpriteSortMode.FrontToBack,BlendState.NonPremultiplied);
 
-            foreach (var elem in Player) elem.Draw(spriteBatch,hud,gameTime);
+            Fractions.ForEach(p=>p.Draw(spriteBatch,hud,gameTime));
+            Ships.ForEach(p => p.Draw(spriteBatch, hud, gameTime));
 
             spriteBatch.End();
         }

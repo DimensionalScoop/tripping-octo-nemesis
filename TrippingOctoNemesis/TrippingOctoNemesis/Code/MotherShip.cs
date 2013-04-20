@@ -35,6 +35,7 @@ namespace TrippingOctoNemesis
             IntPosition = true;
             HasTarget = false;
             Status = Condition.Airborne;
+            additionalLayerDepth = -0.02f;
         }
     }
 }

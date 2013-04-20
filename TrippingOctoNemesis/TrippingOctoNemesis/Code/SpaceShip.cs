@@ -43,11 +43,11 @@ namespace TrippingOctoNemesis
         public Vector2 Direction { get { return new Vector2((float)Math.Cos(Angle), (float)Math.Sin(Angle)); } }
         public float Speed = 120;
         public float AngleSpeed=12;
-        public float ReturnAngleSpeed = 24;
-        public float NormalAngleSpeed = 12;
         public float DeploySpeed=250;
         public float NormalSpeed=120;
         public MotherShip Carrier;
+        public enum KIs { FixedTargetPosition,NearestEnemy }
+        public KIs KI = KIs.FixedTargetPosition;
 
         public Weapon Weapon;
         public int Hitpoints = 10;
@@ -64,7 +64,7 @@ namespace TrippingOctoNemesis
 
         List<Vector2> track = new List<Vector2>();
         protected int TrackLenght = 50;
-        protected Vector2[] EnginePositions = new Vector2[2];
+        protected Vector2[] EnginePositions = new Vector2[1];
         protected static Random random = new Random();
 
         public event Action<SpaceShip> HitpointsChanged;
@@ -82,11 +82,12 @@ namespace TrippingOctoNemesis
             Color = Color.Lerp(Color.White,Fraction.Color,fractionColorBrightness);
         }
 
-        public virtual void Update(GameTime gameTime,Hud hud)
+        public virtual void Update(GameTime gameTime,Hud hud,List<SpaceShip> otherSpaceShips)
         {
             if (Status != Condition.InHangar && Status != Condition.Repairing)
             {
                 CalcTrack();
+                CalcKI(gameTime, hud, otherSpaceShips);
                 CalcTarget(gameTime, hud);
                 CalcMovement(gameTime);
             }
@@ -99,6 +100,34 @@ namespace TrippingOctoNemesis
                 TargetPosition = Carrier.Position + new Vector2(0, Carrier.Sprite.TextureOrigin.Y / 2);
         }
 
+        private void CalcKI(GameTime gameTime, Hud hud, List<SpaceShip> otherSpaceShips)
+        {
+            switch (KI)
+            {
+                case KIs.FixedTargetPosition: return;
+
+                case KIs.NearestEnemy:
+                    int index = -1;
+                    int minRange = int.MaxValue;
+                    int range;
+                    for (int i = 0; i < otherSpaceShips.Count; i++)
+                        if (Fraction.IsEnemy(otherSpaceShips[i].Fraction))
+                        {
+                            range = (int)Vector2.DistanceSquared(otherSpaceShips[i].Position, Position);
+                            if (range < minRange)
+                            {
+                                minRange = range;
+                                index = i;
+                            }
+                        }
+                    if (index == -1) TargetPosition = Position;
+                    else TargetPosition = otherSpaceShips[index].Position;
+                    return;
+
+                default: throw new NotImplementedException();
+            }
+        }
+
         private void CalcDeploy(GameTime gameTime)
         {
             if (Status == Condition.Deployed)
@@ -109,7 +138,7 @@ namespace TrippingOctoNemesis
                 if (gameTime.TotalGameTime > LaunchTime + LaunchDuration)
                 {
                     Status = Condition.Airborne;
-                    StatusChanged(this);
+                    if (StatusChanged != null) StatusChanged(this);
                     Speed = NormalSpeed;
                 }
             }
@@ -142,6 +171,7 @@ namespace TrippingOctoNemesis
 
                 if (KeepScreenPosition) TargetPosition -= hud.CameraDelta;
 
+
                 if(ReachedTarget!=null&&Vector2.DistanceSquared(Position,TargetPosition)<targetMarginSquared)
                 {
                     var methods = ReachedTarget.GetInvocationList();
@@ -155,7 +185,7 @@ namespace TrippingOctoNemesis
         {
             if (Status == Condition.ReturningPhase1 || Status == Condition.ReturningPhase2)
             {
-                Angle = MathHelper.WrapAngle(Angle + difference * (float)gameTime.ElapsedGameTime.TotalSeconds * AngleSpeed/2);
+                Angle = MathHelper.WrapAngle(Angle + difference * (float)gameTime.ElapsedGameTime.TotalSeconds * AngleSpeed / 2);
             }
             else
             {
@@ -168,7 +198,7 @@ namespace TrippingOctoNemesis
         public void Deploy(Vector2 origin, Vector2 target, GameTime gameTime)
         {
             Status = Condition.Deployed;
-            StatusChanged(this);
+            if(StatusChanged!=null) StatusChanged(this);
             Position = origin;
             TargetPosition = target;
             Angle=-MathHelper.PiOver2;
@@ -180,7 +210,7 @@ namespace TrippingOctoNemesis
         public void Return()
         {
             Status = Condition.ReturningPhase1;
-            StatusChanged(this);
+            if (StatusChanged != null) StatusChanged(this);
             TargetPosition = Carrier.Position + new Vector2(0, 100);
             ReachedTarget += ReturningPhase1End;
         }
@@ -188,7 +218,7 @@ namespace TrippingOctoNemesis
         void ReturningPhase1End(SpaceShip none)
         {
             Status = Condition.ReturningPhase2;
-            StatusChanged(this);
+            if (StatusChanged != null) StatusChanged(this);
             TargetPosition = Carrier.Position + new Vector2(0, Carrier.Sprite.TextureOrigin.Y/2);
             ReachedTarget += ReturningPhase2End;
         }
@@ -196,19 +226,20 @@ namespace TrippingOctoNemesis
         void ReturningPhase2End(SpaceShip none)
         {
             Status = Condition.InHangar;
-            StatusChanged(this);
+            if (StatusChanged != null) StatusChanged(this);
             track.Clear();
         }
 
+        protected float additionalLayerDepth;
         public virtual void Draw(SpriteBatch spriteBatch, Hud hud, GameTime gameTime)
         {
             if (Status == Condition.InHangar || Status == Condition.Repairing) return;
 
-            spriteBatch.Draw(Sprite, IntPosition ? (Position + hud.Camera).Round() : Position + hud.Camera, null, Color, MathHelper.PiOver2 + Angle, Sprite.TextureOrigin, Scale, SpriteEffects.None, 0);
+            spriteBatch.Draw(Sprite, IntPosition ? (Position + hud.Camera).Round() : Position + hud.Camera, null, Color, MathHelper.PiOver2 + Angle, Sprite.TextureOrigin, Scale, SpriteEffects.None, DrawOrder.Flyer+additionalLayerDepth);
             for (int i = 0; i < track.Count; i++)
             {
                 float f = i / (float)TrackLenght;
-                Basic.DrawRectangle(spriteBatch, track[i] + hud.Camera, 1, 1, new Color(f, 0.5f * f, 0, f));
+                Basic.DrawRectangle(spriteBatch, track[i] + hud.Camera, 1, 1, new Color(f, 0.5f * f, 0, f), DrawOrder.Flyer-0.01f + additionalLayerDepth);
             }
         }
     }
