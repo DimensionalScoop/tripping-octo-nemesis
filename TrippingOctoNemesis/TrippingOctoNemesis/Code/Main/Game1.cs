@@ -85,12 +85,41 @@ namespace TrippingOctoNemesis
 
             stars.MoveCamera(new Vector2(0,1));
 
+            LongUpdate(gameTime);
             Ships.ForEach(p=>p.Update(gameTime, hud, Ships));
             Fractions.ForEach(p=>p.Update(gameTime,hud));
 
             base.Update(gameTime);
         }
 
+
+
+        const int worldUpdatesPerSecond = 10;
+        TimeSpan lastLongUpdateDuration;
+        TimeSpan lastFirstLongUpdate;
+        int updaterPosition = 0;
+        private void LongUpdate(GameTime gameTime)
+        {
+            int possibleUpdates = (int)(gameTime.ElapsedGameTime.TotalSeconds * worldUpdatesPerSecond * Ships.Count);
+
+            while (possibleUpdates > 0)
+            {
+                possibleUpdates--;
+                updaterPosition++;
+                if (updaterPosition >= Ships.Count)
+                {
+                    updaterPosition = 0;
+                    lastLongUpdateDuration = gameTime.TotalGameTime - lastFirstLongUpdate;
+                    lastFirstLongUpdate = gameTime.TotalGameTime;
+                }
+
+                Ships[updaterPosition].LongUpdate(lastLongUpdateDuration,hud,Ships);
+            }
+        }
+
+
+        Font font = new Font("font");
+        long frames;
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(new Color(30,30,30));
@@ -101,6 +130,10 @@ namespace TrippingOctoNemesis
 
             Fractions.ForEach(p=>p.Draw(spriteBatch,hud,gameTime));
             Ships.ForEach(p => p.Draw(spriteBatch, hud, gameTime));
+
+            frames++;
+            spriteBatch.DrawString(font, "Speed: " + (int)gameTime.ElapsedGameTime.TotalMilliseconds + "/" + (int)TargetElapsedTime.TotalMilliseconds, Vector2.Zero, gameTime.IsRunningSlowly ? Color.Red : Color.Green);
+            spriteBatch.DrawString(font, "\nPerformance: " + (int)(frames / gameTime.TotalGameTime.TotalSeconds * 100), Vector2.Zero, Color.WhiteSmoke);
 
             spriteBatch.End();
         }

@@ -36,6 +36,9 @@ namespace TrippingOctoNemesis
         public bool IntPosition;
         public Vector2 Position=new Vector2(100,100);
         public Vector2 TargetPosition = new Vector2(500, 500);
+        public SpaceShip TargetShip;
+        public int TargetShipDistanceSquared;
+        public bool AutoTargetShip = true;
         public bool HasTarget = true;
         public bool KeepScreenPosition = true;
         public Fraction Fraction;
@@ -47,7 +50,7 @@ namespace TrippingOctoNemesis
         public float NormalSpeed=120;
         public MotherShip Carrier;
         public enum KIs { FixedTargetPosition,NearestEnemy }
-        public KIs KI = KIs.FixedTargetPosition;
+        public KIs KI= KIs.FixedTargetPosition;
 
         public Weapon Weapon;
         public int Hitpoints = 10;
@@ -87,8 +90,8 @@ namespace TrippingOctoNemesis
             if (Status != Condition.InHangar && Status != Condition.Repairing)
             {
                 CalcTrack();
-                CalcKI(gameTime, hud, otherSpaceShips);
-                CalcTarget(gameTime, hud);
+                CalcKI(gameTime);
+                CalcTargetAngle(gameTime, hud);
                 CalcMovement(gameTime);
             }
 
@@ -100,28 +103,37 @@ namespace TrippingOctoNemesis
                 TargetPosition = Carrier.Position + new Vector2(0, Carrier.Sprite.TextureOrigin.Y / 2);
         }
 
-        private void CalcKI(GameTime gameTime, Hud hud, List<SpaceShip> otherSpaceShips)
+        public virtual void LongUpdate(TimeSpan elapsedTime, Hud hud, List<SpaceShip> otherSpaceShips)
+        {
+            if (AutoTargetShip)
+            {
+                TargetShip = null;
+                TargetShipDistanceSquared = -1;
+                int minRange = int.MaxValue;
+                int range;
+                for (int i = 0; i < otherSpaceShips.Count; i++)
+                    if (Fraction.IsEnemy(otherSpaceShips[i].Fraction))
+                    {
+                        range = (int)Vector2.DistanceSquared(otherSpaceShips[i].Position, Position);
+                        if (range < minRange)
+                        {
+                            minRange = range;
+                            TargetShip = otherSpaceShips[i];
+                            TargetShipDistanceSquared = range;
+                        }
+                    }
+            }
+        }
+
+        private void CalcKI(GameTime gameTime)
         {
             switch (KI)
             {
                 case KIs.FixedTargetPosition: return;
 
                 case KIs.NearestEnemy:
-                    int index = -1;
-                    int minRange = int.MaxValue;
-                    int range;
-                    for (int i = 0; i < otherSpaceShips.Count; i++)
-                        if (Fraction.IsEnemy(otherSpaceShips[i].Fraction))
-                        {
-                            range = (int)Vector2.DistanceSquared(otherSpaceShips[i].Position, Position);
-                            if (range < minRange)
-                            {
-                                minRange = range;
-                                index = i;
-                            }
-                        }
-                    if (index == -1) TargetPosition = Position;
-                    else TargetPosition = otherSpaceShips[index].Position;
+                    if (TargetShip==null) TargetPosition = Position;
+                    else TargetPosition = TargetShip.Position;
                     return;
 
                 default: throw new NotImplementedException();
@@ -161,7 +173,7 @@ namespace TrippingOctoNemesis
             if (track.Count > TrackLenght) track.RemoveRange(0, EnginePositions.Length*2);
         }
 
-        protected void CalcTarget(GameTime gameTime, Hud hud)
+        protected void CalcTargetAngle(GameTime gameTime, Hud hud)
         {
             if (HasTarget)
             {
