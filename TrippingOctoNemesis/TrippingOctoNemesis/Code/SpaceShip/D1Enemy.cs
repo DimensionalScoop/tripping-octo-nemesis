@@ -25,7 +25,7 @@ namespace TrippingOctoNemesis
         public D1Enemy(Hud hud,Fraction fraction)
             : base(hud,fraction)
         {
-            Sprite = new Sprite("e\\d1");
+            Sprite = new Sprite("e\\Tripping-Octo-Nemesis-Base");
             Status = Condition.Airborne;
             HasTarget = true;
             Speed = 1000/16+10;
@@ -37,11 +37,11 @@ namespace TrippingOctoNemesis
             deployCooldown = TimeSpan.FromSeconds(10);
             deployDuration = TimeSpan.FromMilliseconds(500);
 
-            EnginePositions = new Vector2[4];
-            EnginePositions[0] = new Vector2(-7, -Sprite.TextureOrigin.Y+5);
-            EnginePositions[1] = new Vector2(7, -Sprite.TextureOrigin.Y+5);
-            EnginePositions[2] = new Vector2(Sprite.TextureOrigin.X - 2, -Sprite.TextureOrigin.Y);
-            EnginePositions[3] = new Vector2(-Sprite.TextureOrigin.X+2, -Sprite.TextureOrigin.Y);
+            EnginePositions = new Vector2[0];
+            //EnginePositions[0] = new Vector2(-7, -Sprite.TextureOrigin.Y+5);
+            //EnginePositions[1] = new Vector2(7, -Sprite.TextureOrigin.Y+5);
+            //EnginePositions[2] = new Vector2(Sprite.TextureOrigin.X - 2, -Sprite.TextureOrigin.Y);
+            //EnginePositions[3] = new Vector2(-Sprite.TextureOrigin.X+2, -Sprite.TextureOrigin.Y);
         }
 
         public override void Update(GameTime gameTime, Hud hud, List<SpaceShip> otherSpaceShips)

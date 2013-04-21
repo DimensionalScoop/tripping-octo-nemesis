@@ -31,12 +31,12 @@ namespace TrippingOctoNemesis
             Speed = 1000/16f;
             Angle = -MathHelper.PiOver2;
 
-            var countTentacles=random.Next(6,9);
+            var countTentacles=Random.Next(6,9);
             for (int i = 0; i < countTentacles; i++)
                 tentacle.Add(new Tentacle() {
-                    Sprite=tentacleSprites[random.Next(tentacleSprites.Length)],
-                    Angle=(0.5f-random.NextFloat())*MathHelper.TwoPi*2,
-                    AngleSpeed=(random.NextFloat()+0.1f)*MathHelper.TwoPi*5
+                    Sprite=tentacleSprites[Random.Next(tentacleSprites.Length)],
+                    Angle=(0.5f-Random.NextFloat())*MathHelper.TwoPi*2,
+                    AngleSpeed=(Random.NextFloat()+0.1f)*MathHelper.TwoPi*5
                 });
         }
 
