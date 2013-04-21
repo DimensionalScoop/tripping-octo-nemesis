@@ -15,14 +15,12 @@ You are the captain of an heavy spacecraft carrier alongside another carrier con
 ![Properties of a carrier](doc/bprint1.png)
 
 ##Controls
-Player One
-
+Player One  
 - `WASD` Move you carrier
 - `1234` Deploy your flyers
 - `Left Shift` + `1234` Recall your flyers
 
-Player Two
-
+Player Two  
 - `Left, Right, Up, Down` Move you carrier
 - `Numpad 1234` Deploy your flyers
 - `Numpad 0` + `Numpad 1234` Recall your flyers
@@ -30,10 +28,10 @@ Player Two
 ##Get It
 
 ###Builds
-If you want to give it a try, you can download the Tripping-Octo-Nemesis binaries here:
+If you want to give it a try, you can download the Tripping-Octo-Nemesis binaries here:  
 https://www.dropbox.com/s/gbjzbp5y53scenp/Tripping-Octo-Nemesis-Binaries.zip
 
-You also need the Microsoft XNA Framework Redistributable 4.0:
+You also need the Microsoft XNA Framework Redistributable 4.0:  
 http://www.microsoft.com/en-us/download/details.aspx?id=20914
 
 
