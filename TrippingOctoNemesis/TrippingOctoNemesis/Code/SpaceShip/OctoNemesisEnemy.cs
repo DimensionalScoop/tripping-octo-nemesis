@@ -22,8 +22,8 @@ namespace TrippingOctoNemesis
 
         List<Tentacle> tentacle = new List<Tentacle>();
 
-        public OctoNemesisEnemy(Fraction fraction)
-            : base(fraction)
+        public OctoNemesisEnemy(Fraction fraction,GameTime gameTime)
+            : base(fraction,gameTime)
         {
             Sprite = new Sprite("e\\ton-eyeball");
             Status = Condition.Airborne;

@@ -17,17 +17,18 @@ namespace TrippingOctoNemesis
     {
         public DeploySlots[] Slots = new DeploySlots[4];
 
-        public MotherShip(Hud hud,Fraction fraction):base(fraction)
+        public MotherShip(Hud hud, Fraction fraction, GameTime gameTime)
+            : base(fraction, gameTime)
         {
             Sprite = new Sprite("s\\mothership");
             Speed = hud.CameraSpeed.Y;
             Angle = -MathHelper.PiOver2;
 
             EnginePositions = new Vector2[4];
-            EnginePositions[0] = new Vector2(-18, -Sprite.TextureOrigin.Y+2);
-            EnginePositions[1] = new Vector2(18, -Sprite.TextureOrigin.Y+2);
-            EnginePositions[2] = new Vector2(-16, -Sprite.TextureOrigin.Y+2);
-            EnginePositions[3] = new Vector2(16, -Sprite.TextureOrigin.Y+2);
+            EnginePositions[0] = new Vector2(-Sprite.TextureOrigin.Y+2,-18 );
+            EnginePositions[1] = new Vector2(-Sprite.TextureOrigin.Y+2,18);
+            EnginePositions[2] = new Vector2( -Sprite.TextureOrigin.Y+2,-16);
+            EnginePositions[3] = new Vector2( -Sprite.TextureOrigin.Y+2,16);
             TrackLenght *= 3;
             
             Hitpoints = 100;
@@ -36,6 +37,7 @@ namespace TrippingOctoNemesis
             HasTarget = false;
             Status = Condition.Airborne;
             additionalLayerDepth = -0.02f;
+            Weapon = null;
         }
     }
 }

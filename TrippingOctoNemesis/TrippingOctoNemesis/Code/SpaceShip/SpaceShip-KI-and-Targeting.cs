@@ -34,7 +34,7 @@ namespace TrippingOctoNemesis
                 case KIs.FixedTargetPosition: return;
 
                 case KIs.NearestEnemy:
-                    if (TargetShip==null) TargetPosition = Position;
+                    if (TargetShip == null) TargetPosition = Position;
                     else TargetPosition = TargetShip.Position;
                     return;
 
@@ -47,16 +47,15 @@ namespace TrippingOctoNemesis
             if (AutoTargetShip)
             {
                 TargetShip = null;
-                TargetShipDistanceSquared = -1;
-                int minRange = int.MaxValue;
+                TargetShipDistanceSquared = int.MaxValue;
                 int range;
                 for (int i = 0; i < otherSpaceShips.Count; i++)
-                    if (Fraction.IsEnemy(otherSpaceShips[i].Fraction))
+                    if (Fraction.IsEnemy(otherSpaceShips[i].Fraction) && !(
+                        otherSpaceShips[i].Status == Condition.Repairing || otherSpaceShips[i].Status == Condition.InHangar))
                     {
                         range = (int)Vector2.DistanceSquared(otherSpaceShips[i].Position, Position);
-                        if (range < minRange)
+                        if (range < TargetShipDistanceSquared)
                         {
-                            minRange = range;
                             TargetShip = otherSpaceShips[i];
                             TargetShipDistanceSquared = range;
                         }

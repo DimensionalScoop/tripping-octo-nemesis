@@ -43,35 +43,38 @@ namespace TrippingOctoNemesis
 
         protected override void LoadContent()
         {
+            GameTime gameTime = new GameTime();
             spriteBatch = new SpriteBatch(GraphicsDevice);
             Sprite.Initialize(Content, GraphicsDevice);
             Font.Initialize(Content);
 
-            CreatePlayer(0,ControlKeySettings.DefaultPlayerOne());
-            CreatePlayer(1, ControlKeySettings.DefaultPlayerTwo());
-            CreateEnemy(0);
+            CreatePlayer(0, ControlKeySettings.DefaultPlayerOne(), gameTime);
+            CreatePlayer(1, ControlKeySettings.DefaultPlayerTwo(), gameTime);
+            Player[0].Allys |= Player[1].Id;
+            Player[1].Allys |= Player[0].Id;
+            CreateEnemy(0, gameTime);
 
             Fractions.AddRange(Player);
             Fractions.AddRange(Enemys);
         }
 
-        private void CreateEnemy(int p)
+        private void CreateEnemy(int p, GameTime gameTime)
         {
             Enemys[0] = new Fraction();
-            Ships.Add(new D1Enemy(hud,Enemys[0]) { Position = new Vector2(300, -200),TargetPosition=new Vector2(500, 200)});
+            Ships.Add(new D1Enemy(hud, Enemys[0], gameTime) { Position = new Vector2(300, -200), TargetPosition = new Vector2(500, 200) });
         }
 
-        private void CreatePlayer(int p,ControlKeySettings keys)
+        private void CreatePlayer(int p,ControlKeySettings keys,GameTime gameTime)
         {
             Player[p] = new Player() { Keys = keys };
 
-            var motherShip = new MotherShip(hud, Player[p]) { Position = new Vector2(300 + 300 * p, 500) };
+            var motherShip = new MotherShip(hud, Player[p],gameTime) { Position = new Vector2(300 + 300 * p, 500) };
             Player[p].AssignMotherShip(motherShip);
             Ships.Add(motherShip);
 
             for (int i = 0; i < 4; i++)
             {
-                var ship = new SpaceShip(Player[p]) { Carrier = motherShip };
+                var ship = new SpaceShip(Player[p], gameTime) { Carrier = motherShip };
                 Player[p].AddShip(ship);
                 Ships.Add(ship);
                 motherShip.Slots[i] = new DeploySlots(ship);

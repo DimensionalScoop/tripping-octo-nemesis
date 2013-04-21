@@ -22,11 +22,12 @@ namespace TrippingOctoNemesis
         public event Action<SpaceShip> StatusChanged;
 
 
-        public SpaceShip(Fraction fraction)
+        public SpaceShip(Fraction fraction, GameTime gameTime)
         {
             EnginePositions[0] = Vector2.Zero;
             Fraction = fraction;
             Color = Color.Lerp(Color.White,Fraction.Color,fractionColorBrightness);
+            Weapon = new Weapon(this,gameTime);
         }
     }
 }

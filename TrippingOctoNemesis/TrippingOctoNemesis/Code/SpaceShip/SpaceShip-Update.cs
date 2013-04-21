@@ -23,6 +23,7 @@ namespace TrippingOctoNemesis
                 CalcKI(gameTime);
                 CalcTargetAngle(gameTime, hud);
                 CalcMovement(gameTime);
+                if (Weapon != null) Weapon.Update(gameTime);
             }
 
             CalcCarrierBehaviour(gameTime);

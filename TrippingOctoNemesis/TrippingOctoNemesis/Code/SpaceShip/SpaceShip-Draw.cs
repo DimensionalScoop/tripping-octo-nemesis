@@ -31,7 +31,7 @@ namespace TrippingOctoNemesis
         {
             foreach (var engine in EnginePositions)
             {
-                var pos = Position + Vector2.Zero.Transform(engine.Angle(Vector2.Zero) - Angle, engine.Length());
+                var pos = Position + engine.Rotate(Angle);//Transform(-engine.Angle(Vector2.Zero) + Angle, engine.Length());
                 track.Add(pos);
                 track.Add(pos - Direction * 2);
             }
@@ -49,6 +49,7 @@ namespace TrippingOctoNemesis
                 float f = i / (float)TrackLenght;
                 Basic.DrawRectangle(spriteBatch, track[i] + hud.Camera, 1, 1, new Color(f, 0.5f * f, 0, f), DrawOrder.Flyer-0.01f + additionalLayerDepth);
             }
+            if (Weapon != null) Weapon.Draw(spriteBatch, hud, gameTime);
         }
     }
 }
