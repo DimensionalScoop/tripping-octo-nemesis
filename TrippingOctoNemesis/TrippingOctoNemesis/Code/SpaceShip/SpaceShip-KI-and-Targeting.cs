@@ -26,6 +26,8 @@ namespace TrippingOctoNemesis
 
         public Weapon Weapon;
 
+        public event Action<SpaceShip> ReachedTarget;
+
 
         private void CalcKI(GameTime gameTime)
         {

@@ -22,17 +22,15 @@ namespace TrippingOctoNemesis
         public SpaceShip Owner;
 
         public int Damage = 2;
-        public int RangeSquared = 1000 ^ 2;
+        public int RangeSquared = (int)Math.Pow(200,2);
         public Vector2 WeaponPosition;
         public TimeSpan WeaponCooldown = TimeSpan.FromMilliseconds(2500);
 
         protected TimeSpan LastShoot;
         protected TimeSpan ShootDuration = TimeSpan.FromMilliseconds(150);
         protected TimeSpan ExplosionDuration = TimeSpan.FromMilliseconds(250);
-        protected Vector2 LaserVector;
+        protected Vector2 TargetVariation;
         protected bool TargetInRange;
-        protected Color LaserColor = Color.PaleVioletRed;
-        protected float FireAngle;
         protected SpaceShip SelectedTarget;
 
         protected const int ExplosionPixels = 10;
@@ -44,16 +42,30 @@ namespace TrippingOctoNemesis
             LastShoot = gameTime.ElapsedGameTime + TimeSpan.FromMilliseconds(WeaponCooldown.TotalMilliseconds * Random.NextFloat());
         }
 
+        bool firstUpdateAfterShootHitTarget;
         public void Update(GameTime gameTime)
         {
-            if (Owner.TargetShip != null  && gameTime.TotalGameTime > LastShoot + WeaponCooldown)
+            if (Owner.TargetShip != null  && RangeSquared>=Owner.TargetShipDistanceSquared&&gameTime.TotalGameTime > LastShoot + WeaponCooldown)
             {
+                firstUpdateAfterShootHitTarget = false;
                 TargetInRange = true;
                 SelectedTarget=Owner.TargetShip;
-                LastShoot = gameTime.TotalGameTime;
-                LaserVector = SelectedTarget.Sprite.TextureOrigin.Rotate(Random.NextFloat() * MathHelper.TwoPi)/2*Random.NextFloat();
-                FireAngle = SelectedTarget.Position.Angle(Owner.Position);// +MathHelper.PiOver2;
+                TargetVariation = SelectedTarget.Sprite.TextureOrigin.Rotate(Random.NextFloat() * MathHelper.TwoPi) / 2 * Random.NextFloat();
             }
+            else if (Owner.TargetShip == null && RangeSquared >= Owner.TargetShipDistanceSquared && gameTime.TotalGameTime > LastShoot + WeaponCooldown)
+            {
+                TargetInRange = false;
+                SelectedTarget = null;
+            }
+
+            if (SelectedTarget!=null && !firstUpdateAfterShootHitTarget && gameTime.TotalGameTime > LastShoot && gameTime.TotalGameTime < LastShoot + ShootDuration)
+            {
+                SelectedTarget.DealDamage(-Damage);
+                firstUpdateAfterShootHitTarget = true;
+            }
+
+            if(gameTime.TotalGameTime > LastShoot + WeaponCooldown)
+                LastShoot = gameTime.TotalGameTime;
         }
 
         public void Draw(SpriteBatch spriteBatch, Hud hud, GameTime gameTime)
@@ -66,12 +78,12 @@ namespace TrippingOctoNemesis
                 Debug.Assert(t >= 0 && t <= 1);
 
                 var source = hud.Camera + Owner.Position + WeaponPosition.Rotate(MathHelper.PiOver2 + Owner.Angle);
-                var target = hud.Camera + SelectedTarget.Position + LaserVector;
+                var target = hud.Camera + SelectedTarget.Position + TargetVariation;
 
                 var spos = Vector2.Lerp(source, target, 1+(float)(((gameTime.TotalGameTime - LastShoot).TotalSeconds / ShootDuration.TotalSeconds)-1)/10);
 
                 for (int i = 0; i < ExplosionPixels; i++)
-                    Basic.DrawRectangle(spriteBatch, spos + LaserVector + new Vector2(10, 10) * new Vector2(Random.NextFloat() - 0.5f, Random.NextFloat() - 0.5f), 1, 1,
+                    Basic.DrawRectangle(spriteBatch, spos + TargetVariation + new Vector2(10, 10) * new Vector2(Random.NextFloat() - 0.5f, Random.NextFloat() - 0.5f), 1, 1,
                         new Color(Random.NextFloat()*0.5f+t/2f, Random.NextFloat()*0.5f+t/2f, t, 0.5f)
                         , DrawOrder.Bullet);
             }
@@ -82,7 +94,7 @@ namespace TrippingOctoNemesis
                 Debug.Assert(t >= 0 && t <= 1);
 
                 var source=hud.Camera + Owner.Position + WeaponPosition.Rotate(MathHelper.PiOver2 + Owner.Angle);
-                var target = hud.Camera + SelectedTarget.Position + LaserVector;
+                var target = hud.Camera + SelectedTarget.Position + TargetVariation;
 
                 var spos=Vector2.Lerp(source,target,t);
                 var tpso = spos.Transform(target.Angle(source), 10);//(target - source)/10+target;//spos.Transform(FireAngle , 15);

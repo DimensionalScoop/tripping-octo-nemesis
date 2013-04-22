@@ -10,6 +10,7 @@ using X45Game.Drawing;
 using X45Game.Effect;
 using X45Game.Input;
 using X45Game.Extensions;
+using System.Diagnostics;
 
 namespace TrippingOctoNemesis
 {
@@ -42,6 +43,7 @@ namespace TrippingOctoNemesis
         
         public virtual void Draw(SpriteBatch spriteBatch, Hud hud, GameTime gameTime)
         {
+            Debug.Assert(!DeleteFlag);
             if (Status == Condition.InHangar || Status == Condition.Repairing) return;
 
             spriteBatch.Draw(Sprite, IntPosition ? (Position + hud.Camera).Round() : Position + hud.Camera, gameTime, Color, Sprite.TextureOrigin, MathHelper.PiOver2 + Angle, Scale, DrawOrder.Flyer + additionalLayerDepth);

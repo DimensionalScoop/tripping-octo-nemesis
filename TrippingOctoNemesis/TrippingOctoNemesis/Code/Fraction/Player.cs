@@ -53,19 +53,25 @@ namespace TrippingOctoNemesis
         public void AssignMotherShip(MotherShip motherShip)
         {
             MotherShip = motherShip;
-            SpaceShips.Add(motherShip);
 
-            MotherShip.HitpointsChanged += MotherShip_WasDamaged;
+            MotherShip.HitpointsChanged += MotherShip_HitpointsChanged;
         }
 
-        public override void AddShip(SpaceShip ship)
+        public void AddShipToCarrier(SpaceShip ship)//TODO: make carrier-spaceship interface more clear
         {
-            base.AddShip(ship);
             ship.Carrier = MotherShip;
             ship.StatusChanged += ship_StatusChanged;
+            ship.HitpointsChanged += ship_HitpointsChanged;
         }
 
-        void MotherShip_WasDamaged(SpaceShip none)
+        void ship_HitpointsChanged(SpaceShip obj)
+        {
+            for (int i = 0; i < MotherShip.Slots.Length; i++)
+                if (MotherShip.Slots[i].Flyers.Contains(obj))
+                    showDeploySlotTimer[i] = lastUpdate;
+        }
+
+        void MotherShip_HitpointsChanged(SpaceShip none)
         {
             showDamageTimer = lastUpdate;
         }
@@ -133,10 +139,10 @@ namespace TrippingOctoNemesis
                 var pos = MotherShip.Position + hud.Camera + hullPosition - MotherShip.Sprite.TextureOrigin;
 
                 spriteBatch.Draw(hull, pos.Round(),null, col,0,Vector2.Zero,1, SpriteEffects.None,DrawOrder.UI);
-                for (int i = 0; i < 8 * (MotherShip.Hitpoints / MotherShip.MaxHitpoints); i++)
+                for (int i = 0; i < (int)(8 * (MotherShip.Hitpoints /(float) MotherShip.MaxHitpoints)); i++)
                     spriteBatch.Draw(hullPoint, (new Vector2(i * (hullPoint.Texture.Width + 1), 0) + pos + hullPointPosition).Round(),null, col,0,Vector2.Zero,1, SpriteEffects.None,DrawOrder.UI);
             }
-
+            //TODO: abstract hull damage display for enemy carrier
 
             for (int i = 0; i < 4; i++)
                 if (gameTime.TotalGameTime < showDeploySlotTimer[i] + showTimeout)

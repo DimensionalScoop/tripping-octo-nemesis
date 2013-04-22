@@ -10,6 +10,7 @@ using X45Game.Drawing;
 using X45Game.Effect;
 using X45Game.Input;
 using X45Game.Extensions;
+using System.Diagnostics;
 
 namespace TrippingOctoNemesis
 {
@@ -17,6 +18,8 @@ namespace TrippingOctoNemesis
     {
         public virtual void Update(GameTime gameTime, Hud hud, List<SpaceShip> otherSpaceShips)
         {
+            if (DeleteFlag) return;
+
             if (Status != Condition.InHangar && Status != Condition.Repairing)
             {
                 CalcTrack();
@@ -31,6 +34,7 @@ namespace TrippingOctoNemesis
 
         public virtual void LongUpdate(TimeSpan elapsedTime, Hud hud, List<SpaceShip> otherSpaceShips)
         {
+            Debug.Assert(!DeleteFlag);
             TargetNearesEnemy(otherSpaceShips);
         }
     }

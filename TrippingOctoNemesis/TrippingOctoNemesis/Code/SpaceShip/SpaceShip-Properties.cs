@@ -10,6 +10,7 @@ using X45Game.Drawing;
 using X45Game.Effect;
 using X45Game.Input;
 using X45Game.Extensions;
+using System.Diagnostics;
 
 namespace TrippingOctoNemesis
 {
@@ -38,5 +39,18 @@ namespace TrippingOctoNemesis
 
         public int Hitpoints = 10;
         public int MaxHitpoints = 10;
+
+        public event Action<SpaceShip> HitpointsChanged;
+        public event Action<SpaceShip> StatusChanged;
+
+        public void DealDamage(int damage)
+        {
+            Debug.Assert(damage<=0);
+
+            Hitpoints = (int)MathHelper.Clamp(Hitpoints + damage, 0, MaxHitpoints);
+            if (HitpointsChanged != null) HitpointsChanged(this);
+
+            if (Hitpoints == 0) Delete();
+        }
     }
 }

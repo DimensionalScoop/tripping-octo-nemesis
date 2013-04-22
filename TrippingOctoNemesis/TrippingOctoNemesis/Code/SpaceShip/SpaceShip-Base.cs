@@ -15,12 +15,12 @@ namespace TrippingOctoNemesis
 {
     public partial class SpaceShip
     {
+        public static bool DeleteableShips { get; private set; }
+
         protected static Random Random = new Random();
 
-        public event Action<SpaceShip> HitpointsChanged;
-        public event Action<SpaceShip> ReachedTarget;
-        public event Action<SpaceShip> StatusChanged;
-
+        public bool DeleteFlag { get; private set; }
+        public event Action<SpaceShip> DeleteFlagSet;
 
         public SpaceShip(Fraction fraction, GameTime gameTime)
         {
@@ -28,6 +28,15 @@ namespace TrippingOctoNemesis
             Fraction = fraction;
             Color = Color.Lerp(Color.White,Fraction.Color,fractionColorBrightness);
             Weapon = new Weapon(this,gameTime);
+        }
+
+
+        public enum DeleteReasons { ZeroHitPoints, Debug }
+        public void Delete(DeleteReasons reason= DeleteReasons.ZeroHitPoints)
+        {
+            DeleteableShips = true;
+            DeleteFlag = true;
+            if (DeleteFlagSet != null) DeleteFlagSet(this);
         }
     }
 }

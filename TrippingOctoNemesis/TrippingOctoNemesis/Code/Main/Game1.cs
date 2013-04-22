@@ -60,7 +60,7 @@ namespace TrippingOctoNemesis
             Fractions.AddRange(Player);
             Fractions.AddRange(Enemys);
 
-            Ships.Add(new OctoJelly(Player[1], gameTime) { Position = new Vector2(200, 200), HasTarget = false,Status= SpaceShip.Condition.Airborne, Angle = -MathHelper.PiOver2 });
+            //Ships.Add(new OctoJelly(Player[1], gameTime) { Position = new Vector2(200, 200), HasTarget = false,Status= SpaceShip.Condition.Airborne, Angle = -MathHelper.PiOver2 });
         }
 
         private void CreateEnemy(int p, GameTime gameTime)
@@ -80,7 +80,7 @@ namespace TrippingOctoNemesis
             for (int i = 0; i < 4; i++)
             {
                 var ship = new SpaceShip(Player[p], gameTime) { Carrier = motherShip };
-                Player[p].AddShip(ship);
+                Player[p].AddShipToCarrier(ship);
                 Ships.Add(ship);
                 motherShip.Slots[i] = new DeploySlots(ship);
             }
@@ -96,6 +96,8 @@ namespace TrippingOctoNemesis
             LongUpdate(gameTime);
             Ships.ForEach(p=>p.Update(gameTime, hud, Ships));
             Fractions.ForEach(p=>p.Update(gameTime,hud));
+
+            if (SpaceShip.DeleteableShips) Ships.RemoveAll(p => p.DeleteFlag);
 
             base.Update(gameTime);
         }
