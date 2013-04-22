@@ -15,8 +15,9 @@ namespace TrippingOctoNemesis
 {
     public partial class SpaceShip
     {
-        public Sprite Sprite = new Sprite("s\\ship");
+        public SpriteSheet Sprite = new SpriteSheet("s\\ship");
         public Color Color = Color.White;
+        public Color DamageParticleBaseColor = Color.White;
         public float Scale = 1f;
 
         const float fractionColorBrightness = 0.5f;
@@ -43,7 +44,8 @@ namespace TrippingOctoNemesis
         {
             if (Status == Condition.InHangar || Status == Condition.Repairing) return;
 
-            spriteBatch.Draw(Sprite, IntPosition ? (Position + hud.Camera).Round() : Position + hud.Camera, null, Color, MathHelper.PiOver2 + Angle, Sprite.TextureOrigin, Scale, SpriteEffects.None, DrawOrder.Flyer+additionalLayerDepth);
+            spriteBatch.Draw(Sprite, IntPosition ? (Position + hud.Camera).Round() : Position + hud.Camera, gameTime, Color, Sprite.TextureOrigin, MathHelper.PiOver2 + Angle, Scale, DrawOrder.Flyer + additionalLayerDepth);
+            //spriteBatch.Draw(Sprite, IntPosition ? (Position + hud.Camera).Round() : Position + hud.Camera, null, Color, MathHelper.PiOver2 + Angle, Sprite.TextureOrigin, Scale, SpriteEffects.None, DrawOrder.Flyer+additionalLayerDepth);
             for (int i = 0; i < track.Count; i++)
             {
                 float f = i / (float)TrackLenght;

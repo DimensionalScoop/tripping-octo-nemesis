@@ -25,7 +25,7 @@ namespace TrippingOctoNemesis
         public D1Enemy(Hud hud,Fraction fraction,GameTime gameTime)
             : base(hud, fraction, gameTime)
         {
-            Sprite = new Sprite("e\\Tripping-Octo-Nemesis-Base");
+            Sprite = new SpriteSheet("e\\Tripping-Octo-Nemesis-Base");
             Status = Condition.Airborne;
             HasTarget = true;
             Speed = 1000/16+10;
@@ -50,7 +50,7 @@ namespace TrippingOctoNemesis
 
             if (availableFlyer > 0 && gameTime.TotalGameTime > lastDeploy + deployCooldown + TimeSpan.FromMilliseconds((packSize - currentPackSize) * deployDuration.TotalMilliseconds))
             {
-                var ship = new SpaceShip(Fraction,gameTime) { KI = KIs.NearestEnemy, Carrier = this };
+                var ship = new OctoJelly(Fraction,gameTime) { KI = KIs.NearestEnemy, Carrier = this };
                 otherSpaceShips.Add(ship);
                 ship.Deploy(Position, Vector2.Zero, gameTime);
                 availableFlyer--;

@@ -60,9 +60,6 @@ namespace TrippingOctoNemesis
         {
             if (SelectedTarget == null) return;
 
-            //if (Owner.TargetShip != null && TargetInRange)
-            //    if (gameTime.TotalGameTime > LastShoot && gameTime.TotalGameTime < LastShoot + ShootDuration)
-
             if (gameTime.TotalGameTime > LastShoot + ShootDuration && gameTime.TotalGameTime < LastShoot + ShootDuration + ExplosionDuration)
             {
                 float t = (float)((gameTime.TotalGameTime - LastShoot - ShootDuration).TotalSeconds / ExplosionDuration.TotalSeconds);
@@ -78,8 +75,6 @@ namespace TrippingOctoNemesis
                         new Color(Random.NextFloat()*0.5f+t/2f, Random.NextFloat()*0.5f+t/2f, t, 0.5f)
                         , DrawOrder.Bullet);
             }
-
-            //HA: Ph: Nr.9 195
 
             if(gameTime.TotalGameTime > LastShoot && gameTime.TotalGameTime < LastShoot + ShootDuration)
             {
@@ -98,16 +93,7 @@ namespace TrippingOctoNemesis
                     new Color(Owner.Fraction.Color.R,Owner.Fraction.Color.G,Owner.Fraction.Color.B,
                         1f//(float)Math.Sin(t*MathHelper.TwoPi*3)
                         ), DrawOrder.Bullet);
-
-                //Basic.DrawLine(spriteBatch,
-                //    source,
-                //    target,
-                //    new Color(Owner.Fraction.Color.R, Owner.Fraction.Color.G, Owner.Fraction.Color.B,
-                //        0.2f//(float)Math.Sin(t*MathHelper.TwoPi*3)
-                //        ), DrawOrder.Bullet);
             }
-
-            //spriteBatch.Draw(Target, hud.Camera+Owner.TargetShip.Position, null, Owner.Fraction.Color, 0, Target.TextureOrigin, 1, SpriteEffects.None, DrawOrder.Bullet);
         }
     }
 }

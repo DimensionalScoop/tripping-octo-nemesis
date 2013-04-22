@@ -25,7 +25,7 @@ namespace TrippingOctoNemesis
         public OctoNemesisEnemy(Fraction fraction,GameTime gameTime)
             : base(fraction,gameTime)
         {
-            Sprite = new Sprite("e\\ton-eyeball");
+            Sprite = new SpriteSheet("e\\ton-eyeball");
             Status = Condition.Airborne;
             //HasTarget = false;
             Speed = 1000/16f;

@@ -133,6 +133,7 @@
     <Compile Include="Code\Map.cs" />
     <Compile Include="Code\Fraction\Fraction.cs" />
     <Compile Include="Code\SpaceShip\MotherShip.cs" />
+    <Compile Include="Code\SpaceShip\OctoJelly.cs" />
     <Compile Include="Code\SpaceShip\OctoNemesisEnemy.cs" />
     <Compile Include="Code\Fraction\Player.cs" />
     <Compile Include="Code\SpaceShip\SpaceShip-CarrierBehavior.cs" />

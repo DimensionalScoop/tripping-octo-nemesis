@@ -20,7 +20,7 @@ namespace TrippingOctoNemesis
         public MotherShip(Hud hud, Fraction fraction, GameTime gameTime)
             : base(fraction, gameTime)
         {
-            Sprite = new Sprite("s\\mothership");
+            Sprite = new SpriteSheet("s\\mothership");
             Speed = hud.CameraSpeed.Y;
             Angle = -MathHelper.PiOver2;
 

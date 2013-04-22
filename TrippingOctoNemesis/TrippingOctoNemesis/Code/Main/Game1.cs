@@ -37,8 +37,11 @@ namespace TrippingOctoNemesis
 
             _graphics.PreferredBackBufferWidth = 1360;
             _graphics.PreferredBackBufferHeight = 730;
+            _graphics.PreferMultiSampling = false;
+            _graphics.SynchronizeWithVerticalRetrace = true;
             IsMouseVisible = true;
             TargetElapsedTime = TimeSpan.FromMilliseconds(30);
+            _graphics.ApplyChanges();
         }
 
         protected override void LoadContent()
@@ -56,6 +59,8 @@ namespace TrippingOctoNemesis
 
             Fractions.AddRange(Player);
             Fractions.AddRange(Enemys);
+
+            Ships.Add(new OctoJelly(Player[1], gameTime) { Position = new Vector2(200, 200), HasTarget = false,Status= SpaceShip.Condition.Airborne, Angle = -MathHelper.PiOver2 });
         }
 
         private void CreateEnemy(int p, GameTime gameTime)
