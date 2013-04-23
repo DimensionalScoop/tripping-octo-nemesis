@@ -31,9 +31,11 @@ namespace TrippingOctoNemesis
         }
 
 
-        public enum DeleteReasons { ZeroHitPoints, Debug }
-        public void Delete(DeleteReasons reason= DeleteReasons.ZeroHitPoints)
+        public enum DeleteReasons { Destroyed, Debug }
+        public void Delete(DeleteReasons reason= DeleteReasons.Destroyed)
         {
+            if (reason == DeleteReasons.Destroyed)
+                ;//add explosions
             DeleteableShips = true;
             DeleteFlag = true;
             if (DeleteFlagSet != null) DeleteFlagSet(this);

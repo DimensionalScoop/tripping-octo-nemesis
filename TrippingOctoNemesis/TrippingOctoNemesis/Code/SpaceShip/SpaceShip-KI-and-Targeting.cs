@@ -10,6 +10,7 @@ using X45Game.Drawing;
 using X45Game.Effect;
 using X45Game.Input;
 using X45Game.Extensions;
+using System.Diagnostics;
 
 namespace TrippingOctoNemesis
 {
@@ -36,7 +37,8 @@ namespace TrippingOctoNemesis
                 case KIs.FixedTargetPosition: return;
 
                 case KIs.NearestEnemy:
-                    if (TargetShip == null) TargetPosition = Position;
+                    if (TargetShip == null) 
+                        TargetPosition = Carrier.Position;
                     else TargetPosition = TargetShip.Position;
                     return;
 
@@ -46,23 +48,24 @@ namespace TrippingOctoNemesis
 
         private void TargetNearesEnemy(List<SpaceShip> otherSpaceShips)
         {
-            if (AutoTargetShip)
-            {
-                TargetShip = null;
-                TargetShipDistanceSquared = int.MaxValue;
-                int range;
-                for (int i = 0; i < otherSpaceShips.Count; i++)
-                    if (Fraction.IsEnemy(otherSpaceShips[i].Fraction) && !(
-                        otherSpaceShips[i].Status == Condition.Repairing || otherSpaceShips[i].Status == Condition.InHangar))
-                    {
-                        range = (int)Vector2.DistanceSquared(otherSpaceShips[i].Position, Position);
-                        if (range < TargetShipDistanceSquared)
+                if (AutoTargetShip && (Status != Condition.InHangar && Status != Condition.Repairing))
+                {
+                    TargetShip = null;
+                    TargetShipDistanceSquared = int.MaxValue;
+                    int range;
+                    for (int i = 0; i < otherSpaceShips.Count; i++)
+                        if (Fraction.IsEnemy(otherSpaceShips[i].Fraction) && !(
+                            otherSpaceShips[i].Status == Condition.Repairing || otherSpaceShips[i].Status == Condition.InHangar))
                         {
-                            TargetShip = otherSpaceShips[i];
-                            TargetShipDistanceSquared = range;
+                            range = (int)Vector2.DistanceSquared(otherSpaceShips[i].Position, Position);
+                            if (range < TargetShipDistanceSquared)
+                            {
+                                Debug.Assert(Status != Condition.InHangar && Status != Condition.Repairing);
+                                TargetShip = otherSpaceShips[i];
+                                TargetShipDistanceSquared = range;
+                            }
                         }
-                    }
-            }
+                }
         }
     }
 }

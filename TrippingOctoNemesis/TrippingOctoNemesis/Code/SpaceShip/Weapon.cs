@@ -14,7 +14,7 @@ using System.Diagnostics;
 
 namespace TrippingOctoNemesis
 {
-    public class Weapon
+    public class Weapon              
     {
         protected static Random Random = new Random();
         protected static Sprite Target = new Sprite("i\\target");
@@ -52,7 +52,7 @@ namespace TrippingOctoNemesis
                 SelectedTarget=Owner.TargetShip;
                 TargetVariation = SelectedTarget.Sprite.TextureOrigin.Rotate(Random.NextFloat() * MathHelper.TwoPi) / 2 * Random.NextFloat();
             }
-            else if (Owner.TargetShip == null && RangeSquared >= Owner.TargetShipDistanceSquared && gameTime.TotalGameTime > LastShoot + WeaponCooldown)
+            else if (Owner.TargetShip == null && gameTime.TotalGameTime > LastShoot + WeaponCooldown)
             {
                 TargetInRange = false;
                 SelectedTarget = null;

@@ -42,7 +42,7 @@ namespace TrippingOctoNemesis
         }
         
         public virtual void Draw(SpriteBatch spriteBatch, Hud hud, GameTime gameTime)
-        {
+        {//XXX: Carrier overlap wrongly
             Debug.Assert(!DeleteFlag);
             if (Status == Condition.InHangar || Status == Condition.Repairing) return;
 
