@@ -215,7 +215,7 @@
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\Microsoft.Xna.GameStudio.targets" />
   <PropertyGroup>
-    <PostBuildEvent>xcopy /e $(ProjectDir)Extensions\*.* $(TargetDir)Extensions\</PostBuildEvent>
+    <PostBuildEvent>xcopy /e /y $(ProjectDir)Extensions\*.* $(TargetDir)Extensions\</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
     <PreBuildEvent>

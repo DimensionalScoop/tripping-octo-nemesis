@@ -26,12 +26,14 @@ namespace TrippingOctoNemesis
             {
                 var t = gameTime.TotalGameTime - LaunchTime;
                 Speed = MathHelper.SmoothStep(DeploySpeed, NormalSpeed, (float)(t.TotalSeconds / LaunchDuration.TotalSeconds));
+                AngleSpeed = MathHelper.SmoothStep(0, NormaleAngleSpeed, (float)(t.TotalSeconds / LaunchDuration.TotalSeconds));
 
                 if (gameTime.TotalGameTime > LaunchTime + LaunchDuration)
                 {
                     Status = Condition.Airborne;
                     if (StatusChanged != null) StatusChanged(this);
                     Speed = NormalSpeed;
+                    AngleSpeed = NormaleAngleSpeed;
                 }
             }
 

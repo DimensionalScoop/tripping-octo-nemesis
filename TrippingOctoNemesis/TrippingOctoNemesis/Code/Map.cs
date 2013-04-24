@@ -5,7 +5,8 @@ using System.Text;
 
 namespace TrippingOctoNemesis
 {
-    class Map
+    public class Map
     {
+
     }
 }

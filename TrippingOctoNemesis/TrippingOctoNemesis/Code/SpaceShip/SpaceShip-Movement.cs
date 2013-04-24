@@ -19,18 +19,25 @@ namespace TrippingOctoNemesis
         public Vector2 Position = new Vector2(100, 100);
         public Vector2 TargetPosition = new Vector2(500, 500);
         public float Speed = 120;
-        public float AngleSpeed = 12;
+        public float AngleSpeed = 0;
+        public float NormaleAngleSpeed = 5;
         public float DeploySpeed = 250;
         public float NormalSpeed = 120;
         public float Angle;
         public Vector2 Direction { get { return new Vector2((float)Math.Cos(Angle), (float)Math.Sin(Angle)); } }
+
+        public bool ActivateEvasion;
 
         static readonly int targetMarginSquared = 20 ^ 2;
 
 
         protected void CalcMovement(GameTime gameTime)
         {
+            if(ActivateEvasion)
+                Angle += 0.05f * (float)gameTime.ElapsedGameTime.TotalSeconds * AngleSpeed;
+
             Position += Direction * Speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            ActivateEvasion = false;
         }
 
         protected void CalcTargetAngle(GameTime gameTime, Hud hud)
@@ -53,6 +60,8 @@ namespace TrippingOctoNemesis
             }
         }
 
+
+        readonly static float minDistanceForAngleSpeedReduction = (float)Math.Pow(200, 2);
         private void CalcNewAngle(GameTime gameTime, float difference)
         {
             if (Status == Condition.ReturningPhase1 || Status == Condition.ReturningPhase2)
@@ -61,9 +70,25 @@ namespace TrippingOctoNemesis
             }
             else
             {
-                Angle = MathHelper.WrapAngle(Angle + difference * (float)gameTime.ElapsedGameTime.TotalSeconds * AngleSpeed
-                    * MathHelper.SmoothStep(0, 1, MathHelper.Clamp((TargetPosition - Position).LengthSquared() / 40000, 0, 1))
-                    );//TODO: add better steering behavior
+                var dist0 = 400;
+                var dist = (TargetPosition - Position).LengthSquared() / dist0;
+                if (dist > dist0) dist = dist0;
+
+                var rangeAngleSpeed = MathHelper.SmoothStep(12, AngleSpeed, dist);
+
+
+                var actualDifference = difference * (float)gameTime.ElapsedGameTime.TotalSeconds * rangeAngleSpeed;
+
+                actualDifference *= MathHelper.SmoothStep(0, 1, MathHelper.Clamp((TargetPosition - Position).LengthSquared() / minDistanceForAngleSpeedReduction, 0, 1));
+
+                //var actualDifference = difference * (float)gameTime.ElapsedGameTime.TotalSeconds * AngleSpeed;
+                //actualDifference *= MathHelper.SmoothStep(0, 1, MathHelper.Clamp((TargetPosition - Position).LengthSquared() / minDistanceForAngleSpeedReduction, 0, 1));
+                if (
+                    (actualDifference < 0 && actualDifference < difference) ||
+                    (actualDifference > 0 && actualDifference > difference))
+                    actualDifference = difference;
+
+                Angle = MathHelper.WrapAngle(Angle + actualDifference);
             }
         }
     }

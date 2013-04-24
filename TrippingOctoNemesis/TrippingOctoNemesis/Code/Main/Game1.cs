@@ -77,7 +77,7 @@ namespace TrippingOctoNemesis
         private void CreateEnemy(int p, GameTime gameTime)
         {
             Enemys[0] = new Fraction();
-            Ships.Add(new D1Enemy(hud, Enemys[0], gameTime) { Position = new Vector2(300, -200), TargetPosition = new Vector2(500, 200) });
+            //Ships.Add(new D1Enemy(hud, Enemys[0], gameTime) { Position = new Vector2(300, -200), TargetPosition = new Vector2(500, 200) });
         }
 
         private void CreatePlayer(int p,ControlKeySettings keys,GameTime gameTime)
@@ -97,12 +97,27 @@ namespace TrippingOctoNemesis
             }
         }
 
+        static readonly float minCollisionRadius=(float)Math.Pow(10,2);
+
         protected override void Update(GameTime gameTime)
         {
             if (input.Key.KeysStroked.Contains(Keys.Escape))
                 Exit();
 
             stars.MoveCamera(new Vector2(0,1));
+
+            //XXX: Possible performance issue
+            List<SpaceShip> exclude = new List<SpaceShip>();
+            for (int i = 0; i < Ships.Count; i++)
+            {
+                if (exclude.Contains(Ships[i])||Ships[i] as MotherShip!=null) continue;
+                for (int j = i+1; j < Ships.Count; j++)
+                    if (Vector2.DistanceSquared(Ships[i].Position, Ships[j].Position) < minCollisionRadius)
+                    {
+                        Ships[i].ActivateEvasion = true;
+                        exclude.Add(Ships[j]);
+                    }
+            }
 
             LongUpdate(gameTime);
             Ships.ForEach(p=>p.Update(gameTime, hud, Ships));

@@ -18,6 +18,22 @@ namespace TrippingOctoNemesis
     {
         public enum Condition { InHangar, Airborne, Deployed, ReturningPhase1, ReturningPhase2, Repairing }
         public Condition Status = Condition.InHangar;
+        public bool IsAirborne
+        {
+            get
+            {
+                switch (Status)
+                {
+                    case Condition.Airborne: return true;
+                    case Condition.Deployed: return true;
+                    case Condition.InHangar: return false;
+                    case Condition.Repairing: return false;
+                    case Condition.ReturningPhase1: return true;
+                    case Condition.ReturningPhase2: return true;
+                    default: throw new NotImplementedException();
+                }
+            }
+        }
         public Color StatusColor
         {
             get

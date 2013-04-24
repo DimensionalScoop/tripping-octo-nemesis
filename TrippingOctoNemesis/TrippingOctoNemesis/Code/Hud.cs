@@ -18,6 +18,7 @@ namespace TrippingOctoNemesis
         public Vector2 Camera;
         public Vector2 CameraDelta;
         public Vector2 CameraSpeed = new Vector2(0, 1000/16);
+        public Vector2 ScreenSize;
 
         public KeyProvider Key;
 
@@ -32,7 +33,8 @@ namespace TrippingOctoNemesis
         protected override void LoadContent()
         {
             Key = Game.Services.GetService(typeof(KeyProvider)) as KeyProvider;
-            
+            ScreenSize = new Vector2(Game.GraphicsDevice.Viewport.Width, Game.GraphicsDevice.Viewport.Height);
+
             base.LoadContent();
         }
 

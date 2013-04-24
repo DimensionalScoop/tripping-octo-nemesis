@@ -16,6 +16,7 @@ namespace TrippingOctoNemesis
     public class MotherShip:SpaceShip
     {
         public DeploySlots[] Slots = new DeploySlots[4];
+        public Vector2 CursorPosition;
 
         public MotherShip(Hud hud, Fraction fraction, GameTime gameTime)
             : base(fraction, gameTime)
@@ -38,6 +39,7 @@ namespace TrippingOctoNemesis
             Status = Condition.Airborne;
             additionalLayerDepth = -0.02f;
             Weapon = null;
+            Carrier = this;
         }
     }
 }
