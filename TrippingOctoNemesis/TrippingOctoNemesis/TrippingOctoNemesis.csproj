@@ -131,6 +131,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Code\Communicator\Character.cs" />
+    <Compile Include="Code\Communicator\Speech.cs" />
+    <Compile Include="Code\Communicator\TextInterface.cs" />
     <Compile Include="Code\Extensions\ExtensionsManager.cs" />
     <Compile Include="Code\Extensions\Extension.cs" />
     <Compile Include="Code\Fraction\ControlKeySettings.cs" />

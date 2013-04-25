@@ -88,22 +88,31 @@ namespace TrippingOctoNemesis
 
         private void HandleInput(GameTime gameTime, Hud hud)
         {
-            if (hud.Key.KeysPressed.Contains(Keys.Control))
+            if (!hud.Key.KeysPressed.Contains(Keys.Control))
             {
-                var newPos = MotherShip.Position + GetDPadPosition(gameTime, hud) * MotherShip.Speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                var newPos = MotherShip.Position + GetDPadPosition(gameTime, hud) * MotherShip.FuelSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
                 if ((newPos + hud.Camera).X > 0 && (newPos + hud.Camera).Y > 0 && (newPos + hud.Camera).X < hud.ScreenSize.X && (newPos + hud.Camera).Y < hud.ScreenSize.Y)
+                {
+                    if (newPos != MotherShip.Position)
+                        MotherShip.Fuel = MathHelper.Clamp(MotherShip.Fuel - MotherShip.FuelConsumptionPerSecond * (float)gameTime.ElapsedGameTime.TotalSeconds
+                            , 0, MotherShip.MaxFuel);
+
                     MotherShip.Position = newPos;
+                    showEngineTimer = gameTime.TotalGameTime;
+                }
             }
             else
             {
-                var newPos = MotherShip.CursorPosition + GetDPadPosition(gameTime, hud) * CursorSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                var newPos = MotherShip.CursorPosition + new Vector2(0, 1) * GetDPadPosition(gameTime, hud) * CursorSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-                if ((newPos + hud.Camera).X > 0 && (newPos + hud.Camera).Y > 0 && (newPos + hud.Camera).X < hud.ScreenSize.X && (newPos + hud.Camera).Y < hud.ScreenSize.Y)
+                if ((newPos + hud.Camera).Y > 0 && (newPos + hud.Camera).Y < hud.ScreenSize.Y)
                     MotherShip.CursorPosition = newPos;
+            }
 
                 MotherShip.CursorPosition -= hud.CameraDelta;
-            }
+                MotherShip.CursorPosition.X = MotherShip.Position.X;
+            
 
 
             if (!hud.Key.KeysPressed.Contains(Keys.Control))
@@ -197,7 +206,9 @@ namespace TrippingOctoNemesis
                 var pos = MotherShip.Position + hud.Camera + enginePosition - MotherShip.Sprite.TextureOrigin;
 
                 spriteBatch.Draw(engine, pos.Round(), null, col, 0, Vector2.Zero, 1, SpriteEffects.None, DrawOrder.UI);
-                spriteBatch.Draw(engineBar, (pos + engineBarPosition).Round(),null, col, 0, Vector2.Zero, 1, SpriteEffects.None, DrawOrder.UI);
+                spriteBatch.Draw(engineBar, (pos + engineBarPosition).Round(),
+                    new Rectangle(0,0,(int)(engineBar.Texture.Width*MotherShip.Fuel/MotherShip.MaxFuel),engineBar.Texture.Height),
+                    col, 0, Vector2.Zero, 1, SpriteEffects.None, DrawOrder.UI);
             }
         }
     }

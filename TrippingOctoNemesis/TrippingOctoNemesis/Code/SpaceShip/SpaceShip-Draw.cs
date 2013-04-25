@@ -38,7 +38,7 @@ namespace TrippingOctoNemesis
                 track.Add(pos - Direction * 2);
             }
 
-            if (track.Count > TrackLenght) track.RemoveRange(0, EnginePositions.Length*2);
+            while (track.Count > TrackLenght) track.RemoveAt(0);
         }
         
         public virtual void Draw(SpriteBatch spriteBatch, Hud hud, GameTime gameTime)

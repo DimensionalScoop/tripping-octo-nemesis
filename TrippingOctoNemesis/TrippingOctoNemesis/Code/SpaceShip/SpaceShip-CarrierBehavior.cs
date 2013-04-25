@@ -35,6 +35,9 @@ namespace TrippingOctoNemesis
                     Speed = NormalSpeed;
                     AngleSpeed = NormaleAngleSpeed;
                 }
+
+                if (Status == Condition.ReturningPhase1 || Status == Condition.ReturningPhase2)
+                    AngleSpeed = 12;
             }
 
             if (Status == Condition.ReturningPhase1)

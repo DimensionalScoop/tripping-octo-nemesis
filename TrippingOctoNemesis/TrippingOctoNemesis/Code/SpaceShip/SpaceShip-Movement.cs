@@ -33,11 +33,13 @@ namespace TrippingOctoNemesis
 
         protected void CalcMovement(GameTime gameTime)
         {
-            if(ActivateEvasion)
+            if (ActivateEvasion&&Status!= Condition.ReturningPhase1&&Status!=Condition.ReturningPhase2)
+            {
                 Angle += 0.05f * (float)gameTime.ElapsedGameTime.TotalSeconds * AngleSpeed;
-
+                ActivateEvasion = false;
+            }
+            
             Position += Direction * Speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
-            ActivateEvasion = false;
         }
 
         protected void CalcTargetAngle(GameTime gameTime, Hud hud)
