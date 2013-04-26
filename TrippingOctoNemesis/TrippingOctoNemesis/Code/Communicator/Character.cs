@@ -42,7 +42,7 @@ namespace TrippingOctoNemesis.Communicator
         {
             PlayerOne=new Character()
             {
-                Sprite=new Sprite("c\\player1"),
+                Sprite=new Sprite("c\\player-1"),
                 Name="Player One",
                 Rank="Captain",
                 ShortDescription="Age 23, likes the sun when it's night"//SCOTT
@@ -51,7 +51,7 @@ namespace TrippingOctoNemesis.Communicator
 
             PlayerTwo=new Character()
             {
-                Sprite=new Sprite("c\\player2"),
+                Sprite=new Sprite("c\\player-2"),
                 Name="Elayn",
                 Rank="Skipper",
                 ShortDescription="Age 21, sometimes pretends to be the necromancer queen of the poorly lit lands"//LADY ESMERELDA THE NECROMANCER QUEEN OF THE POORLY LIT LANDS
@@ -63,7 +63,7 @@ namespace TrippingOctoNemesis.Communicator
                 Sprite=new Sprite("c\\mechanic"),
                 Name="Machinist",
                 Rank="Head Engineer",
-                ShortDescription="Age 30, \" I liked steam before it became popular\"",
+                ShortDescription="Age 30, \"I liked steam before it became popular\"",
             };
             Characters.Add(Mechanic);
 

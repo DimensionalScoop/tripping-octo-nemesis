@@ -7,7 +7,13 @@ namespace TrippingOctoNemesis.Communicator
 {
     public struct Speech
     {
-        public StringBuilder Text;
+        public string Text;
         public Character Speaker;
+
+        public Speech(Character speaker, string text)
+        {
+            Speaker = speaker;
+            Text = text;
+        }
     }
 }

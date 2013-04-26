@@ -4,6 +4,7 @@ using System.IO;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using TrippingOctoNemesis.Communicator;
 using TrippingOctoNemesis.Extensions;
 using X45Game;
 using X45Game.Drawing;
@@ -26,6 +27,7 @@ namespace TrippingOctoNemesis
         Player[] Player = new Player[2];
         Fraction[] Enemys = new Fraction[1];
         Hud hud;
+        TextInterface text;
         ExtensionsManager extensions;
 
         DirectoryInfo path = new DirectoryInfo(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location));
@@ -38,7 +40,9 @@ namespace TrippingOctoNemesis
             input = new InputProvider(this);
             effect = EffectProvider.Initialize(this);
             stars = new StarField(this, 2, 1, 0.5f);
+            
             hud = new Hud(this);
+            text = new TextInterface(this, new Vector2(1360, 730));
 
             graphics.PreferredBackBufferWidth = 1360;
             graphics.PreferredBackBufferHeight = 730;
@@ -71,13 +75,19 @@ namespace TrippingOctoNemesis
             Fractions.AddRange(Player);
             Fractions.AddRange(Enemys);
 
+            text.AddSpeech(new Speech(Character.PlayerOne, "Hi there, I'm Player One!"));
+            text.AddSpeech(new Speech(Character.PlayerTwo, "Hi there too, I'm Player Two!"));
+            text.AddSpeech(new Speech(Character.Mechanic, "I'm the " + Character.Mechanic.Rank+"."));
+            text.AddSpeech(new Speech(Character.CiC, "This is "+Character.CiC.Rank+"; Engage!"));
+            text.AddSpeech(new Speech(Character.Merchant, "I'm a merchant."));
+
             //Ships.Add(new OctoJelly(Player[1], gameTime) { Position = new Vector2(200, 200), HasTarget = false,Status= SpaceShip.Condition.Airborne, Angle = -MathHelper.PiOver2 });
         }
 
         private void CreateEnemy(int p, GameTime gameTime)
         {
             Enemys[0] = new Fraction();
-            //Ships.Add(new D1Enemy(hud, Enemys[0], gameTime) { Position = new Vector2(300, -200), TargetPosition = new Vector2(500, 200) });
+            Ships.Add(new D1Enemy(hud, Enemys[0], gameTime) { Position = new Vector2(300, -200), TargetPosition = new Vector2(500, 200) });
         }
 
         private void CreatePlayer(int p,ControlKeySettings keys,GameTime gameTime)
