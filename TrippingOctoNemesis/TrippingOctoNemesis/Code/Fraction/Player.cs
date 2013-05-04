@@ -13,12 +13,12 @@ using X45Game.Extensions;
 
 namespace TrippingOctoNemesis
 {
-    class Player:Fraction
+    class Player : Fraction
     {
         public MotherShip MotherShip;
 
         public ControlKeySettings Keys;
-
+        
         #region Assets and pixle positions
         static readonly Sprite hull = new Sprite("i\\hull");
         static readonly Sprite incLeft = new Sprite("i\\inc-left");
@@ -35,15 +35,15 @@ namespace TrippingOctoNemesis
             new Vector2(-43, 22),new Vector2(-27, -4),new Vector2(48,-5),
             new Vector2(63,22)
         };
-        static readonly Vector2[] incPointPosition=new Vector2[]{
+        static readonly Vector2[] incPointPosition = new Vector2[]{
         new Vector2(13,0),new Vector2(13,0),new Vector2(26,0),new Vector2(26,0)
         };
-        static readonly Vector2 enginePosition=new Vector2(21,99);
+        static readonly Vector2 enginePosition = new Vector2(21, 99);
         static readonly Vector2 engineBarPosition = new Vector2(63, 5);
 
         static readonly Vector2[] deploySlotPositions = new Vector2[]{
             new Vector2(10,42),new Vector2(23,16), new Vector2(46,16),new Vector2(59,42)};
-#endregion
+        #endregion
 
         TimeSpan showDamageTimer;
         TimeSpan[] showDeploySlotTimer = new TimeSpan[4];
@@ -51,12 +51,11 @@ namespace TrippingOctoNemesis
         static readonly TimeSpan showTimeout = TimeSpan.FromSeconds(3);
         static readonly TimeSpan fadeDuration = TimeSpan.FromSeconds(0.4f);
         static readonly float CursorSpeed = 800;
-
+        
 
         public void AssignMotherShip(MotherShip motherShip)
         {
             MotherShip = motherShip;
-
             MotherShip.HitpointsChanged += MotherShip_HitpointsChanged;
         }
 
@@ -79,9 +78,9 @@ namespace TrippingOctoNemesis
             showDamageTimer = lastUpdate;
         }
 
-        public override void Update(GameTime gameTime,Hud hud)
+        public override void Update(GameTime gameTime, Hud hud)
         {
-            base.Update(gameTime,hud);
+            base.Update(gameTime, hud);
 
             HandleInput(gameTime, hud);
         }
@@ -95,11 +94,13 @@ namespace TrippingOctoNemesis
                 if ((newPos + hud.Camera).X > 0 && (newPos + hud.Camera).Y > 0 && (newPos + hud.Camera).X < hud.ScreenSize.X && (newPos + hud.Camera).Y < hud.ScreenSize.Y)
                 {
                     if (newPos != MotherShip.Position)
+                    {
                         MotherShip.Fuel = MathHelper.Clamp(MotherShip.Fuel - MotherShip.FuelConsumptionPerSecond * (float)gameTime.ElapsedGameTime.TotalSeconds
                             , 0, MotherShip.MaxFuel);
 
-                    MotherShip.Position = newPos;
-                    showEngineTimer = gameTime.TotalGameTime;
+                        showEngineTimer = gameTime.TotalGameTime;
+                        MotherShip.Position = newPos;
+                    }
                 }
             }
             else
@@ -110,9 +111,9 @@ namespace TrippingOctoNemesis
                     MotherShip.CursorPosition = newPos;
             }
 
-                MotherShip.CursorPosition -= hud.CameraDelta;
-                MotherShip.CursorPosition.X = MotherShip.Position.X;
-            
+            MotherShip.CursorPosition -= hud.CameraDelta;
+            MotherShip.CursorPosition.X = MotherShip.Position.X;
+
 
 
             if (!hud.Key.KeysPressed.Contains(Keys.Control))
@@ -160,19 +161,19 @@ namespace TrippingOctoNemesis
                     if (MotherShip.Slots[i].Flyers.Contains(ship)) showDeploySlotTimer[i] = lastUpdate;
         }
 
-        
+
 
         public override void Draw(SpriteBatch spriteBatch, Hud hud, GameTime gameTime)
         {
             base.Draw(spriteBatch, hud, gameTime);
 
             DrawUI(spriteBatch, hud, gameTime);
-            
+
         }
 
         private void DrawUI(SpriteBatch spriteBatch, Hud hud, GameTime gameTime)
         {
-            spriteBatch.Draw(pointer, MotherShip.CursorPosition +hud.Camera, null, new Color(Color.R,Color.G,Color.B,0.3f), (float)gameTime.TotalGameTime.TotalSeconds * MathHelper.TwoPi/10, pointer.TextureOrigin, 1, SpriteEffects.None, DrawOrder.Flyer - 0.04f);
+            spriteBatch.Draw(pointer, MotherShip.CursorPosition + hud.Camera, null, new Color(Color.R, Color.G, Color.B, 0.3f), (float)gameTime.TotalGameTime.TotalSeconds * MathHelper.TwoPi / 10, pointer.TextureOrigin, 1, SpriteEffects.None, DrawOrder.Flyer - 0.04f);
 
             if (gameTime.TotalGameTime < showDamageTimer + showTimeout)
             {
@@ -180,9 +181,9 @@ namespace TrippingOctoNemesis
                 var col = new Color(1, 1, 1, t > showTimeout - fadeDuration ? 1 - (float)(t - showTimeout + fadeDuration).TotalSeconds / (float)fadeDuration.TotalSeconds : 1);
                 var pos = MotherShip.Position + hud.Camera + hullPosition - MotherShip.Sprite.TextureOrigin;
 
-                spriteBatch.Draw(hull, pos.Round(),null, col,0,Vector2.Zero,1, SpriteEffects.None,DrawOrder.UI);
-                for (int i = 0; i < (int)(8 * (MotherShip.Hitpoints /(float) MotherShip.MaxHitpoints)); i++)
-                    spriteBatch.Draw(hullPoint, (new Vector2(i * (hullPoint.Texture.Width + 1), 0) + pos + hullPointPosition).Round(),null, col,0,Vector2.Zero,1, SpriteEffects.None,DrawOrder.UI);
+                spriteBatch.Draw(hull, pos.Round(), null, col, 0, Vector2.Zero, 1, SpriteEffects.None, DrawOrder.UI);
+                for (int i = 0; i < (int)(8 * (MotherShip.Hitpoints / (float)MotherShip.MaxHitpoints)); i++)
+                    spriteBatch.Draw(hullPoint, (new Vector2(i * (hullPoint.Texture.Width + 1), 0) + pos + hullPointPosition).Round(), null, col, 0, Vector2.Zero, 1, SpriteEffects.None, DrawOrder.UI);
             }
             //TODO: abstract hull damage display for enemy carrier
 
@@ -194,9 +195,9 @@ namespace TrippingOctoNemesis
                     var pos = MotherShip.Position + hud.Camera + incPosition[i] - MotherShip.Sprite.TextureOrigin;
                     spriteBatch.Draw(i < 2 ? incLeft : incRight, pos.Round(), null, col, 0, Vector2.Zero, 1, SpriteEffects.None, DrawOrder.UI);
                     for (int f = 0; f < MotherShip.Slots[i].TotalFlyers; f++)
-                        spriteBatch.Draw(incPoint, (pos + incPointPosition[i] + new Vector2(f * (1 + incPoint.Texture.Width), 0)).Round(),null,
+                        spriteBatch.Draw(incPoint, (pos + incPointPosition[i] + new Vector2(f * (1 + incPoint.Texture.Width), 0)).Round(), null,
                             new Color(MotherShip.Slots[i].Flyers[f].StatusColor.R, MotherShip.Slots[i].Flyers[f].StatusColor.G, MotherShip.Slots[i].Flyers[f].StatusColor.B, col.A),
-                            0,Vector2.Zero,1, SpriteEffects.None,DrawOrder.UI);
+                            0, Vector2.Zero, 1, SpriteEffects.None, DrawOrder.UI);
                 }
 
             if (gameTime.TotalGameTime < showEngineTimer + showTimeout)
@@ -207,7 +208,7 @@ namespace TrippingOctoNemesis
 
                 spriteBatch.Draw(engine, pos.Round(), null, col, 0, Vector2.Zero, 1, SpriteEffects.None, DrawOrder.UI);
                 spriteBatch.Draw(engineBar, (pos + engineBarPosition).Round(),
-                    new Rectangle(0,0,(int)(engineBar.Texture.Width*MotherShip.Fuel/MotherShip.MaxFuel),engineBar.Texture.Height),
+                    new Rectangle(0, 0, (int)(engineBar.Texture.Width * MotherShip.Fuel / MotherShip.MaxFuel), engineBar.Texture.Height),
                     col, 0, Vector2.Zero, 1, SpriteEffects.None, DrawOrder.UI);
             }
         }
