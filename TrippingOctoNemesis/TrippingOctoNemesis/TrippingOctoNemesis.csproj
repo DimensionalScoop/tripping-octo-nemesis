@@ -5,7 +5,7 @@
     <ProjectTypeGuids>{6D335F3A-9D43-41b4-9D22-F6F17C4BE596};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
-    <OutputType>Exe</OutputType>
+    <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>TrippingOctoNemesis</RootNamespace>
     <AssemblyName>TrippingOctoNemesis</AssemblyName>
@@ -117,6 +117,8 @@
     <Reference Include="System">
       <Private>False</Private>
     </Reference>
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml">
       <Private>False</Private>
     </Reference>
@@ -137,6 +139,12 @@
     <Compile Include="Code\Extensions\ExtensionsManager.cs" />
     <Compile Include="Code\Extensions\Extension.cs" />
     <Compile Include="Code\Fraction\ControlKeySettings.cs" />
+    <Compile Include="Code\Particles\Blast.cs" />
+    <Compile Include="Code\Particles\DestroiedShip.cs" />
+    <Compile Include="Code\Particles\Explosion.cs" />
+    <Compile Include="Code\Particles\MultiBlast.cs" />
+    <Compile Include="Code\Particles\SmallBlast.cs" />
+    <Compile Include="Code\Particles\PartialExplosion.cs" />
     <Compile Include="Code\SpaceShip\DeploySlots.cs" />
     <Compile Include="Code\Hud.cs" />
     <Compile Include="Code\SpaceShip\D1Enemy.cs" />
@@ -178,7 +186,7 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\x45game\X45Game\X45Game.csproj">
+    <ProjectReference Include="..\..\..\..\x45game\X45Game\X45Game.csproj">
       <Project>{980d56e7-9844-48a8-b789-a1abc25a1c13}</Project>
       <Name>X45Game</Name>
     </ProjectReference>

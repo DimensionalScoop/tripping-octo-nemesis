@@ -4,12 +4,12 @@ using System.IO;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using TrippingOctoNemesis.Communicator;
-using TrippingOctoNemesis.Extensions;
 using X45Game;
 using X45Game.Drawing;
 using X45Game.Effect;
 using X45Game.Input;
+using TrippingOctoNemesis.Communicator;
+using TrippingOctoNemesis.Extensions;
 
 namespace TrippingOctoNemesis
 {
@@ -18,10 +18,6 @@ namespace TrippingOctoNemesis
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
-        InputProvider input;
-        EffectProvider effect;
-        StarField stars;
-
         List<SpaceShip> Ships = new List<SpaceShip>();
         List<Fraction> Fractions = new List<Fraction>();
         Player[] Player = new Player[2];
@@ -29,6 +25,10 @@ namespace TrippingOctoNemesis
         Hud hud;
         TextInterface text;
         ExtensionsManager extensions;
+        InputProvider input;
+        ParticleProvider particles;
+        StarField stars;
+        Random random = new Random();
 
         DirectoryInfo path = new DirectoryInfo(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location));
 
@@ -38,7 +38,7 @@ namespace TrippingOctoNemesis
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             input = new InputProvider(this);
-            effect = EffectProvider.Initialize(this);
+            particles = new ParticleProvider();
             stars = new StarField(this, 2, 1, 0.5f);
             
             hud = new Hud(this);
@@ -65,6 +65,11 @@ namespace TrippingOctoNemesis
             spriteBatch = new SpriteBatch(GraphicsDevice);
             Sprite.Initialize(Content, GraphicsDevice);
             Font.Initialize(Content);
+
+#if DEBUG
+            var window = System.Windows.Forms.Form.FromHandle(Window.Handle);
+            window.Location = new System.Drawing.Point(-1366, 200);
+#endif
 
             CreatePlayer(0, ControlKeySettings.DefaultPlayerOne(), gameTime);
             CreatePlayer(1, ControlKeySettings.DefaultPlayerTwo(), gameTime);
@@ -115,6 +120,7 @@ namespace TrippingOctoNemesis
                 Exit();
 
             stars.MoveCamera(new Vector2(0,1));
+            particles.Update(gameTime);
 
             //XXX: Possible performance issue
             List<SpaceShip> exclude = new List<SpaceShip>();
@@ -171,6 +177,8 @@ namespace TrippingOctoNemesis
 
             Fractions.ForEach(p=>p.Draw(spriteBatch,hud,gameTime));
             Ships.ForEach(p => p.Draw(spriteBatch, hud, gameTime));
+
+            particles.Draw(spriteBatch, hud.Camera, gameTime);
 
             spriteBatch.End();
         }

@@ -87,11 +87,11 @@ namespace TrippingOctoNemesis.Communicator
                 MathHelper.Lerp(-speaker.Sprite.Texture.Width,0,MathHelper.Clamp((float)((gameTime.TotalGameTime-LastTextRefresh).TotalSeconds/CharacterSlideSpeed.TotalSeconds),0,1)),
                 screenSize.Y-speaker.Sprite.Texture.Height
                 );
-            int textLenght = (int)((gameTime.TotalGameTime - LastTextRefresh - CharacterSlideSpeed).TotalSeconds / DelayPerChar.TotalSeconds);
+            int textLength = (int)((gameTime.TotalGameTime - LastTextRefresh - CharacterSlideSpeed).TotalSeconds / DelayPerChar.TotalSeconds);
 
             spriteBatch.Draw(speaker.Sprite, characterPos, Color.White);
             if (gameTime.TotalGameTime - LastTextRefresh > CharacterSlideSpeed)
-                spriteBatch.DrawText(text.Substring(0,Math.Min(textLenght,text.Length)), textPosition, false, font, Color.WhiteSmoke);
+                spriteBatch.DrawText(text.Substring(0,Math.Min(textLength,text.Length)), textPosition, false, font, Color.WhiteSmoke);
 
             spriteBatch.End();
 

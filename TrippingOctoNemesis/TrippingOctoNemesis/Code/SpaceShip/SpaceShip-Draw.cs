@@ -25,7 +25,7 @@ namespace TrippingOctoNemesis
         protected float additionalLayerDepth;
 
         List<Vector2> track = new List<Vector2>();
-        protected int TrackLenght = 50;
+        protected int TrackLength = 50;
         protected Vector2[] EnginePositions = new Vector2[1];
 
 
@@ -38,7 +38,7 @@ namespace TrippingOctoNemesis
                 track.Add(pos - Direction * 2);
             }
 
-            while (track.Count > TrackLenght) track.RemoveAt(0);
+            while (track.Count > TrackLength) track.RemoveAt(0);
         }
         
         public virtual void Draw(SpriteBatch spriteBatch, Hud hud, GameTime gameTime)
@@ -50,7 +50,7 @@ namespace TrippingOctoNemesis
             //spriteBatch.Draw(Sprite, IntPosition ? (Position + hud.Camera).Round() : Position + hud.Camera, null, Color, MathHelper.PiOver2 + Angle, Sprite.TextureOrigin, Scale, SpriteEffects.None, DrawOrder.Flyer+additionalLayerDepth);
             for (int i = 0; i < track.Count; i++)
             {
-                float f = i / (float)TrackLenght;
+                float f = i / (float)TrackLength;
                 Basic.DrawRectangle(spriteBatch, track[i] + hud.Camera, 1, 1, new Color(f, 0.5f * f, 0, f), DrawOrder.Flyer-0.01f + additionalLayerDepth);
             }
             if (Weapon != null) Weapon.Draw(spriteBatch, hud, gameTime);

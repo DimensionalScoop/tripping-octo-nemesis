@@ -35,7 +35,10 @@ namespace TrippingOctoNemesis
         public void Delete(DeleteReasons reason= DeleteReasons.Destroyed)
         {
             if (reason == DeleteReasons.Destroyed)
-                ;//add explosions
+            {
+                Particle.Add(new Particles.Explosion(Position, (int)this.Sprite.TextureOrigin.Length()));
+                Particle.Add(new Particles.DestroiedShip(Position, Sprite) { Color = Color, Rotation = MathHelper.PiOver2 + Angle });
+            }
             DeleteableShips = true;
             DeleteFlag = true;
             if (DeleteFlagSet != null) DeleteFlagSet(this);

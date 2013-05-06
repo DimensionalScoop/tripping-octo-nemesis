@@ -5,7 +5,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrippingOctoNemesis", "Trip
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrippingOctoNemesisContent", "TrippingOctoNemesis\TrippingOctoNemesisContent\TrippingOctoNemesisContent.contentproj", "{5AB65DA9-F219-4C85-9C79-BC62FEB4B79F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "X45Game", "..\x45game\X45Game\X45Game.csproj", "{980D56E7-9844-48A8-B789-A1ABC25A1C13}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "X45Game", "..\..\x45game\X45Game\X45Game.csproj", "{980D56E7-9844-48A8-B789-A1ABC25A1C13}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -46,8 +46,5 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(Performance) = preSolution
-		HasPerformanceSessions = true
 	EndGlobalSection
 EndGlobal

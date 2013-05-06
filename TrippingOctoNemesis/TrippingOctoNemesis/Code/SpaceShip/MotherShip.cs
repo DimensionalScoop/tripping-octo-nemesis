@@ -36,7 +36,7 @@ namespace TrippingOctoNemesis
             EnginePositions[1] = new Vector2(-Sprite.TextureOrigin.Y+2,18);
             EnginePositions[2] = new Vector2( -Sprite.TextureOrigin.Y+2,-16);
             EnginePositions[3] = new Vector2( -Sprite.TextureOrigin.Y+2,16);
-            TrackLenght *= 3;
+            TrackLength *= 3;
             
             Hitpoints = 100;
             MaxHitpoints = 100;
@@ -55,7 +55,7 @@ namespace TrippingOctoNemesis
             if (Fuel == 0)
             {
                 FuelSpeed = 25;
-                TrackLenght = 50;
+                TrackLength = 50;
             }
         }
     }
