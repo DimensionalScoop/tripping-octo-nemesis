@@ -13,17 +13,17 @@ using X45Game.Extensions;
 
 namespace TrippingOctoNemesis.Particles
 {
-    class MultiBlast : Particle
+    class Burst : Particle
     {
         protected int Size;
 
         const float smallBlastVarriation = 5;
         const int blastRange = 30;
-        const float blastDelaymsVarriation = 500;
+        const float blastDelaymsVarriation = 200;
         static readonly Varriation countBlasts = new Varriation(6/100f, 3/100f);
 
 
-        public MultiBlast(Vector2 origin, int size = 100)
+        public Burst(Vector2 origin, int size = 100)
         {
             Size = size;
             Origin = origin;
@@ -31,11 +31,13 @@ namespace TrippingOctoNemesis.Particles
 
         public override void Delete()
         {
-            int blasts = (int)(countBlasts.Random*Size*2);
+            int blasts = (int)(countBlasts.Random*Size*4);
             for (int i = 0; i < blasts; i++)
             {
+                var range = Random.NextFloat() * Size;
+
                 Add(new Particles.Blast(
-                    Origin.Transform(MathHelper.TwoPi * Random.NextFloat(), Random.NextFloat() * Size)) { DelayFlag = TimeSpan.FromMilliseconds(blastDelaymsVarriation * Random.NextFloat()) });
+                    Origin.Transform(MathHelper.TwoPi * Random.NextFloat(), range)) { DelayFlag = TimeSpan.FromMilliseconds(MathHelper.Lerp(0, blastDelaymsVarriation, (float)Math.Pow(range / (float)Size, 2))) });
             }
 
             base.Delete();

@@ -28,12 +28,15 @@ namespace TrippingOctoNemesis.Particles
 
         public override void Delete()
         {
+            var angle=MathHelper.TwoPi * Random.NextFloat();
+
             for (int i = 0; i < blasts.Random; i++)
             {
-                Add(new PartialExplosion(Origin, MathHelper.TwoPi * Random.NextFloat(), lenght.Random) {DelayFlag=TimeSpan.FromSeconds(0.3f*Random.NextFloat()) });
+                Add(new PartialExplosion(Origin,angle , lenght.Random) {DelayFlag=TimeSpan.FromSeconds(0.3f*Random.NextFloat()) });
+                angle += MathHelper.TwoPi * Random.NextFloat() * 0.25f;
             }
 
-            Add(new MultiBlast(Origin, Size));
+            Add(new Burst(Origin, Size*2));
 
             base.Delete();
         }

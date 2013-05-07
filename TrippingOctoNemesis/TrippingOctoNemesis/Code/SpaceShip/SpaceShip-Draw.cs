@@ -40,13 +40,19 @@ namespace TrippingOctoNemesis
 
             while (track.Count > TrackLength) track.RemoveAt(0);
         }
-        
+
+
+        /// <summary>
+        /// Value to prevent flickering on overlapping sprites of same depth
+        /// </summary>
+        float depthVarriation = Random.NextFloat() / 10000;
         public virtual void Draw(SpriteBatch spriteBatch, Hud hud, GameTime gameTime)
-        {//XXX: Carrier overlap wrongly
-            Debug.Assert(!DeleteFlag);
+        {
+
+            if (DeleteFlag) return;
             if (Status == Condition.InHangar || Status == Condition.Repairing) return;
 
-            spriteBatch.Draw(Sprite, IntPosition ? (Position + hud.Camera).Round() : Position + hud.Camera, gameTime, Color, Sprite.TextureOrigin, MathHelper.PiOver2 + Angle, Scale, DrawOrder.Flyer + additionalLayerDepth);
+            spriteBatch.Draw(Sprite, IntPosition ? (Position + hud.Camera).Round() : Position + hud.Camera, gameTime, Color, Sprite.TextureOrigin, MathHelper.PiOver2 + Angle, Scale, DrawOrder.Flyer + additionalLayerDepth + depthVarriation);
             //spriteBatch.Draw(Sprite, IntPosition ? (Position + hud.Camera).Round() : Position + hud.Camera, null, Color, MathHelper.PiOver2 + Angle, Sprite.TextureOrigin, Scale, SpriteEffects.None, DrawOrder.Flyer+additionalLayerDepth);
             for (int i = 0; i < track.Count; i++)
             {

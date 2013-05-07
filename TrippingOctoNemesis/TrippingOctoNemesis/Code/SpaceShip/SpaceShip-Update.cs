@@ -34,7 +34,7 @@ namespace TrippingOctoNemesis
 
         public virtual void LongUpdate(TimeSpan elapsedTime, Hud hud, List<SpaceShip> otherSpaceShips)
         {
-            Debug.Assert(!DeleteFlag);
+            //Debug.Assert(!DeleteFlag);
             TargetNearesEnemy(otherSpaceShips);
         }
     }

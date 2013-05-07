@@ -142,6 +142,7 @@
     <Compile Include="Code\Particles\Blast.cs" />
     <Compile Include="Code\Particles\DestroiedShip.cs" />
     <Compile Include="Code\Particles\Explosion.cs" />
+    <Compile Include="Code\Particles\Burst.cs" />
     <Compile Include="Code\Particles\MultiBlast.cs" />
     <Compile Include="Code\Particles\SmallBlast.cs" />
     <Compile Include="Code\Particles\PartialExplosion.cs" />

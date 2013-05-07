@@ -141,7 +141,18 @@ namespace TrippingOctoNemesis
 
             if (SpaceShip.DeleteableShips) Ships.RemoveAll(p => p.DeleteFlag);
 
+            DebugHelpers();
+
             base.Update(gameTime);
+        }
+
+        private void DebugHelpers()
+        {
+
+#if DEBUG
+            if (input.Mouse.Clicks.Contains(MouseButtons.Right))
+                Ships.FindAll(p => (p.Position + hud.Camera - input.Mouse.Position).Length() < 30).ForEach(p => p.Delete(SpaceShip.DeleteReasons.Destroyed));
+#endif
         }
 
         const int worldUpdatesPerSecond = 10;
