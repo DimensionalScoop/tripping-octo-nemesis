@@ -16,14 +16,16 @@ You are the captain of an heavy spacecraft carrier alongside another carrier con
 
 ##Controls
 Player One  
--  `WASD` Move your cursor
--  `Left Shift` + `WASD` Move your carrier
+
+- `WASD` Move your carrier
+- `Left Shift` + `WS` Move your cursor
 - `1234` Deploy your flyers
 - `Left Shift` + `1234` Recall your flyers
 
 Player Two  
-- `Left, Right, Up, Down` Move your cursor
-- `Numpad 0` + `Left, Right, Up, Down` Move your carrier
+
+- `Left, Right, Up, Down` Move your carrier
+- `Numpad 0` + `Up, Down` Move your cursor
 - `Numpad 1234` Deploy your flyers
 - `Numpad 0` + `Numpad 1234` Recall your flyers
 
