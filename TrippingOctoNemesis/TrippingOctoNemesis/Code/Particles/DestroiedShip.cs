@@ -57,7 +57,6 @@ namespace TrippingOctoNemesis.Particles
         //FIX: Correct sliced/dead rotation
         //FIX: Multiple sprites showing after destruction
 
-
         public override void Draw(SpriteBatch spriteBatch, Vector2 camera, GameTime gameTime)
         {
             if (RelativeAge(gameTime) > 1) { Delete(); return; }

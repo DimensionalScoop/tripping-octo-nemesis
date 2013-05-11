@@ -54,9 +54,7 @@ namespace TrippingOctoNemesis
 
             extensions = new ExtensionsManager();
             foreach (var dir in new DirectoryInfo(path.FullName + "\\Extensions").GetDirectories())
-                extensions.AddExtension(dir);
-
-            extensions.BindInterfaceExtensions(this);
+                extensions.AddDirectory(dir.FullName);
         }
 
         protected override void LoadContent()
@@ -65,6 +63,7 @@ namespace TrippingOctoNemesis
             spriteBatch = new SpriteBatch(GraphicsDevice);
             Sprite.Initialize(Content, GraphicsDevice);
             Font.Initialize(Content);
+            extensions.Load(this);
 
 #if DEBUG
             var window = System.Windows.Forms.Form.FromHandle(Window.Handle);
