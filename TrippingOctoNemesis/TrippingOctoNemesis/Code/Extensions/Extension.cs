@@ -27,7 +27,7 @@ namespace TrippingOctoNemesis.Extensions
         public string[] Dependencies;
     }
 
-    class Extension
+    public class Extension
     {
         public ExtensionDescription Info;
 

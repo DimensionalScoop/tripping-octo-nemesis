@@ -18,7 +18,7 @@ using System.Diagnostics;
 
 namespace TrippingOctoNemesis.Extensions.Test1
 {
-    public class DebugInterfaceOverlay:DrawableGameComponent
+    public class DebugInterfaceOverlay:Plugin
     {
         SpriteBatch spriteBatch;
         long frames;

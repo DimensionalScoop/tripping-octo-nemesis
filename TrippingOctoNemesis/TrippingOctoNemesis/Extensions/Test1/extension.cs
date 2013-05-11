@@ -18,16 +18,15 @@ using System.Diagnostics;
 
 namespace TrippingOctoNemesis.Extensions.Test1
 {
-    public class Test1:Extension
+    public class Test1Desc : ExtensionDescription
     {
-        public Test1()
+        public Test1Desc()
         {
             Name = "Test 1";
-            Type = ExtensionTypes.Interface;
+            Type = ExtensionTypes.Plugin;
             Author = "Elayn";
             Description = "Debug test for the extension manager.";
-            Dependencies = new string[0];
-            Scripts = new string[] { "DebugInterfaceOverlay.cs" };
+            Dependencies = null;
         }
     }
 }

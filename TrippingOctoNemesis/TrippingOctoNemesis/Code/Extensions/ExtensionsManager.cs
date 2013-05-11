@@ -47,7 +47,7 @@ namespace TrippingOctoNemesis.Extensions
             for(int i=0;i<Extensions.Count;i++)
             {
                 var elem = Extensions[i];
-                var files= elem.Directory.EnumerateFiles(extensionFileName);
+                var files= elem.Directory.GetFiles(extensionFileName+".*");
                 if (files.Count() == 0||files.Count()>1) { Console.WriteLine("Could not find " + extensionFileName + " in " + elem.Directory.FullName); continue; }
 
                 var result=CompileFiles(files.First().FullName);
@@ -96,8 +96,8 @@ namespace TrippingOctoNemesis.Extensions
 
             var sorted = new List<Extension>();
 
-            sorted.AddRange(Extensions.FindAll(p => p.Info.Dependencies.Length == 0));
-            Extensions.RemoveAll(p => p.Info.Dependencies.Length == 0);
+            sorted.AddRange(Extensions.FindAll(p => p.Info.Dependencies == null || p.Info.Dependencies.Length == 0));
+            Extensions.RemoveAll(p =>p.Info.Dependencies==null|| p.Info.Dependencies.Length == 0);
 
             List<string> solvedDependencies = sorted.ConvertAll<string>(p => p.Info.Name);
 
@@ -143,7 +143,11 @@ namespace TrippingOctoNemesis.Extensions
         {
             foreach (var elem in Extensions)
             {
-                string[] files = elem.Directory.GetFiles("*" + elem.DescriptionFile.Extension, SearchOption.AllDirectories).Select(p=>p.FullName).ToArray();
+                string[] files = elem.Directory.GetFiles("*" + elem.DescriptionFile.Extension, SearchOption.AllDirectories)
+                    .Select(p=>p.FullName)
+                    .Where(p=>p!=elem.DescriptionFile.FullName)
+                    .ToArray();
+
                 var result = CompileFiles(LoadedAssemblies, files);
                 if (HasErrors(result, elem.Directory.FullName))
                 {
@@ -165,6 +169,7 @@ namespace TrippingOctoNemesis.Extensions
         private IEnumerable<Map> CreateMaps()
         {
             foreach (var elem in Extensions)
+                if(elem.Maps!=null)
                 foreach (var map in elem.Maps)
                 {
                     yield return Activator.CreateInstance(typeof(Map)) as Map;
@@ -174,9 +179,10 @@ namespace TrippingOctoNemesis.Extensions
         private IEnumerable<Plugin> CreatePlugins(Game game)
         {
             foreach (var elem in Extensions)
+                if (elem.Plugins!= null)
                 foreach (var plugin in elem.Plugins)
                 {
-                    var item=Activator.CreateInstance(typeof(Plugin),game) as Plugin;
+                    var item=Activator.CreateInstance(plugin,game) as Plugin;
                     game.Components.Add(item);
                     yield return item;
                 }
@@ -220,7 +226,7 @@ namespace TrippingOctoNemesis.Extensions
                             .ToArray();
             compilerParams.ReferencedAssemblies.AddRange(assemblies);//XXX: might not include all assemblies
 
-            if (additionalAssemblys != null)
+            if (additionalAssemblys != null&&additionalAssemblys.Count>0)
                 compilerParams.ReferencedAssemblies.AddRange(additionalAssemblys.Select(p => p.FullName).ToArray());//XXX: Might not work at all
 
             return codeDomProvider.CompileAssemblyFromFile(compilerParams, filepath);

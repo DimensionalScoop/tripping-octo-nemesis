@@ -57,13 +57,18 @@ namespace TrippingOctoNemesis
                 extensions.AddDirectory(dir.FullName);
         }
 
+        protected override void Initialize()
+        {
+            extensions.Load(this);
+            base.Initialize();
+        }
+
         protected override void LoadContent()
         {
             GameTime gameTime = new GameTime();
             spriteBatch = new SpriteBatch(GraphicsDevice);
             Sprite.Initialize(Content, GraphicsDevice);
             Font.Initialize(Content);
-            extensions.Load(this);
 
 #if DEBUG
             var window = System.Windows.Forms.Form.FromHandle(Window.Handle);
