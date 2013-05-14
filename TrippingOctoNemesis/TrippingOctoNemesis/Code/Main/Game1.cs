@@ -86,8 +86,8 @@ namespace TrippingOctoNemesis
 
             text.AddSpeech(new Speech(Character.PlayerOne, "Hi there, I'm Player One!"));
             text.AddSpeech(new Speech(Character.PlayerTwo, "Hi there too, I'm Player Two!"));
-            text.AddSpeech(new Speech(Character.Mechanic, "I'm the " + Character.Mechanic.Rank+"."));
-            text.AddSpeech(new Speech(Character.CiC, "This is "+Character.CiC.Rank+"; Engage!"));
+            text.AddSpeech(new Speech(Character.Mechanic, "I'm the " + Character.Mechanic.Rank + "."));
+            text.AddSpeech(new Speech(Character.CiC, "This is " + Character.CiC.Rank + "; Engage!"));
             text.AddSpeech(new Speech(Character.Merchant, "I'm a merchant."));
 
             //Ships.Add(new OctoJelly(Player[1], gameTime) { Position = new Vector2(200, 200), HasTarget = false,Status= SpaceShip.Condition.Airborne, Angle = -MathHelper.PiOver2 });

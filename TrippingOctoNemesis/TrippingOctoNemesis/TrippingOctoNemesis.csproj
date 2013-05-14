@@ -139,6 +139,7 @@
     <Compile Include="Code\Communicator\TextInterface.cs" />
     <Compile Include="Code\Extensions\Encounter.cs" />
     <Compile Include="Code\Extensions\Enemy.cs" />
+    <Compile Include="Code\Extensions\Event.cs" />
     <Compile Include="Code\Extensions\ExtensionsManager.cs" />
     <Compile Include="Code\Extensions\Extension.cs" />
     <Compile Include="Code\Extensions\Group.cs" />
@@ -235,7 +236,7 @@
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\Microsoft.Xna.GameStudio.targets" />
   <PropertyGroup>
     <PostBuildEvent>xcopy /e /y $(ProjectDir)Extensions\*.* $(TargetDir)Extensions\
-xcopy /e /y $(ProjectDir)..\..\Extensions\Extensions\*.* $(TargetDir)Extensions\</PostBuildEvent>
+:: xcopy /e /y $(ProjectDir)..\..\Extensions\Extensions\*.* $(TargetDir)Extensions\</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
     <PreBuildEvent>

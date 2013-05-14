@@ -40,6 +40,10 @@ namespace TrippingOctoNemesis.Extensions
             CompileExtensions();
             Maps = CreateMaps().ToList();
             Plugins = CreatePlugins(game).ToList();
+
+            Debug.WriteLine("Loaded extensions:");
+            foreach (var elem in Extensions)
+                Debug.WriteLine(elem.Info.Name + ", by " + elem.Info.Author + ". Type:" + Enum.GetName(typeof(ExtensionTypes), elem.Info.Type));
         }
 
         private void LoadDiscriptions()
