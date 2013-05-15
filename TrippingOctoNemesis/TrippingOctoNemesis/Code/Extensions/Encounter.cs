@@ -15,7 +15,58 @@ namespace TrippingOctoNemesis.Extensions
 {
     public class Encounter
     {
-        protected List<Group> Groups = new List<Group>();
+        int eventIndex = 0;
+        Event currentEvent
+        {
+            get
+            {
+                if (eventIndex >= Events.Count)
+                    return null;
+                return Events[eventIndex];
+            }
+        }
+        StatusReport report = null;
+
+        public List<Event> Events = new List<Event>();
+
+        public bool DeleteFlag { get; private set; }
+
+
+        public Encounter(Game game, Map owner)
+        {
+
+        }
+
+        public void Update(GameTime gameTime)
+        {
+            if(Events.Count==0)
+            {
+                Delete();
+                return;
+            }
+
+            if (currentEvent.DeleteFlag)
+            {
+                report = currentEvent.Finish();
+                eventIndex++;
+                if (currentEvent == null) { Delete(); return; }
+
+                currentEvent.Begin(report);
+            }
+
+            currentEvent.Update(gameTime);
+        }
+
+        public StatusReport Finish()
+        {
+            return report;
+        }
+
+        protected void Delete()
+        {
+            DeleteFlag = true;
+        }
+
 
         /// <summary>
         /// Spawns a group of enemies

@@ -146,6 +146,7 @@
     <Compile Include="Code\Extensions\Map.cs" />
     <Compile Include="Code\Extensions\Plugin.cs" />
     <Compile Include="Code\Extensions\Script.cs" />
+    <Compile Include="Code\Extensions\StatusReport.cs" />
     <Compile Include="Code\Fraction\ControlKeySettings.cs" />
     <Compile Include="Code\Particles\Blast.cs" />
     <Compile Include="Code\Particles\DestroiedShip.cs" />
