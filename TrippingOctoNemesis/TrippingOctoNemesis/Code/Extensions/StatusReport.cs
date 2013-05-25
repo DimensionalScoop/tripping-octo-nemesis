@@ -5,7 +5,7 @@ using System.Text;
 
 namespace TrippingOctoNemesis.Extensions
 {
-    class StatusReport
+    public class StatusReport
     {
     }
 }

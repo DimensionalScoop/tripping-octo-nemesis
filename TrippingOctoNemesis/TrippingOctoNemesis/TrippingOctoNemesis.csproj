@@ -140,6 +140,7 @@
     <Compile Include="Code\Extensions\Encounter.cs" />
     <Compile Include="Code\Extensions\Enemy.cs" />
     <Compile Include="Code\Extensions\Event.cs" />
+    <Compile Include="Code\Extensions\Events\DefaultEvents.cs" />
     <Compile Include="Code\Extensions\ExtensionsManager.cs" />
     <Compile Include="Code\Extensions\Extension.cs" />
     <Compile Include="Code\Extensions\Group.cs" />

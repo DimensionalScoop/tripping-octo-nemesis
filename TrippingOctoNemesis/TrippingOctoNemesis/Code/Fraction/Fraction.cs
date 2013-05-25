@@ -17,6 +17,10 @@ namespace TrippingOctoNemesis
     {
         protected TimeSpan lastUpdate;
 
+        static Fraction()
+        {
+            PlayerColors = new[] { Color.Orange, Color.LightBlue, Color.Green, Color.Yellow, Color.Purple, Color.White, Color.Gray };
+        }
 
         public sealed override void Update(GameTime gameTime)
         {

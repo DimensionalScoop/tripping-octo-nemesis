@@ -31,6 +31,12 @@ namespace TrippingOctoNemesis.Extensions
 
         public bool DeleteFlag { get; private set; }
 
+        public Game Game;
+        public Hud Hud;
+        public Player[] Player;
+        public Fraction[] Enemies;
+        public List<SpaceShip> Ships;
+
 
         public Encounter(Game game, Map owner)
         {

@@ -13,7 +13,7 @@ using X45Game.Extensions;
 
 namespace TrippingOctoNemesis
 {
-    class ControlKeySettings
+    public class ControlKeySettings
     {
         public Keys Up;
         public Keys Down;

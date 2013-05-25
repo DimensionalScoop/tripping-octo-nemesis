@@ -13,7 +13,7 @@ using X45Game.Extensions;
 
 namespace TrippingOctoNemesis
 {
-    class Player : Fraction
+    public class Player : Fraction
     {
         public MotherShip MotherShip;
 

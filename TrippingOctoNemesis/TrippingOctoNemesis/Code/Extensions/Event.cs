@@ -20,10 +20,10 @@ namespace TrippingOctoNemesis.Extensions
         protected Encounter Parant;
 
         public bool DeleteFlag { get; private set; }
-        public virtual string Name { get; protected set; }
+        public abstract string Name { get; }
 
 
-        public void Init(Encounter parant, Game game)
+        public Event(Encounter parant, Game game)
         {
             Parant = parant;
             Game = game;
