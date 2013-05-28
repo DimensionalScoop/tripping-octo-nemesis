@@ -17,15 +17,15 @@ namespace TrippingOctoNemesis
     {
         public DeploySlots[] Slots = new DeploySlots[4];
         public Vector2 CursorPosition;
-        //LADY ESMERELDA THE NECROMANCER QUEEN OF THE POORLY LIT LANDSx
+        //LADY ESMERELDA THE NECROMANCER QUEEN OF THE POORLY LIT LANDS
         public float Fuel = 100;
         public float MaxFuel = 100;
         public float FuelConsumptionPerSecond = 1;
         public float FuelSpeed = 100;
         
 
-        public MotherShip(Hud hud, Fraction fraction, GameTime gameTime)
-            : base(fraction, gameTime)
+        public MotherShip(Hud hud, Fraction fraction)
+            : base(fraction)
         {
             Sprite = new SpriteSheet("s\\mothership");
             Speed = hud.CameraSpeed.Y;
@@ -46,6 +46,7 @@ namespace TrippingOctoNemesis
             additionalLayerDepth = -0.02f;
             Weapon = null;
             Carrier = this;
+            Class = ShipClasses.Carrier;
         }
 
         public override void LongUpdate(TimeSpan elapsedTime, Hud hud, List<SpaceShip> otherSpaceShips)

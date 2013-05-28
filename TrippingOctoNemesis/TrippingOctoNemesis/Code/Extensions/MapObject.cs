@@ -13,7 +13,6 @@ using X45Game.Extensions;
 
 namespace TrippingOctoNemesis.Extensions
 {
-    [Serializable]
     public class MapObject
     {
         public float Position = -1;
@@ -30,8 +29,10 @@ namespace TrippingOctoNemesis.Extensions
         {
             Parant = map;
         }
+
+        public virtual void Activated(GameTime gameTime) { }
         
-        public void Delete() { DeleteFlag = true; }
+        public virtual void Delete() { DeleteFlag = true; }
 
         public virtual void Update(GameTime gameTime) { }
 

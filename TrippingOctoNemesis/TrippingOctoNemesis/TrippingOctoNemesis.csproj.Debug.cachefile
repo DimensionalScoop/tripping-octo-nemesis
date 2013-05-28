@@ -29,8 +29,8 @@ Content\c\merchant.xnb
 Content\c\player-1.xnb
 Content\c\player-2.xnb
 Content\p\Explosion.xnb
-Content\font.xnb
 Content\f\sfont.xnb
+Content\font.xnb
 Network\Lidgren.Network.dll
 Drawing\Resources\input_bar.png
 Drawing\Resources\point.png

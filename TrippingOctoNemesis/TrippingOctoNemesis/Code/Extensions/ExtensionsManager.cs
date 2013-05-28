@@ -18,7 +18,7 @@ using System.Diagnostics;
 
 namespace TrippingOctoNemesis.Extensions
 {
-    class ExtensionsManager
+    public class ExtensionsManager
     {
         public List<Extension> Extensions = new List<Extension>();
         const string extensionFileName = "extension";

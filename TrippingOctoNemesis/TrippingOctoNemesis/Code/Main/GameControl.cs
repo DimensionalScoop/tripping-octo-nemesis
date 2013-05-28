@@ -19,18 +19,17 @@ namespace TrippingOctoNemesis
     public class GameControl:DrawableGameComponent
     {
         #region Fields
-        List<Map> maps = new List<Map>();
-        
         Map CurrentMap;
-        List<SpaceShip> Ships = new List<SpaceShip>();
-        List<Fraction> Fractions = new List<Fraction>();
-        Player[] Player = new Player[2];
-        Fraction[] Enemys = new Fraction[1];
+        public static List<SpaceShip> Ships = new List<SpaceShip>();
+        public static List<Fraction> Fractions = new List<Fraction>();
+        public static Player[] Player = new Player[2];
+        public static Fraction[] Enemys = new Fraction[5];
 
         SpriteBatch spriteBatch;
         Random random = new Random();
+        GameTime lastUpdate = new GameTime();
 
-        Hud hud;
+        public static Hud Hud;
         TextInterface text;
         ExtensionsManager extensions;
         InputProvider input;
@@ -52,13 +51,12 @@ namespace TrippingOctoNemesis
             particles = new ParticleProvider();
             stars = new StarField(game, 2, 1, 0.5f);
 
-            hud = new Hud(game);
+            Hud = new Hud(game);
             text = new TextInterface(game, new Vector2(1360, 730));
 
             extensions = new ExtensionsManager();
             
         }
-
 
         protected override void LoadContent()
         {
@@ -77,7 +75,8 @@ namespace TrippingOctoNemesis
             
             #endif
 
-            CurrentMap = new TestMap();
+            extensions.Maps.Add(new TestMap());
+            SelectMap(extensions.Maps.First().Id);
         }
         
         private void InitExtensions(Game game)
@@ -95,27 +94,28 @@ namespace TrippingOctoNemesis
             CreatePlayer(1, ControlKeySettings.DefaultPlayerTwo(), gameTime);
             Player[0].Allys |= Player[1].Id;
             Player[1].Allys |= Player[0].Id;
-            CreateEnemy(0, gameTime);
+            
+            for(int i=0;i<=4;i++)
+            CreateEnemy(i);
 
             Fractions.AddRange(Player);
             Fractions.AddRange(Enemys);
         }
-        private void CreateEnemy(int p, GameTime gameTime)
+        private void CreateEnemy(int p)
         {
-            Enemys[0] = new Fraction();
-            Ships.Add(new D1Enemy(hud, Enemys[0], gameTime) { Position = new Vector2(300, -200), TargetPosition = new Vector2(500, 200) });
+            Enemys[p] = new Fraction();
         }
         private void CreatePlayer(int p, ControlKeySettings keys, GameTime gameTime)
         {
             Player[p] = new Player() { Keys = keys };
 
-            var motherShip = new MotherShip(hud, Player[p], gameTime) { Position = new Vector2(300 + 300 * p, 500) };
+            var motherShip = new MotherShip(Hud, Player[p]) { Position = new Vector2(300 + 300 * p, 500) };
             Player[p].AssignMotherShip(motherShip);
             Ships.Add(motherShip);
 
             for (int i = 0; i < 4; i++)
             {
-                var ship = new SpaceShip(Player[p], gameTime) { Carrier = motherShip };
+                var ship = new SpaceShip(Player[p]) { Carrier = motherShip };
                 Player[p].AddShipToCarrier(ship);
                 Ships.Add(ship);
                 motherShip.Slots[i] = new DeploySlots(ship);
@@ -125,6 +125,8 @@ namespace TrippingOctoNemesis
 
         public override void Update(GameTime gameTime)
         {
+            lastUpdate = gameTime;
+
             FrameUpdate(gameTime);
             LongUpdate(gameTime);
 
@@ -135,7 +137,7 @@ namespace TrippingOctoNemesis
         {
             UpdateMap(gameTime);
             UpdateShips(gameTime);
-            Fractions.ForEach(p => p.Update(gameTime, hud));
+            Fractions.ForEach(p => p.Update(gameTime, Hud));
 
             stars.MoveCamera(new Vector2(0, 1));
             particles.Update(gameTime);
@@ -148,8 +150,8 @@ namespace TrippingOctoNemesis
         {
             if (CurrentMap.DeleteFlag)
             {
-                if (CurrentMap.NextMap != "")
-                    CurrentMap = maps.Find(p => p.Name == CurrentMap.NextMap).DeepClone();
+                if (CurrentMap.NextMap != Guid.Empty)
+                    SelectMap(CurrentMap.NextMap);
                 else
                     Finish();
             }
@@ -157,9 +159,17 @@ namespace TrippingOctoNemesis
             CurrentMap.Update(gameTime);
         }
 
+        private void SelectMap(Guid id)
+        {
+            CurrentMap = extensions.Maps.Find(p => p.Id == id);
+            CurrentMap.Reset();
+            CurrentMap.Start(lastUpdate);
+        }
+
         private void Finish()
         {
-            CurrentMap = maps.Find(p => p.Name == CurrentMap.Name).DeepClone();
+            //TODO: score screen after Finish()
+            SelectMap(CurrentMap.Id);
         }
 
         #region MethodFields
@@ -183,13 +193,13 @@ namespace TrippingOctoNemesis
                     lastFirstLongUpdate = gameTime.TotalGameTime;
                 }
 
-                Ships[updaterPosition].LongUpdate(lastLongUpdateDuration, hud, Ships);
+                Ships[updaterPosition].LongUpdate(lastLongUpdateDuration, Hud, Ships);
             }
         }
 
         private void UpdateShips(GameTime gameTime)
         {
-            Ships.ForEach(p => p.Update(gameTime, hud, Ships));
+            Ships.ForEach(p => p.Update(gameTime, Hud, Ships));
             if (SpaceShip.DeleteableShips) Ships.RemoveAll(p => p.DeleteFlag);
             UpdateShipEvasion();
         }
@@ -217,7 +227,7 @@ namespace TrippingOctoNemesis
 
             #if DEBUG
             if (input.Mouse.Clicks.Contains(MouseButtons.Right))
-                Ships.FindAll(p => (p.Position + hud.Camera - input.Mouse.Position).Length() < 30).ForEach(p => p.Delete(SpaceShip.DeleteReasons.Destroyed));
+                Ships.FindAll(p => (p.Position + Hud.Camera - input.Mouse.Position).Length() < 30).ForEach(p => p.Delete(SpaceShip.DeleteReasons.Destroyed));
             #endif
         }
 
@@ -227,12 +237,12 @@ namespace TrippingOctoNemesis
             spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.NonPremultiplied);
 
 
-            Fractions.ForEach(p => p.Draw(spriteBatch, hud, gameTime));
-            Ships.ForEach(p => p.Draw(spriteBatch, hud, gameTime));
+            Fractions.ForEach(p => p.Draw(spriteBatch, Hud, gameTime));
+            Ships.ForEach(p => p.Draw(spriteBatch, Hud, gameTime));
             
-            particles.Draw(spriteBatch, hud.Camera, gameTime);
+            particles.Draw(spriteBatch, Hud.Camera, gameTime);
             
-            CurrentMap.DrawMapUI(spriteBatch, new Vector2(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), true);
+            CurrentMap.DrawMapUI(spriteBatch, new Vector2(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), true,gameTime);
 
 
             spriteBatch.End();

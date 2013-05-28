@@ -14,6 +14,8 @@ using System.Diagnostics;
 
 namespace TrippingOctoNemesis
 {
+    public enum ShipClasses { None, Fighter, Carrier, Supporter, Transporter, Special }
+
     public partial class SpaceShip
     {
         public enum Condition { InHangar, Airborne, Deployed, ReturningPhase1, ReturningPhase2, Repairing }
@@ -55,6 +57,22 @@ namespace TrippingOctoNemesis
 
         public int Hitpoints = 10;
         public int MaxHitpoints = 10;
+        public ShipClasses Class;
+
+        protected float DCModifier;
+        public float DC
+        {
+            get
+            {
+                float returnValue = MaxHitpoints;
+                if (Weapon != null) returnValue *= (float)(Weapon.Damage / Weapon.WeaponCooldown.TotalSeconds);
+                returnValue += DCModifier;
+
+                if (Class == ShipClasses.Carrier) returnValue *= 5;
+                if (Class == ShipClasses.Transporter) returnValue /= 3;
+                return returnValue;
+            }
+        }
 
         public event Action<SpaceShip> HitpointsChanged;
         public event Action<SpaceShip> StatusChanged;

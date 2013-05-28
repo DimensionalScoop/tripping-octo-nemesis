@@ -19,7 +19,7 @@ namespace TrippingOctoNemesis
         public Vector2 Position = new Vector2(100, 100);
         public Vector2 TargetPosition = new Vector2(500, 500);
         public float Speed = 120;
-        public float AngleSpeed = 0;
+        public float AngleSpeed = 5;
         public float NormaleAngleSpeed = 5;
         public float DeploySpeed = 250;
         public float NormalSpeed = 120;

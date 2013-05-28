@@ -17,10 +17,13 @@ namespace TrippingOctoNemesis
     {
         public Vector2 Camera;
         public Vector2 CameraDelta;
-        public Vector2 CameraSpeed = new Vector2(0, 1000/16);
+        public Vector2 CameraSpeed = new Vector2(0, 1000 / 16);
         public Vector2 ScreenSize;
 
         public KeyProvider Key;
+        SpriteBatch spriteBatch;
+
+        static readonly Font font = new Font("f\\sfont");
 
 
         public Hud(Game game)
@@ -34,6 +37,7 @@ namespace TrippingOctoNemesis
         {
             Key = Game.Services.GetService(typeof(KeyProvider)) as KeyProvider;
             ScreenSize = new Vector2(Game.GraphicsDevice.Viewport.Width, Game.GraphicsDevice.Viewport.Height);
+            spriteBatch = new SpriteBatch(GraphicsDevice);
 
             base.LoadContent();
         }
@@ -42,6 +46,33 @@ namespace TrippingOctoNemesis
         {
             CameraDelta = CameraSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
             Camera += CameraDelta;
+        }
+
+        public override void Draw(GameTime gameTime)
+        {
+            spriteBatch.Begin();
+
+#if DEBUG
+            string info = "";
+
+            info += "Camera: " + Camera;
+            info += "\nPlayer: " + GameControl.Ships.Find(p => p.Fraction == GameControl.Player[0]).Position;
+            if (GameControl.Ships.Find(p => p.Fraction.IsEnemy(GameControl.Player[0])) != null)
+            {
+                var enepos = GameControl.Ships.Find(p => p.Fraction.IsEnemy(GameControl.Player[0])).Position;
+                info += "\nFirst Enemy Wing: " + enepos;
+                if (new Rectangle((int)Camera.X, (int)-Camera.Y, (int)ScreenSize.X, (int)ScreenSize.Y).Contains((int)enepos.X, (int)enepos.Y))
+                    info += " (visible)";
+            }
+
+
+            spriteBatch.DrawText(info, new Vector2(ScreenSize.X/2, 50), true, font, Color.White);
+
+#endif
+
+            spriteBatch.End();
+
+            base.Draw(gameTime);
         }
     }
 }

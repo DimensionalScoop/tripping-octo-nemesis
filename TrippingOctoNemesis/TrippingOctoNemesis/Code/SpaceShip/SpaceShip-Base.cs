@@ -22,12 +22,13 @@ namespace TrippingOctoNemesis
         public bool DeleteFlag { get; private set; }
         public event Action<SpaceShip> DeleteFlagSet;
 
-        public SpaceShip(Fraction fraction, GameTime gameTime)
+        public SpaceShip(Fraction fraction)
         {
             EnginePositions[0] = Vector2.Zero;
             Fraction = fraction;
             Color = Color.Lerp(Color.White,Fraction.Color,fractionColorBrightness);
-            Weapon = new Weapon(this,gameTime);
+            Weapon = new Weapon(this);
+            Class = ShipClasses.Fighter;
         }
 
 

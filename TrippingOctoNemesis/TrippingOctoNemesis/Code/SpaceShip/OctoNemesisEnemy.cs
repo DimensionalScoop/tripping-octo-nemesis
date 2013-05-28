@@ -22,14 +22,15 @@ namespace TrippingOctoNemesis
 
         List<Tentacle> tentacle = new List<Tentacle>();
 
-        public OctoNemesisEnemy(Fraction fraction,GameTime gameTime)
-            : base(fraction,gameTime)
+        public OctoNemesisEnemy(Fraction fraction)
+            : base(fraction)
         {
             Sprite = new SpriteSheet("e\\ton-eyeball");
             Status = Condition.Airborne;
             //HasTarget = false;
             Speed = 1000/16f;
             Angle = -MathHelper.PiOver2;
+            Class = ShipClasses.Carrier;
 
             var countTentacles=Random.Next(6,9);
             for (int i = 0; i < countTentacles; i++)

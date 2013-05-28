@@ -37,8 +37,11 @@ namespace TrippingOctoNemesis
                 case KIs.FixedTargetPosition: return;
 
                 case KIs.NearestEnemy:
-                    if (TargetShip == null) 
-                        TargetPosition = Carrier.Position;
+                    if (TargetShip == null)
+                        if (Carrier != null)
+                            TargetPosition = Carrier.Position;
+                        else
+                            TargetPosition = Position;
                     else TargetPosition = TargetShip.Position;
                     return;
 

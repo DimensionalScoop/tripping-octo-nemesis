@@ -36,10 +36,12 @@ namespace TrippingOctoNemesis
         protected const int ExplosionPixels = 10;
 
 
+        public Weapon(SpaceShip owner) : this(owner, new GameTime()) { }
+
         public Weapon(SpaceShip owner,GameTime gameTime)
         {
             Owner = owner;
-            LastShoot = gameTime.ElapsedGameTime + TimeSpan.FromMilliseconds(WeaponCooldown.TotalMilliseconds * Random.NextFloat());
+            LastShoot = gameTime.TotalGameTime + TimeSpan.FromMilliseconds(WeaponCooldown.TotalMilliseconds * Random.NextFloat());
         }
 
         bool firstUpdateAfterShootHitTarget;

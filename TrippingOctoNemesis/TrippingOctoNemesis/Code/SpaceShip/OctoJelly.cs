@@ -15,8 +15,8 @@ namespace TrippingOctoNemesis
 {
     public class OctoJelly:SpaceShip
     {
-        public OctoJelly(Fraction fraction, GameTime gameTime)
-            : base(fraction, gameTime)
+        public OctoJelly(Fraction fraction)
+            : base(fraction)
         {
             Sprite = new SpriteSheet("e\\Tripping-Octo-Jelly_spritesheet",4);
             Color = Color.LightBlue;

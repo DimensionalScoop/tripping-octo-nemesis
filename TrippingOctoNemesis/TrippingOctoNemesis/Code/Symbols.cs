@@ -10,6 +10,8 @@ namespace TrippingOctoNemesis
         public const char
             ArrowLeft = 'ã',
             TextContinousMarkerUp = 'á',
-            TextContinousMarkerDown = 'à';
+            TextContinousMarkerDown = 'à',
+            RightArrows1 = 'ñ',
+            RightArrows2 = 'ò';
     }
 }
