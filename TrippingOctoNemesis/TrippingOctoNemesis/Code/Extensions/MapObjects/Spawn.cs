@@ -82,19 +82,19 @@ namespace TrippingOctoNemesis.Extensions.MapObjects
             else
                 returnValue += "Unidentified ";
 
-            if (Ships.All(p => p.Class == ShipClasses.Fighter))
+            if (Ships.All(p => p.Class == SpaceShip.ShipClasses.Fighter))
                 returnValue += "Fighter Wing";
-            else if (Ships.All(p => p.Class == ShipClasses.Supporter))
+            else if (Ships.All(p => p.Class == SpaceShip.ShipClasses.Supporter))
                 returnValue += "Support Wing";
-            else if (Ships.All(p => p.Class == ShipClasses.Transporter))
+            else if (Ships.All(p => p.Class == SpaceShip.ShipClasses.Transporter))
                 returnValue += "Unguarded Transporters";
-            else if (Ships.All(p => p.Class == ShipClasses.Carrier))
+            else if (Ships.All(p => p.Class == SpaceShip.ShipClasses.Carrier))
                 returnValue += "Carrier";
-            else if (Ships.All(p => p.Class == ShipClasses.Transporter || p.Class == ShipClasses.Fighter))
+            else if (Ships.All(p => p.Class == SpaceShip.ShipClasses.Transporter || p.Class == SpaceShip.ShipClasses.Fighter))
                 returnValue += "Convoy";
-            else if (Ships.All(p => p.Class == ShipClasses.Transporter || p.Class == ShipClasses.Fighter || p.Class == ShipClasses.Supporter))
+            else if (Ships.All(p => p.Class == SpaceShip.ShipClasses.Transporter || p.Class == SpaceShip.ShipClasses.Fighter || p.Class == SpaceShip.ShipClasses.Supporter))
                 returnValue += "Supported Convoy";
-            else if (Ships.All(p => p.Class == ShipClasses.Transporter || p.Class == ShipClasses.Fighter || p.Class == ShipClasses.Supporter || p.Class == ShipClasses.Carrier))
+            else if (Ships.All(p => p.Class == SpaceShip.ShipClasses.Transporter || p.Class == SpaceShip.ShipClasses.Fighter || p.Class == SpaceShip.ShipClasses.Supporter || p.Class == SpaceShip.ShipClasses.Carrier))
                 returnValue += "Heavy Convoy";
             else
                 returnValue += "Ships";

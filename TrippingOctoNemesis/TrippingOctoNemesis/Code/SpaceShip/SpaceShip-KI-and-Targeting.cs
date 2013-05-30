@@ -51,19 +51,19 @@ namespace TrippingOctoNemesis
 
         private void TargetNearesEnemy(List<SpaceShip> otherSpaceShips)
         {
-                if (AutoTargetShip && (Status != Condition.InHangar && Status != Condition.Repairing))
+                if (AutoTargetShip && (Status != Conditions.InHangar && Status != Conditions.Repairing))
                 {
                     TargetShip = null;
                     TargetShipDistanceSquared = int.MaxValue;
                     int range;
                     for (int i = 0; i < otherSpaceShips.Count; i++)
                         if (Fraction.IsEnemy(otherSpaceShips[i].Fraction) && !(
-                            otherSpaceShips[i].Status == Condition.Repairing || otherSpaceShips[i].Status == Condition.InHangar))
+                            otherSpaceShips[i].Status == Conditions.Repairing || otherSpaceShips[i].Status == Conditions.InHangar))
                         {
                             range = (int)Vector2.DistanceSquared(otherSpaceShips[i].Position, Position);
                             if (range < TargetShipDistanceSquared)
                             {
-                                Debug.Assert(Status != Condition.InHangar && Status != Condition.Repairing);
+                                Debug.Assert(Status != Conditions.InHangar && Status != Conditions.Repairing);
                                 TargetShip = otherSpaceShips[i];
                                 TargetShipDistanceSquared = range;
                             }

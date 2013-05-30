@@ -45,21 +45,25 @@ namespace TrippingOctoNemesis
         {
             Entities.AddRange(new MapObject[]{
 
-                new Wait(2),
-                new Spawn(new SpaceShip(GameControl.Enemys[1]){Position=new Vector2(100,-300),Status= SpaceShip.Condition.Airborne,KI = TrippingOctoNemesis.SpaceShip.KIs.NearestEnemy,HasTarget=true, KeepScreenPosition=false},
-                    new SpaceShip(GameControl.Enemys[1]){Position=new Vector2(200,-300),Status= SpaceShip.Condition.Airborne,KI = TrippingOctoNemesis.SpaceShip.KIs.NearestEnemy,HasTarget=true, KeepScreenPosition=false},
-                    new SpaceShip(GameControl.Enemys[1]){Position=new Vector2(300,-300),Status= SpaceShip.Condition.Airborne,KI = TrippingOctoNemesis.SpaceShip.KIs.NearestEnemy,HasTarget=true, KeepScreenPosition=false},
-                    new SpaceShip(GameControl.Enemys[1]){Position=new Vector2(400,-300),Status= SpaceShip.Condition.Airborne,KI = TrippingOctoNemesis.SpaceShip.KIs.NearestEnemy,HasTarget=true, KeepScreenPosition=false},
-                    new SpaceShip(GameControl.Enemys[1]){Position=new Vector2(500,-300),Status= SpaceShip.Condition.Airborne,KI = TrippingOctoNemesis.SpaceShip.KIs.NearestEnemy,HasTarget=true, KeepScreenPosition=false},
-                    new SpaceShip(GameControl.Enemys[1]){Position=new Vector2(600,-300),Status= SpaceShip.Condition.Airborne,KI = TrippingOctoNemesis.SpaceShip.KIs.NearestEnemy,HasTarget=true, KeepScreenPosition=false},
-                    new SpaceShip(GameControl.Enemys[1]){Position=new Vector2(700,-300),Status= SpaceShip.Condition.Airborne,KI = TrippingOctoNemesis.SpaceShip.KIs.NearestEnemy,HasTarget=true, KeepScreenPosition=false},
-                    new SpaceShip(GameControl.Enemys[1]){Position=new Vector2(800,-300),Status= SpaceShip.Condition.Airborne,KI = TrippingOctoNemesis.SpaceShip.KIs.NearestEnemy,HasTarget=true, KeepScreenPosition=false}),
+                new Warp(1),
+                new Wait(4),
+                new Warp(0,3),
+                new Warp(0,2),
+                new Wait(1),
+                new Spawn(new SpaceShip(GameControl.Enemys[1]){Position=new Vector2(100,-300),Status= SpaceShip.Conditions.Airborne,KI = TrippingOctoNemesis.SpaceShip.KIs.NearestEnemy,HasTarget=true, KeepScreenPosition=false},
+                    new SpaceShip(GameControl.Enemys[1]){Position=new Vector2(200,-300),Status= SpaceShip.Conditions.Airborne,KI = TrippingOctoNemesis.SpaceShip.KIs.NearestEnemy,HasTarget=true, KeepScreenPosition=false},
+                    new SpaceShip(GameControl.Enemys[1]){Position=new Vector2(300,-300),Status= SpaceShip.Conditions.Airborne,KI = TrippingOctoNemesis.SpaceShip.KIs.NearestEnemy,HasTarget=true, KeepScreenPosition=false},
+                    new SpaceShip(GameControl.Enemys[1]){Position=new Vector2(400,-300),Status= SpaceShip.Conditions.Airborne,KI = TrippingOctoNemesis.SpaceShip.KIs.NearestEnemy,HasTarget=true, KeepScreenPosition=false},
+                    new SpaceShip(GameControl.Enemys[1]){Position=new Vector2(500,-300),Status= SpaceShip.Conditions.Airborne,KI = TrippingOctoNemesis.SpaceShip.KIs.NearestEnemy,HasTarget=true, KeepScreenPosition=false},
+                    new SpaceShip(GameControl.Enemys[1]){Position=new Vector2(600,-300),Status= SpaceShip.Conditions.Airborne,KI = TrippingOctoNemesis.SpaceShip.KIs.NearestEnemy,HasTarget=true, KeepScreenPosition=false},
+                    new SpaceShip(GameControl.Enemys[1]){Position=new Vector2(700,-300),Status= SpaceShip.Conditions.Airborne,KI = TrippingOctoNemesis.SpaceShip.KIs.NearestEnemy,HasTarget=true, KeepScreenPosition=false},
+                    new SpaceShip(GameControl.Enemys[1]){Position=new Vector2(800,-300),Status= SpaceShip.Conditions.Airborne,KI = TrippingOctoNemesis.SpaceShip.KIs.NearestEnemy,HasTarget=true, KeepScreenPosition=false}),
                 new Clear(),
                 new Spawn(new D1Enemy(GameControl.Hud, GameControl.Enemys[0]) { Position = new Vector2(300, -200), TargetPosition = new Vector2(500, 200) }),
                 new Clear(),
                 new Spawn(new D1Enemy(GameControl.Hud, GameControl.Enemys[0]) { Position = new Vector2(300, -200), TargetPosition = new Vector2(500, 200) }),
                 new Clear(),
-                new Spawn(true,5,p=>new Vector2(p*200,-100-p*20),new SpaceShip(GameControl.Enemys[1]){Position=new Vector2(400,-300),Status= SpaceShip.Condition.Airborne}),
+                new Spawn(true,5,p=>new Vector2(p*200,-100-p*20),new SpaceShip(GameControl.Enemys[1]){Position=new Vector2(400,-300),Status= SpaceShip.Conditions.Airborne}),
                 new Clear()
 
             });

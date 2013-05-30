@@ -31,18 +31,17 @@ namespace TrippingOctoNemesis
             Speed = hud.CameraSpeed.Y;
             Angle = -MathHelper.PiOver2;
 
-            EnginePositions = new Vector2[4];
-            EnginePositions[0] = new Vector2(-Sprite.TextureOrigin.Y+2,-18 );
-            EnginePositions[1] = new Vector2(-Sprite.TextureOrigin.Y+2,18);
-            EnginePositions[2] = new Vector2( -Sprite.TextureOrigin.Y+2,-16);
-            EnginePositions[3] = new Vector2( -Sprite.TextureOrigin.Y+2,16);
-            TrackLength *= 3;
+            SetEngines(150,
+            new Vector2(-Sprite.TextureOrigin.Y + 2, -18),
+            new Vector2(-Sprite.TextureOrigin.Y + 2, 18),
+            new Vector2(-Sprite.TextureOrigin.Y + 2, -16),
+            new Vector2(-Sprite.TextureOrigin.Y + 2, 16));
             
             Hitpoints = 100;
             MaxHitpoints = 100;
             IntPosition = true;
             HasTarget = false;
-            Status = Condition.Airborne;
+            Status = Conditions.Airborne;
             additionalLayerDepth = -0.02f;
             Weapon = null;
             Carrier = this;
@@ -56,7 +55,7 @@ namespace TrippingOctoNemesis
             if (Fuel == 0)
             {
                 FuelSpeed = 25;
-                TrackLength = 50;
+                SetEngines(50);
             }
         }
     }

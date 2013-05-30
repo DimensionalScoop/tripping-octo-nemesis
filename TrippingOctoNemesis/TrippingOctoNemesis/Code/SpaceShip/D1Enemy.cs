@@ -26,7 +26,7 @@ namespace TrippingOctoNemesis
             : base(hud, fraction)
         {
             Sprite = new SpriteSheet("e\\Tripping-Octo-Nemesis-Base");
-            Status = Condition.Airborne;
+            Status = Conditions.Airborne;
             HasTarget = true;
             Speed = 1000/16+10;
             AngleSpeed = 1;
@@ -38,7 +38,7 @@ namespace TrippingOctoNemesis
             deployDuration = TimeSpan.FromMilliseconds(500);
             Class = ShipClasses.Carrier;
 
-            EnginePositions = new Vector2[0];
+            SetEngines(0);
         }
 
         public override void Update(GameTime gameTime, Hud hud, List<SpaceShip> otherSpaceShips)

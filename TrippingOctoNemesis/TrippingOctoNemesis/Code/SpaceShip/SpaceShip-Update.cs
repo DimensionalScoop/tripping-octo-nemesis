@@ -16,11 +16,17 @@ namespace TrippingOctoNemesis
 {
     public partial class SpaceShip
     {
+        /// <summary>
+        /// Is called every frame.
+        /// </summary>
+        /// <param name="gameTime"></param>
+        /// <param name="hud"></param>
+        /// <param name="otherSpaceShips"></param>
         public virtual void Update(GameTime gameTime, Hud hud, List<SpaceShip> otherSpaceShips)
         {
             if (DeleteFlag) return;
 
-            if (Status != Condition.InHangar && Status != Condition.Repairing)
+            if (IsAirborne)
             {
                 CalcTrack();
                 CalcKI(gameTime);
@@ -32,6 +38,12 @@ namespace TrippingOctoNemesis
             CalcCarrierBehaviour(gameTime);
         }
 
+        /// <summary>
+        /// Is called for some ships per frame (round-robin), but at least once per second for every ship. Use for expensive calculations.
+        /// </summary>
+        /// <param name="elapsedTime"></param>
+        /// <param name="hud"></param>
+        /// <param name="otherSpaceShips"></param>
         public virtual void LongUpdate(TimeSpan elapsedTime, Hud hud, List<SpaceShip> otherSpaceShips)
         {
             //Debug.Assert(!DeleteFlag);

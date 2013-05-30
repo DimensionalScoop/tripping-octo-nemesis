@@ -22,7 +22,7 @@ namespace TrippingOctoNemesis
 
         private void CalcCarrierBehaviour(GameTime gameTime)
         {
-            if (Status == Condition.Deployed)
+            if (Status == Conditions.Deployed)
             {
                 var t = gameTime.TotalGameTime - LaunchTime;
                 Speed = MathHelper.SmoothStep(DeploySpeed, NormalSpeed, (float)(t.TotalSeconds / LaunchDuration.TotalSeconds));
@@ -30,25 +30,25 @@ namespace TrippingOctoNemesis
 
                 if (gameTime.TotalGameTime > LaunchTime + LaunchDuration)
                 {
-                    Status = Condition.Airborne;
+                    Status = Conditions.Airborne;
                     if (StatusChanged != null) StatusChanged(this);
                     Speed = NormalSpeed;
                     AngleSpeed = NormaleAngleSpeed;
                 }
 
-                if (Status == Condition.ReturningPhase1 || Status == Condition.ReturningPhase2)
+                if (Status == Conditions.ReturningPhase1 || Status == Conditions.ReturningPhase2)
                     AngleSpeed = 12;
             }
 
-            if (Status == Condition.ReturningPhase1)
+            if (Status == Conditions.ReturningPhase1)
                 TargetPosition = Carrier.Position + new Vector2(0, 100);
-            else if (Status == Condition.ReturningPhase2)
+            else if (Status == Conditions.ReturningPhase2)
                 TargetPosition = Carrier.Position + new Vector2(0, Carrier.Sprite.TextureOrigin.Y / 2);
         }
 
         public void Deploy(Vector2 origin, Vector2 target, GameTime gameTime)
         {
-            Status = Condition.Deployed;
+            Status = Conditions.Deployed;
             if(StatusChanged!=null) StatusChanged(this);
             Position = origin;
             TargetPosition = target;
@@ -60,7 +60,7 @@ namespace TrippingOctoNemesis
 
         public void Return()
         {
-            Status = Condition.ReturningPhase1;
+            Status = Conditions.ReturningPhase1;
             if (StatusChanged != null) StatusChanged(this);
             TargetPosition = Carrier.Position + new Vector2(0, 100);
             ReachedTarget += ReturningPhase1End;
@@ -68,7 +68,7 @@ namespace TrippingOctoNemesis
 
         void ReturningPhase1End(SpaceShip none)
         {
-            Status = Condition.ReturningPhase2;
+            Status = Conditions.ReturningPhase2;
             if (StatusChanged != null) StatusChanged(this);
             TargetPosition = Carrier.Position + new Vector2(0, Carrier.Sprite.TextureOrigin.Y/2);
             ReachedTarget += ReturningPhase2End;
@@ -76,7 +76,7 @@ namespace TrippingOctoNemesis
 
         void ReturningPhase2End(SpaceShip none)
         {
-            Status = Condition.InHangar;
+            Status = Conditions.InHangar;
             if (StatusChanged != null) StatusChanged(this);
             track.Clear();
         }

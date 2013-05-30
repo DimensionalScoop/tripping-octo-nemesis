@@ -151,6 +151,7 @@
     <Compile Include="Code\Extensions\MapObjects\Null.cs" />
     <Compile Include="Code\Extensions\MapObjects\Spawn.cs" />
     <Compile Include="Code\Extensions\MapObjects\Wait.cs" />
+    <Compile Include="Code\Extensions\MapObjects\Warp.cs" />
     <Compile Include="Code\Extensions\Plugin.cs" />
     <Compile Include="Code\Extensions\Script.cs" />
     <Compile Include="Code\Extensions\StatusReport.cs" />

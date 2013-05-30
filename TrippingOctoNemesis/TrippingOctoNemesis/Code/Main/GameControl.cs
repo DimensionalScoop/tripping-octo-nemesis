@@ -34,7 +34,7 @@ namespace TrippingOctoNemesis
         ExtensionsManager extensions;
         InputProvider input;
         ParticleProvider particles;
-        StarField stars;
+        public static StarField Stars;
 
         DirectoryInfo path = new DirectoryInfo(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location));
 
@@ -49,7 +49,7 @@ namespace TrippingOctoNemesis
         {
             input = new InputProvider(game);
             particles = new ParticleProvider();
-            stars = new StarField(game, 2, 1, 0.5f);
+            Stars = new StarField(game, 2, 1, 0.5f);
 
             Hud = new Hud(game);
             text = new TextInterface(game, new Vector2(1360, 730));
@@ -139,7 +139,7 @@ namespace TrippingOctoNemesis
             UpdateShips(gameTime);
             Fractions.ForEach(p => p.Update(gameTime, Hud));
 
-            stars.MoveCamera(new Vector2(0, 1));
+            Stars.MoveCamera(new Vector2(0, 1));
             particles.Update(gameTime);
             HandleInput(gameTime);
 

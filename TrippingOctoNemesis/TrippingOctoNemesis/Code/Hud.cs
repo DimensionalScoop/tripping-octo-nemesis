@@ -55,7 +55,8 @@ namespace TrippingOctoNemesis
 #if DEBUG
             string info = "";
 
-            info += "Camera: " + Camera;
+            info += "Warp Factor: " + (int)(GameControl.Stars.WarpFactor*100)+"%";
+            info += "\nCamera: " + Camera;
             info += "\nPlayer: " + GameControl.Ships.Find(p => p.Fraction == GameControl.Player[0]).Position;
             if (GameControl.Ships.Find(p => p.Fraction.IsEnemy(GameControl.Player[0])) != null)
             {
@@ -66,7 +67,7 @@ namespace TrippingOctoNemesis
             }
 
 
-            spriteBatch.DrawText(info, new Vector2(ScreenSize.X/2, 50), true, font, Color.White);
+            spriteBatch.DrawText(info, new Vector2(ScreenSize.X/2-100, 50), false, font, Color.White);
 
 #endif
 

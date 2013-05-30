@@ -24,7 +24,7 @@ namespace TrippingOctoNemesis
 
         public SpaceShip(Fraction fraction)
         {
-            EnginePositions[0] = Vector2.Zero;
+            SetEngines(Vector2.Zero);
             Fraction = fraction;
             Color = Color.Lerp(Color.White,Fraction.Color,fractionColorBrightness);
             Weapon = new Weapon(this);

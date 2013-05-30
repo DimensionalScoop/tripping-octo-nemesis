@@ -13,9 +13,22 @@ using X45Game.Extensions;
 
 namespace TrippingOctoNemesis
 {
+    //public class Navigatior
+    //{
+    //    public float Speed { get; protected set; }
+    //    public float Angle { get; protected set; }
+    //    public readonly float DefaultSpeed;
+    //    public readonly float DeploySpeed;
+    //    public readonly float DefaltAngleSpeed;
+    //    public readonly float DeployAngleSpeed;
+
+    //    public Vector2 Direction { get { return new Vector2((float)Math.Cos(Angle), (float)Math.Sin(Angle)); } }
+
+    //    public Navigatior(ü
+    //}
+
     public partial class SpaceShip
     {
-        public bool IntPosition;
         public Vector2 Position = new Vector2(100, 100);
         public Vector2 TargetPosition = new Vector2(500, 500);
         public float Speed = 120;
@@ -33,7 +46,7 @@ namespace TrippingOctoNemesis
 
         protected void CalcMovement(GameTime gameTime)
         {
-            if (ActivateEvasion&&Status!= Condition.ReturningPhase1&&Status!=Condition.ReturningPhase2)
+            if (ActivateEvasion&&Status!= Conditions.ReturningPhase1&&Status!=Conditions.ReturningPhase2)
             {
                 Angle += 0.05f * (float)gameTime.ElapsedGameTime.TotalSeconds * AngleSpeed;
                 ActivateEvasion = false;
@@ -66,7 +79,7 @@ namespace TrippingOctoNemesis
         readonly static float minDistanceForAngleSpeedReduction = (float)Math.Pow(200, 2);
         private void CalcNewAngle(GameTime gameTime, float difference)
         {
-            if (Status == Condition.ReturningPhase1 || Status == Condition.ReturningPhase2)
+            if (Status == Conditions.ReturningPhase1 || Status == Conditions.ReturningPhase2)
             {
                 Angle = MathHelper.WrapAngle(Angle + difference * (float)gameTime.ElapsedGameTime.TotalSeconds * AngleSpeed / 2);
             }

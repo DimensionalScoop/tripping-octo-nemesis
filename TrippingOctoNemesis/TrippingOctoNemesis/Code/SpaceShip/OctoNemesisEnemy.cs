@@ -26,7 +26,7 @@ namespace TrippingOctoNemesis
             : base(fraction)
         {
             Sprite = new SpriteSheet("e\\ton-eyeball");
-            Status = Condition.Airborne;
+            Status = Conditions.Airborne;
             //HasTarget = false;
             Speed = 1000/16f;
             Angle = -MathHelper.PiOver2;

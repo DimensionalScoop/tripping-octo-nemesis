@@ -18,28 +18,28 @@ namespace TrippingOctoNemesis.Extensions.MapObjects
     /// </summary>
     public class Wait:MapObject
     {
-        TimeSpan start;
-        TimeSpan duration;
+        protected TimeSpan Start;
+        protected TimeSpan Duration;
 
         public Wait(float seconds)
         {
             Name = "Wait "+(int)seconds+" s";
             VisibleOnMap = false;
-            duration = TimeSpan.FromSeconds(seconds);
-            Size = (float)duration.TotalSeconds*10;
+            Duration = TimeSpan.FromSeconds(seconds);
+            Size = (float)Duration.TotalSeconds*10;
             //TODO: Size=Speed*duration
         }
 
         public override void Activated(GameTime gameTime)
         {
-            start = gameTime.TotalGameTime;
+            Start = gameTime.TotalGameTime;
 
             base.Activated(gameTime);
         }
 
         public override void Update(GameTime gameTime)
         {
-            if (gameTime.TotalGameTime - start >= duration)
+            if (gameTime.TotalGameTime - Start >= Duration)
                 Delete();
             
             base.Update(gameTime);

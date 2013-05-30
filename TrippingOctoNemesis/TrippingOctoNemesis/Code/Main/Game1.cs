@@ -41,8 +41,8 @@ namespace TrippingOctoNemesis
             Font.Initialize(Content);
 
             #if DEBUG
-            var window = System.Windows.Forms.Form.FromHandle(Window.Handle);
-            window.Location = new System.Drawing.Point(-1366, 200);
+            //var window = System.Windows.Forms.Form.FromHandle(Window.Handle);
+            //window.Location = new System.Drawing.Point(-1366, 200);
             #endif
 
             base.Initialize();
