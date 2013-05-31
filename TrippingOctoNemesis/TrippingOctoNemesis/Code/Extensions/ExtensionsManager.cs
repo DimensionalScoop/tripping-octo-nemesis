@@ -10,7 +10,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using X45Game;
 using X45Game.Drawing;
-using X45Game.Effect;
+
 using X45Game.Input;
 using X45Game.Extensions;
 using System.Reflection;

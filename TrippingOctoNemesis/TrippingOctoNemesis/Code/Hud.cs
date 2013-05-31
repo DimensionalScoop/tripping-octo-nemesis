@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using X45Game;
 using X45Game.Drawing;
-using X45Game.Effect;
+
 using X45Game.Input;
 using X45Game.Extensions;
 
@@ -23,7 +23,7 @@ namespace TrippingOctoNemesis
         public KeyProvider Key;
         SpriteBatch spriteBatch;
 
-        static readonly Font font = new Font("f\\sfont");
+        static readonly Font font = new Font("font");
 
 
         public Hud(Game game)
@@ -57,7 +57,9 @@ namespace TrippingOctoNemesis
 
             info += "Warp Factor: " + (int)(GameControl.Stars.WarpFactor*100)+"%";
             info += "\nCamera: " + Camera;
-            info += "\nPlayer: " + GameControl.Ships.Find(p => p.Fraction == GameControl.Player[0]).Position;
+            var player=GameControl.Ships.Find(p => p.Fraction == GameControl.Player[0]);
+            if(player!=null)
+            info += "\nPlayer: " + player.Position.ToString();
             if (GameControl.Ships.Find(p => p.Fraction.IsEnemy(GameControl.Player[0])) != null)
             {
                 var enepos = GameControl.Ships.Find(p => p.Fraction.IsEnemy(GameControl.Player[0])).Position;

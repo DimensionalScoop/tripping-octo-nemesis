@@ -51,7 +51,7 @@
     <NoStdLib>true</NoStdLib>
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <PlatformTarget>x86</PlatformTarget>
-    <XnaCompressContent>True</XnaCompressContent>
+    <XnaCompressContent>False</XnaCompressContent>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <DebugType>pdbonly</DebugType>
@@ -159,12 +159,13 @@
     <Compile Include="Code\Main\GameControl.cs" />
     <Compile Include="Code\Main\TestMap.cs" />
     <Compile Include="Code\Particles\Blast.cs" />
-    <Compile Include="Code\Particles\DestroiedShip.cs" />
+    <Compile Include="Code\Particles\DestroyedShip.cs" />
     <Compile Include="Code\Particles\Explosion.cs" />
     <Compile Include="Code\Particles\Burst.cs" />
     <Compile Include="Code\Particles\MultiBlast.cs" />
     <Compile Include="Code\Particles\SmallBlast.cs" />
     <Compile Include="Code\Particles\PartialExplosion.cs" />
+    <Compile Include="Code\Particles\Text.cs" />
     <Compile Include="Code\SpaceShip\DeploySlots.cs" />
     <Compile Include="Code\Hud.cs" />
     <Compile Include="Code\SpaceShip\D1Enemy.cs" />

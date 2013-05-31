@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using X45Game;
 using X45Game.Drawing;
-using X45Game.Effect;
+
 using X45Game.Input;
 using X45Game.Extensions;
 
@@ -25,7 +25,7 @@ namespace TrippingOctoNemesis
         public D1Enemy(Hud hud,Fraction fraction)
             : base(hud, fraction)
         {
-            Sprite = new SpriteSheet("e\\Tripping-Octo-Nemesis-Base");
+            Sprite = new SpriteSheet("s\\Tripping-Octo-Nemesis-Base");
             Status = Conditions.Airborne;
             HasTarget = true;
             Speed = 1000/16+10;

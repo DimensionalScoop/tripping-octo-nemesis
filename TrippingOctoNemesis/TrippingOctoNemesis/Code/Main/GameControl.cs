@@ -7,7 +7,6 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using X45Game;
 using X45Game.Drawing;
-using X45Game.Effect;
 using X45Game.Input;
 using X45Game.Extensions;
 using TrippingOctoNemesis.Extensions;
@@ -27,7 +26,7 @@ namespace TrippingOctoNemesis
 
         SpriteBatch spriteBatch;
         Random random = new Random();
-        GameTime lastUpdate = new GameTime();
+        public static GameTime LastUpdate = new GameTime();
 
         public static Hud Hud;
         TextInterface text;
@@ -125,7 +124,7 @@ namespace TrippingOctoNemesis
 
         public override void Update(GameTime gameTime)
         {
-            lastUpdate = gameTime;
+            LastUpdate = gameTime;
 
             FrameUpdate(gameTime);
             LongUpdate(gameTime);
@@ -163,7 +162,7 @@ namespace TrippingOctoNemesis
         {
             CurrentMap = extensions.Maps.Find(p => p.Id == id);
             CurrentMap.Reset();
-            CurrentMap.Start(lastUpdate);
+            CurrentMap.Start(LastUpdate);
         }
 
         private void Finish()

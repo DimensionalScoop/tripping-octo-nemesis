@@ -7,19 +7,19 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using X45Game;
 using X45Game.Drawing;
-using X45Game.Effect;
+
 using X45Game.Input;
 using X45Game.Extensions;
 
 namespace TrippingOctoNemesis.Particles
 {
-    public class DestroiedShip:Particle
+    public class DestroyedShip:Particle
     {
         Vector2 momentum;
         Vector2 leftDrift;
         Vector2 rightDrift;
 
-        public DestroiedShip(Vector2 origin,Vector2 momentum, SpriteSheet sprite)
+        public DestroyedShip(Vector2 origin,Vector2 momentum, SpriteSheet sprite)
         {
             Origin = origin;
             Sprite = sprite;

@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using X45Game;
 using X45Game.Drawing;
-using X45Game.Effect;
+
 using X45Game.Input;
 using X45Game.Extensions;
 using System.Diagnostics;
@@ -93,13 +93,15 @@ namespace TrippingOctoNemesis
         /// <summary>
         /// Deals the given amount of damage to this ship.
         /// </summary>
-        /// <param name="damage"></param>
-        public void DealDamage(int damage)
+        /// <param name="hitpointsToAdd"></param>
+        public void DealDamage(int hitpointsToAdd,Vector2 position)
         {
-            Debug.Assert(damage<=0);
+            Debug.Assert(hitpointsToAdd<=0);
 
-            Hitpoints = (int)MathHelper.Clamp(Hitpoints + damage, 0, MaxHitpoints);
+            Hitpoints = (int)MathHelper.Clamp(Hitpoints + hitpointsToAdd, 0, MaxHitpoints);
             if (HitpointsChanged != null) HitpointsChanged(this);
+            if (hitpointsToAdd != 0)
+                Particle.Add(new Particles.Text(position, hitpointsToAdd > 0 ? "+" : "" + hitpointsToAdd, 1, hitpointsToAdd > 0 ? Color.Green : Color.Red));
 
             if (Hitpoints == 0) Delete();
         }

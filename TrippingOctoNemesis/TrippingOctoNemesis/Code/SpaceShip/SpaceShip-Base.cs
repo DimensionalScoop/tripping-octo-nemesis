@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using X45Game;
 using X45Game.Drawing;
-using X45Game.Effect;
+
 using X45Game.Input;
 using X45Game.Extensions;
 
@@ -38,7 +38,7 @@ namespace TrippingOctoNemesis
             if (reason == DeleteReasons.Destroyed)
             {
                 Particle.Add(new Particles.Explosion(Position, (int)this.Sprite.TextureOrigin.Length()));
-                Particle.Add(new Particles.DestroiedShip(Position,Vector2.Zero.Transform(Angle,Speed), Sprite) { Color = Color, Rotation = MathHelper.PiOver2 + Angle });
+                Particle.Add(new Particles.DestroyedShip(Position,Vector2.Zero.Transform(Angle,Speed), Sprite) { Color = Color, Rotation = MathHelper.PiOver2 + Angle });
             }
             DeleteableShips = true;
             DeleteFlag = true;

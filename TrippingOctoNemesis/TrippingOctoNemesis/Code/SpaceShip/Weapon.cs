@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using X45Game;
 using X45Game.Drawing;
-using X45Game.Effect;
+
 using X45Game.Input;
 using X45Game.Extensions;
 using System.Diagnostics;
@@ -32,23 +32,24 @@ namespace TrippingOctoNemesis
         protected Vector2 TargetVariation;
         protected bool TargetInRange;
         protected SpaceShip SelectedTarget;
+        protected bool DisplayShoot;
+        protected bool DisplayMiniDerbis;
 
         protected const int ExplosionPixels = 10;
 
-
-        public Weapon(SpaceShip owner) : this(owner, new GameTime()) { }
-
-        public Weapon(SpaceShip owner,GameTime gameTime)
+        public Weapon(SpaceShip owner)
         {
             Owner = owner;
-            LastShoot = gameTime.TotalGameTime + TimeSpan.FromMilliseconds(WeaponCooldown.TotalMilliseconds * Random.NextFloat());
+            LastShoot =  GameControl.LastUpdate.TotalGameTime + TimeSpan.FromMilliseconds(WeaponCooldown.TotalMilliseconds * Random.NextFloat());
         }
-
+        //FIX: Ton Carrier has engines
         bool firstUpdateAfterShootHitTarget;
         public void Update(GameTime gameTime)
         {
-            if (Owner.TargetShip != null  && RangeSquared>=Owner.TargetShipDistanceSquared&&gameTime.TotalGameTime > LastShoot + WeaponCooldown)
+            if (Owner.TargetShip != null  && Owner.TargetShip.Hitpoints>0 && RangeSquared>=Owner.TargetShipDistanceSquared&&gameTime.TotalGameTime > LastShoot + WeaponCooldown)
             {
+                DisplayShoot = true;
+                DisplayMiniDerbis = false;
                 firstUpdateAfterShootHitTarget = false;
                 TargetInRange = true;
                 SelectedTarget=Owner.TargetShip;
@@ -58,11 +59,13 @@ namespace TrippingOctoNemesis
             {
                 TargetInRange = false;
                 SelectedTarget = null;
-            }
+            }//  
 
-            if (SelectedTarget!=null && !firstUpdateAfterShootHitTarget && gameTime.TotalGameTime > LastShoot && gameTime.TotalGameTime < LastShoot + ShootDuration)
+            if (SelectedTarget!=null && !firstUpdateAfterShootHitTarget && RangeSquared>=Owner.TargetShipDistanceSquared && gameTime.TotalGameTime > LastShoot && gameTime.TotalGameTime < LastShoot + ShootDuration)
             {
-                SelectedTarget.DealDamage(-Damage);
+                DisplayShoot = false;
+                DisplayMiniDerbis = true;
+                SelectedTarget.DealDamage(-Damage, SelectedTarget.Position + TargetVariation);
                 firstUpdateAfterShootHitTarget = true;
             }
 
@@ -74,7 +77,7 @@ namespace TrippingOctoNemesis
         {
             if (SelectedTarget == null) return;
 
-            if (gameTime.TotalGameTime > LastShoot + ShootDuration && gameTime.TotalGameTime < LastShoot + ShootDuration + ExplosionDuration)
+            if (DisplayMiniDerbis && gameTime.TotalGameTime > LastShoot + ShootDuration && gameTime.TotalGameTime < LastShoot + ShootDuration + ExplosionDuration)
             {
                 float t = (float)((gameTime.TotalGameTime - LastShoot - ShootDuration).TotalSeconds / ExplosionDuration.TotalSeconds);
                 Debug.Assert(t >= 0 && t <= 1);
@@ -90,7 +93,7 @@ namespace TrippingOctoNemesis
                         , DrawOrder.Bullet);
             }
 
-            if(gameTime.TotalGameTime > LastShoot && gameTime.TotalGameTime < LastShoot + ShootDuration)
+            if(DisplayShoot && gameTime.TotalGameTime > LastShoot && gameTime.TotalGameTime < LastShoot + ShootDuration)
             {
                 var t = (float)((gameTime.TotalGameTime - LastShoot).TotalSeconds / ShootDuration.TotalSeconds);
                 Debug.Assert(t >= 0 && t <= 1);

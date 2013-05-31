@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using X45Game;
 using X45Game.Drawing;
-using X45Game.Effect;
+
 using X45Game.Input;
 using TrippingOctoNemesis.Communicator;
 using TrippingOctoNemesis.Extensions;
@@ -28,7 +28,11 @@ namespace TrippingOctoNemesis
             graphics.PreferMultiSampling = false;
             graphics.SynchronizeWithVerticalRetrace = true;
             IsMouseVisible = true;
+#if DEBUG
+            TargetElapsedTime = TimeSpan.FromMilliseconds(35);
+#else
             TargetElapsedTime = TimeSpan.FromMilliseconds(30);
+#endif
             graphics.ApplyChanges();
 
             Components.Add(new GameControl(this));

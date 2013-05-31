@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using X45Game;
 using X45Game.Drawing;
-using X45Game.Effect;
+
 using X45Game.Input;
 using X45Game.Extensions;
 
@@ -17,15 +17,15 @@ namespace TrippingOctoNemesis
 
     public class OctoNemesisEnemy:SpaceShip
     {
-        static readonly Sprite eye = new Sprite("e\\ton-eye");
-        static readonly Sprite[] tentacleSprites = new Sprite[] { new Sprite("e\\ton-ten-1"), new Sprite("e\\ton-ten-2") };
+        static readonly Sprite eye = new Sprite("s\\ton-eye");
+        static readonly Sprite[] tentacleSprites = new Sprite[] { new Sprite("s\\ton-ten-1"), new Sprite("s\\ton-ten-2") };
 
         List<Tentacle> tentacle = new List<Tentacle>();
 
         public OctoNemesisEnemy(Fraction fraction)
             : base(fraction)
         {
-            Sprite = new SpriteSheet("e\\ton-eyeball");
+            Sprite = new SpriteSheet("s\\ton-eyeball");
             Status = Conditions.Airborne;
             //HasTarget = false;
             Speed = 1000/16f;

@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using X45Game;
 using X45Game.Drawing;
-using X45Game.Effect;
+
 using X45Game.Input;
 using X45Game.Extensions;
 using System.Diagnostics;
@@ -49,7 +49,7 @@ namespace TrippingOctoNemesis.Extensions.MapObjects
             Color = Color.DarkRed;
             List<SpaceShip> shipsToAdd = new List<SpaceShip>();
             for (int i = 1; i <= repetitions; i++)
-            {//BUG: Must deep copy ships!!
+            {//BUG: deep copy ships!!
                 foreach (var elem in ships)
                     elem.Position = position(i);
                 shipsToAdd.AddRange(ships);

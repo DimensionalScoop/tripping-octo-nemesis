@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using X45Game;
 using X45Game.Drawing;
-using X45Game.Effect;
+
 using X45Game.Input;
 using X45Game.Extensions;
 using System.Diagnostics;
@@ -71,7 +71,7 @@ namespace TrippingOctoNemesis.Extensions
         /// <summary>
         /// The ui font of the minimap.
         /// </summary>
-        static readonly Font font = new Font("f\\sfont");
+        static readonly Font font = new Font("font");
         /// <summary>
         /// Vertical offset of the minimap.
         /// </summary>

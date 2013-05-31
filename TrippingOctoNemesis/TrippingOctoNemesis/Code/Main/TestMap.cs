@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using X45Game;
 using X45Game.Drawing;
-using X45Game.Effect;
+
 using X45Game.Input;
 using X45Game.Extensions;
 using TrippingOctoNemesis.Extensions.MapObjects;
@@ -46,9 +46,8 @@ namespace TrippingOctoNemesis
             Entities.AddRange(new MapObject[]{
 
                 new Warp(1),
-                new Wait(4),
+                new Wait(20),
                 new Warp(0,3),
-                new Warp(0,2),
                 new Wait(1),
                 new Spawn(new SpaceShip(GameControl.Enemys[1]){Position=new Vector2(100,-300),Status= SpaceShip.Conditions.Airborne,KI = TrippingOctoNemesis.SpaceShip.KIs.NearestEnemy,HasTarget=true, KeepScreenPosition=false},
                     new SpaceShip(GameControl.Enemys[1]){Position=new Vector2(200,-300),Status= SpaceShip.Conditions.Airborne,KI = TrippingOctoNemesis.SpaceShip.KIs.NearestEnemy,HasTarget=true, KeepScreenPosition=false},
