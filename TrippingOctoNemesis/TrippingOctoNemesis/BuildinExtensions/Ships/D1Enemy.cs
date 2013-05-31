@@ -13,7 +13,7 @@ using X45Game.Extensions;
 
 namespace TrippingOctoNemesis
 {
-    public class D1Enemy:MotherShip
+    public class D1Enemy:Carrier
     {
         TimeSpan lastDeploy;
         TimeSpan deployCooldown;
@@ -38,7 +38,7 @@ namespace TrippingOctoNemesis
             deployDuration = TimeSpan.FromMilliseconds(500);
             Class = ShipClasses.Carrier;
 
-            SetEngines(0);
+            SetEngines(0,null);
         }
 
         public override void Update(GameTime gameTime, Hud hud, List<SpaceShip> otherSpaceShips)

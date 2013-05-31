@@ -11,7 +11,7 @@ using X45Game.Drawing;
 using X45Game.Input;
 using X45Game.Extensions;
 
-namespace TrippingOctoNemesis.Extensions
+namespace TrippingOctoNemesis
 {
     public class MapObject
     {

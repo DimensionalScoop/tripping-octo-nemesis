@@ -162,9 +162,6 @@ namespace TrippingOctoNemesis.Extensions
 
                 LoadedAssemblies.Add(assembly);
                 elem.Maps = GetTypes<Map>(assembly).ToList();
-                elem.Encounters = GetTypes<Encounter>(assembly).ToList();
-                elem.Groups = GetTypes<Group>(assembly).ToList();
-                elem.Enemies = GetTypes<Enemy>(assembly).ToList();
                 elem.Plugins = GetTypes<Plugin>(assembly).ToList();
                 elem.Scripts = GetTypes<Script>(assembly).ToList();
             }

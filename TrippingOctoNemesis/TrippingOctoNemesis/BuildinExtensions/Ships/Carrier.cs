@@ -13,7 +13,7 @@ using X45Game.Extensions;
 
 namespace TrippingOctoNemesis
 {
-    public class MotherShip:SpaceShip
+    public class Carrier:SpaceShip
     {
         public DeploySlots[] Slots = new DeploySlots[4];
         public Vector2 CursorPosition;
@@ -24,7 +24,7 @@ namespace TrippingOctoNemesis
         public float FuelSpeed = 100;
         
 
-        public MotherShip(Hud hud, Fraction fraction)
+        public Carrier(Hud hud, Fraction fraction)
             : base(fraction)
         {
             Sprite = new SpriteSheet("s\\mothership");

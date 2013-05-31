@@ -15,7 +15,7 @@ namespace TrippingOctoNemesis
 {
     public class Player : Fraction
     {
-        public MotherShip MotherShip;
+        public Carrier Carrier;
 
         public ControlKeySettings Keys;
         
@@ -51,28 +51,28 @@ namespace TrippingOctoNemesis
         static readonly TimeSpan fadeDuration = TimeSpan.FromSeconds(0.4f);
         static readonly float CursorSpeed = 800;
         
-
-        public void AssignMotherShip(MotherShip motherShip)
+        //FEATURE: make player's ship modifiable
+        public void AssignCarrier(Carrier motherShip)
         {
-            MotherShip = motherShip;
-            MotherShip.HitpointsChanged += MotherShip_HitpointsChanged;
+            Carrier = motherShip;
+            Carrier.HitpointsChanged += Carrier_HitpointsChanged;
         }
 
         public void AddShipToCarrier(SpaceShip ship)//TODO: make carrier-spaceship interface more clear
         {
-            ship.Carrier = MotherShip;
+            ship.Carrier = Carrier;
             ship.StatusChanged += ship_StatusChanged;
             ship.HitpointsChanged += ship_HitpointsChanged;
         }
 
         void ship_HitpointsChanged(SpaceShip obj)
         {
-            for (int i = 0; i < MotherShip.Slots.Length; i++)
-                if (MotherShip.Slots[i].Flyers.Contains(obj))
+            for (int i = 0; i < Carrier.Slots.Length; i++)
+                if (Carrier.Slots[i].Flyers.Contains(obj))
                     showDeploySlotTimer[i] = lastUpdate;
         }
 
-        void MotherShip_HitpointsChanged(SpaceShip none)
+        void Carrier_HitpointsChanged(SpaceShip none)
         {
             showDamageTimer = lastUpdate;
         }
@@ -88,50 +88,50 @@ namespace TrippingOctoNemesis
         {
             if (!hud.Key.KeysPressed.Contains(Keys.Control))
             {
-                var newPos = MotherShip.Position + GetDPadPosition(gameTime, hud) * MotherShip.FuelSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                var newPos = Carrier.Position + GetDPadPosition(gameTime, hud) * Carrier.FuelSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
                 if ((newPos + hud.Camera).X > 0 && (newPos + hud.Camera).Y > 0 && (newPos + hud.Camera).X < hud.ScreenSize.X && (newPos + hud.Camera).Y < hud.ScreenSize.Y)
                 {
-                    if (newPos != MotherShip.Position)
+                    if (newPos != Carrier.Position)
                     {
-                        MotherShip.Fuel = MathHelper.Clamp(MotherShip.Fuel - MotherShip.FuelConsumptionPerSecond * (float)gameTime.ElapsedGameTime.TotalSeconds
-                            , 0, MotherShip.MaxFuel);
+                        Carrier.Fuel = MathHelper.Clamp(Carrier.Fuel - Carrier.FuelConsumptionPerSecond * (float)gameTime.ElapsedGameTime.TotalSeconds
+                            , 0, Carrier.MaxFuel);
 
                         showEngineTimer = gameTime.TotalGameTime;
-                        MotherShip.Position = newPos;
+                        Carrier.Position = newPos;
                     }
                 }
             }
             else
             {
-                var newPos = MotherShip.CursorPosition + new Vector2(0, 1) * GetDPadPosition(gameTime, hud) * CursorSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                var newPos = Carrier.CursorPosition + new Vector2(0, 1) * GetDPadPosition(gameTime, hud) * CursorSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
                 if ((newPos + hud.Camera).Y > 0 && (newPos + hud.Camera).Y < hud.ScreenSize.Y)
-                    MotherShip.CursorPosition = newPos;
+                    Carrier.CursorPosition = newPos;
             }
 
-            MotherShip.CursorPosition -= hud.CameraDelta;
-            MotherShip.CursorPosition.X = MotherShip.Position.X;
+            Carrier.CursorPosition -= hud.CameraDelta;
+            Carrier.CursorPosition.X = Carrier.Position.X;
 
 
 
             if (!hud.Key.KeysPressed.Contains(Keys.Control))
             {
                 for (int i = 0; i < 4; i++)
-                    if (hud.Key.KeysStroked.Contains(Keys.NumberKeys[i]) && MotherShip.Slots[i].Flyers.Any(p => p.Status == SpaceShip.Conditions.InHangar))
+                    if (hud.Key.KeysStroked.Contains(Keys.NumberKeys[i]) && Carrier.Slots[i].Flyers.Any(p => p.Status == SpaceShip.Conditions.InHangar))
                     {
-                        var ship = MotherShip.Slots[i].Flyers.First(p => p.Status == SpaceShip.Conditions.InHangar);
+                        var ship = Carrier.Slots[i].Flyers.First(p => p.Status == SpaceShip.Conditions.InHangar);
 
-                        ship.Deploy(MotherShip.Position + deploySlotPositions[i] - MotherShip.Sprite.TextureOrigin, MotherShip.CursorPosition, gameTime);
+                        ship.Deploy(Carrier.Position + deploySlotPositions[i] - Carrier.Sprite.TextureOrigin, Carrier.CursorPosition, gameTime);
                         showDeploySlotTimer[i] = gameTime.TotalGameTime;
                     }
             }
             else
             {
                 for (int i = 0; i < 4; i++)
-                    if (hud.Key.KeysStroked.Contains(Keys.NumberKeys[i]) && MotherShip.Slots[i].Flyers.Any(p => p.Status == SpaceShip.Conditions.Airborne))
+                    if (hud.Key.KeysStroked.Contains(Keys.NumberKeys[i]) && Carrier.Slots[i].Flyers.Any(p => p.Status == SpaceShip.Conditions.Airborne))
                     {
-                        MotherShip.Slots[i].Flyers.First(p => p.Status == SpaceShip.Conditions.Airborne)
+                        Carrier.Slots[i].Flyers.First(p => p.Status == SpaceShip.Conditions.Airborne)
                             .Return();
                         showDeploySlotTimer[i] = gameTime.TotalGameTime;
                     }
@@ -157,7 +157,7 @@ namespace TrippingOctoNemesis
         {
             if (ship.Status != SpaceShip.Conditions.ReturningPhase2)
                 for (int i = 0; i < 4; i++)
-                    if (MotherShip.Slots[i].Flyers.Contains(ship)) showDeploySlotTimer[i] = lastUpdate;
+                    if (Carrier.Slots[i].Flyers.Contains(ship)) showDeploySlotTimer[i] = lastUpdate;
         }
 
 
@@ -172,16 +172,16 @@ namespace TrippingOctoNemesis
 
         private void DrawUI(SpriteBatch spriteBatch, Hud hud, GameTime gameTime)
         {
-            spriteBatch.Draw(pointer, MotherShip.CursorPosition + hud.Camera, null, new Color(Color.R, Color.G, Color.B, 0.3f), (float)gameTime.TotalGameTime.TotalSeconds * MathHelper.TwoPi / 10, pointer.TextureOrigin, 1, SpriteEffects.None, DrawOrder.Flyer - 0.04f);
+            spriteBatch.Draw(pointer, Carrier.CursorPosition + hud.Camera, null, new Color(Color.R, Color.G, Color.B, 0.3f), (float)gameTime.TotalGameTime.TotalSeconds * MathHelper.TwoPi / 10, pointer.TextureOrigin, 1, SpriteEffects.None, DrawOrder.Flyer - 0.04f);
 
             if (gameTime.TotalGameTime < showDamageTimer + showTimeout)
             {
                 var t = gameTime.TotalGameTime - showDamageTimer;
                 var col = new Color(1, 1, 1, t > showTimeout - fadeDuration ? 1 - (float)(t - showTimeout + fadeDuration).TotalSeconds / (float)fadeDuration.TotalSeconds : 1);
-                var pos = MotherShip.Position + hud.Camera + hullPosition - MotherShip.Sprite.TextureOrigin;
+                var pos = Carrier.Position + hud.Camera + hullPosition - Carrier.Sprite.TextureOrigin;
 
                 spriteBatch.Draw(hull, pos.Round(), null, col, 0, Vector2.Zero, 1, SpriteEffects.None, DrawOrder.UI);
-                for (int i = 0; i < (int)(8 * (MotherShip.Hitpoints / (float)MotherShip.MaxHitpoints)); i++)
+                for (int i = 0; i < (int)(8 * (Carrier.Hitpoints / (float)Carrier.MaxHitpoints)); i++)
                     spriteBatch.Draw(hullPoint, (new Vector2(i * (hullPoint.Texture.Width + 1), 0) + pos + hullPointPosition).Round(), null, col, 0, Vector2.Zero, 1, SpriteEffects.None, DrawOrder.UI);
             }
 
@@ -190,14 +190,14 @@ namespace TrippingOctoNemesis
                 {
                     var t = gameTime.TotalGameTime - showDeploySlotTimer[i];
                     var col = new Color(1, 1, 1, t > showTimeout - fadeDuration ? 1 - (float)(t - showTimeout + fadeDuration).TotalSeconds / (float)fadeDuration.TotalSeconds : 1);
-                    var pos = MotherShip.Position + hud.Camera + incPosition[i] - MotherShip.Sprite.TextureOrigin;
+                    var pos = Carrier.Position + hud.Camera + incPosition[i] - Carrier.Sprite.TextureOrigin;
                     spriteBatch.Draw(i < 2 ? incLeft : incRight, pos.Round(), null, col, 0, Vector2.Zero, 1, SpriteEffects.None, DrawOrder.UI);
 
-                    for (int f = 0; f < MotherShip.Slots[i].TotalFlyers; f++)
+                    for (int f = 0; f < Carrier.Slots[i].TotalFlyers; f++)
                     {
-                        var sprite = MotherShip.Slots[i].Flyers[f].Icon;
+                        var sprite = Carrier.Slots[i].Flyers[f].Icon;
                         var icoPos = (pos + incPointPosition[i] + new Vector2(f * (1 + sprite.Texture.Width), 0)).Round();
-                        var color = new Color(MotherShip.Slots[i].Flyers[f].StatusColor.R, MotherShip.Slots[i].Flyers[f].StatusColor.G, MotherShip.Slots[i].Flyers[f].StatusColor.B, col.A);
+                        var color = new Color(Carrier.Slots[i].Flyers[f].StatusColor.R, Carrier.Slots[i].Flyers[f].StatusColor.G, Carrier.Slots[i].Flyers[f].StatusColor.B, col.A);
 
                         spriteBatch.Draw(sprite,icoPos, null,color,0, Vector2.Zero, 1, SpriteEffects.None, DrawOrder.UI);
                     }
@@ -207,11 +207,11 @@ namespace TrippingOctoNemesis
             {
                 var t = gameTime.TotalGameTime - showEngineTimer;
                 var col = new Color(1, 1, 1, t > showTimeout - fadeDuration ? 1 - (float)(t - showTimeout + fadeDuration).TotalSeconds / (float)fadeDuration.TotalSeconds : 1);
-                var pos = MotherShip.Position + hud.Camera + enginePosition - MotherShip.Sprite.TextureOrigin;
+                var pos = Carrier.Position + hud.Camera + enginePosition - Carrier.Sprite.TextureOrigin;
 
                 spriteBatch.Draw(engine, pos.Round(), null, col, 0, Vector2.Zero, 1, SpriteEffects.None, DrawOrder.UI);
                 spriteBatch.Draw(engineBar, (pos + engineBarPosition).Round(),
-                    new Rectangle(0, 0, (int)(engineBar.Texture.Width * MotherShip.Fuel / MotherShip.MaxFuel), engineBar.Texture.Height),
+                    new Rectangle(0, 0, (int)(engineBar.Texture.Width * Carrier.Fuel / Carrier.MaxFuel), engineBar.Texture.Height),
                     col, 0, Vector2.Zero, 1, SpriteEffects.None, DrawOrder.UI);
             }
         }

@@ -57,6 +57,8 @@ namespace TrippingOctoNemesis
         {
             this.trackLength = trackLenght;
             EnginePositions = positions;
+            if (EnginePositions == null)
+                EnginePositions = new Vector2[0];
         }
 
         protected void CalcTrack()

@@ -108,7 +108,7 @@ namespace TrippingOctoNemesis
         {
             Player[p] = new Player() { Keys = keys };
 
-            var motherShip = new MotherShip(Hud, Player[p]) { Position = new Vector2(300 + 300 * p, 500) };
+            var motherShip = new Carrier(Hud, Player[p]) { Position = new Vector2(300 + 300 * p, 500) };
             Player[p].AssignMotherShip(motherShip);
             Ships.Add(motherShip);
 
@@ -209,7 +209,7 @@ namespace TrippingOctoNemesis
             List<SpaceShip> exclude = new List<SpaceShip>();
             for (int i = 0; i < Ships.Count; i++)
             {
-                if (exclude.Contains(Ships[i]) || Ships[i] as MotherShip != null) continue;
+                if (exclude.Contains(Ships[i]) || Ships[i] as Carrier != null) continue;
                 for (int j = i + 1; j < Ships.Count; j++)
                     if (Vector2.DistanceSquared(Ships[i].Position, Ships[j].Position) < minCollisionRadius)
                     {

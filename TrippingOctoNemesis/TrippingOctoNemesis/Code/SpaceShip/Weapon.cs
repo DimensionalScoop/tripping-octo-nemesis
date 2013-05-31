@@ -88,7 +88,7 @@ namespace TrippingOctoNemesis
                 var spos = Vector2.Lerp(source, target, 1+(float)(((gameTime.TotalGameTime - LastShoot).TotalSeconds / ShootDuration.TotalSeconds)-1)/10);
 
                 for (int i = 0; i < ExplosionPixels; i++)
-                    Basic.DrawRectangle(spriteBatch, spos + TargetVariation + new Vector2(10, 10) * new Vector2(Random.NextFloat() - 0.5f, Random.NextFloat() - 0.5f), 1, 1,
+                    spriteBatch.DrawRectangle(spos + TargetVariation + new Vector2(10, 10) * new Vector2(Random.NextFloat() - 0.5f, Random.NextFloat() - 0.5f), 1, 1,
                         new Color(Random.NextFloat()*0.5f+t/2f, Random.NextFloat()*0.5f+t/2f, t, 0.5f)
                         , DrawOrder.Bullet);
             }
@@ -104,9 +104,7 @@ namespace TrippingOctoNemesis
                 var spos=Vector2.Lerp(source,target,t);
                 var tpso = spos.Transform(target.Angle(source), 10);//(target - source)/10+target;//spos.Transform(FireAngle , 15);
 
-                Basic.DrawLine(spriteBatch,
-                    spos,
-                    tpso,
+                spriteBatch.DrawLine(spos,tpso,
                     new Color(Owner.Fraction.Color.R,Owner.Fraction.Color.G,Owner.Fraction.Color.B,
                         1f//(float)Math.Sin(t*MathHelper.TwoPi*3)
                         ), DrawOrder.Bullet);

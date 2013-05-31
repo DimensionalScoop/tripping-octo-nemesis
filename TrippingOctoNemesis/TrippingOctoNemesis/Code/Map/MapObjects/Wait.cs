@@ -11,28 +11,37 @@ using X45Game.Drawing;
 using X45Game.Input;
 using X45Game.Extensions;
 
-namespace TrippingOctoNemesis.Extensions.MapObjects
+namespace TrippingOctoNemesis.MapObjects
 {
     /// <summary>
-    /// Does nothing and sets delete flag.
+    /// Waits a certain amount of time before the next map object is spawned
     /// </summary>
-    public class Null : MapObject
+    public class Wait:MapObject
     {
-        public Null()
+        protected TimeSpan Start;
+        protected TimeSpan Duration;
+
+        public Wait(float seconds)
         {
-            Name = "Null";
+            Name = "Wait "+(int)seconds+" s";
             VisibleOnMap = false;
-            //TODO: Size=amountOfEnemieFighters
+            Duration = TimeSpan.FromSeconds(seconds);
+            Size = (float)Duration.TotalSeconds*10;
+            //TODO: Size=Speed*duration
         }
 
         public override void Activated(GameTime gameTime)
         {
-            Delete();
+            Start = gameTime.TotalGameTime;
+
             base.Activated(gameTime);
         }
 
         public override void Update(GameTime gameTime)
         {
+            if (gameTime.TotalGameTime - Start >= Duration)
+                Delete();
+            
             base.Update(gameTime);
         }
     }

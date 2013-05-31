@@ -11,27 +11,28 @@ using X45Game.Drawing;
 using X45Game.Input;
 using X45Game.Extensions;
 
-namespace TrippingOctoNemesis.Extensions.MapObjects
+namespace TrippingOctoNemesis.MapObjects
 {
     /// <summary>
-    /// Waits until all non-player ships vanished before the next map object is spawned.
+    /// Does nothing and sets delete flag.
     /// </summary>
-    public class Clear:MapObject
+    public class Null : MapObject
     {
-        public Clear()
+        public Null()
         {
-            Name = "Clear";
+            Name = "Null";
             VisibleOnMap = false;
             //TODO: Size=amountOfEnemieFighters
         }
 
+        public override void Activated(GameTime gameTime)
+        {
+            Delete();
+            base.Activated(gameTime);
+        }
+
         public override void Update(GameTime gameTime)
         {
-            if (GameControl.Ships.All(p =>
-                p.Fraction == GameControl.Player[0] ||
-                p.Fraction == GameControl.Player[1]))
-                Delete();
-
             base.Update(gameTime);
         }
     }

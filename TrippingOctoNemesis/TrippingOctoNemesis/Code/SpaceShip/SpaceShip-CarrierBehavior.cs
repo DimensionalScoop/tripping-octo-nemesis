@@ -15,7 +15,7 @@ namespace TrippingOctoNemesis
 {
     public partial class SpaceShip
     {
-        public MotherShip Carrier;
+        public Carrier Carrier;
         public TimeSpan LaunchTime;
         public readonly TimeSpan LaunchDuration = TimeSpan.FromSeconds(1);
 

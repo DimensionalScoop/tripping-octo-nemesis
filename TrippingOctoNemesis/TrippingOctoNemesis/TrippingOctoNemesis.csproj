@@ -137,27 +137,21 @@
     <Compile Include="Code\Communicator\Character.cs" />
     <Compile Include="Code\Communicator\Speech.cs" />
     <Compile Include="Code\Communicator\TextInterface.cs" />
-    <Compile Include="Code\Extensions\BackgroundObjects.cs" />
-    <Compile Include="Code\Extensions\Encounter.cs" />
-    <Compile Include="Code\Extensions\Enemy.cs" />
-    <Compile Include="Code\Extensions\Event.cs" />
-    <Compile Include="Code\Extensions\Events\DefaultEvents.cs" />
+    <Compile Include="Code\Map\BackgroundObjects.cs" />
     <Compile Include="Code\Extensions\ExtensionsManager.cs" />
     <Compile Include="Code\Extensions\Extension.cs" />
-    <Compile Include="Code\Extensions\Group.cs" />
-    <Compile Include="Code\Extensions\Map.cs" />
-    <Compile Include="Code\Extensions\MapObject.cs" />
-    <Compile Include="Code\Extensions\MapObjects\Clear.cs" />
-    <Compile Include="Code\Extensions\MapObjects\Null.cs" />
-    <Compile Include="Code\Extensions\MapObjects\Spawn.cs" />
-    <Compile Include="Code\Extensions\MapObjects\Wait.cs" />
-    <Compile Include="Code\Extensions\MapObjects\Warp.cs" />
+    <Compile Include="Code\Map\Map.cs" />
+    <Compile Include="Code\Map\MapObject.cs" />
+    <Compile Include="Code\Map\MapObjects\Clear.cs" />
+    <Compile Include="Code\Map\MapObjects\Null.cs" />
+    <Compile Include="Code\Map\MapObjects\Spawn.cs" />
+    <Compile Include="Code\Map\MapObjects\Wait.cs" />
+    <Compile Include="Code\Map\MapObjects\Warp.cs" />
     <Compile Include="Code\Extensions\Plugin.cs" />
     <Compile Include="Code\Extensions\Script.cs" />
-    <Compile Include="Code\Extensions\StatusReport.cs" />
     <Compile Include="Code\Fraction\ControlKeySettings.cs" />
     <Compile Include="Code\Main\GameControl.cs" />
-    <Compile Include="Code\Main\TestMap.cs" />
+    <Compile Include="BuildinExtensions\Maps\TestMap.cs" />
     <Compile Include="Code\Particles\Blast.cs" />
     <Compile Include="Code\Particles\DestroyedShip.cs" />
     <Compile Include="Code\Particles\Explosion.cs" />
@@ -167,13 +161,13 @@
     <Compile Include="Code\Particles\PartialExplosion.cs" />
     <Compile Include="Code\Particles\Text.cs" />
     <Compile Include="Code\SpaceShip\DeploySlots.cs" />
-    <Compile Include="Code\Hud.cs" />
-    <Compile Include="Code\SpaceShip\D1Enemy.cs" />
+    <Compile Include="Code\Main\Hud.cs" />
+    <Compile Include="BuildinExtensions\Ships\D1Enemy.cs" />
     <Compile Include="Code\Main\Game1.cs" />
     <Compile Include="Code\Fraction\Fraction.cs" />
-    <Compile Include="Code\SpaceShip\MotherShip.cs" />
-    <Compile Include="Code\SpaceShip\OctoJelly.cs" />
-    <Compile Include="Code\SpaceShip\OctoNemesisEnemy.cs" />
+    <Compile Include="BuildinExtensions\Ships\Missile.cs" />
+    <Compile Include="BuildinExtensions\Ships\Carrier.cs" />
+    <Compile Include="BuildinExtensions\Ships\OctoJelly.cs" />
     <Compile Include="Code\Fraction\Player.cs" />
     <Compile Include="Code\SpaceShip\SpaceShip-CarrierBehavior.cs" />
     <Compile Include="Code\SpaceShip\SpaceShip-Draw.cs" />
@@ -183,28 +177,14 @@
     <Compile Include="Code\SpaceShip\SpaceShip-Update.cs" />
     <Compile Include="Code\SpaceShip\SpaceShip-Base.cs" />
     <Compile Include="Code\SpaceShip\Weapon.cs" />
-    <Compile Include="Code\DrawOrder.cs" />
+    <Compile Include="Code\Misc\DrawOrder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Code\Main\Program.cs" />
-    <Compile Include="Code\Symbols.cs" />
+    <Compile Include="Code\Misc\Symbols.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\Game.ico" />
     <Content Include="Assets\GameThumbnail.png" />
-    <Content Include="Drawing\resources\arrow.png" />
-    <Content Include="Drawing\resources\detail.png" />
-    <Content Include="Drawing\resources\input_bar.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Drawing\resources\point.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Drawing\resources\sel_bar.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Drawing\resources\sel_sel_bar.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\x45game\X45Game\X45Game.csproj">

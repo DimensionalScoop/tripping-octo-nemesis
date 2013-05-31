@@ -12,7 +12,7 @@ using X45Game.Input;
 using X45Game.Extensions;
 using System.Diagnostics;
 
-namespace TrippingOctoNemesis.Extensions.MapObjects
+namespace TrippingOctoNemesis.MapObjects
 {
     /// <summary>
     /// Spawns the given range of ships.
