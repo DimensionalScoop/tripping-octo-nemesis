@@ -36,6 +36,26 @@ namespace TrippingOctoNemesis
                 }
             }
         }
+        public bool UpdateKi
+        {
+            get
+            {
+                switch (Status)
+                {
+                    case Conditions.Airborne:
+                        return true;
+                    case Conditions.Deployed:
+                    case Conditions.InHangar:
+                    case Conditions.Repairing:
+                    case Conditions.ReturningPhase1:
+                    case Conditions.ReturningPhase2:
+                        return false;
+
+                    default: throw new NotImplementedException();
+                }
+            }
+        }
+        
         /// <summary>
         /// Color of the ship icon displayed in the carrier ui.
         /// </summary>
@@ -55,6 +75,8 @@ namespace TrippingOctoNemesis
                 }
             }
         }
+
+
         /// <summary>
         /// The ship icon displayed in the carrier ui.
         /// </summary>

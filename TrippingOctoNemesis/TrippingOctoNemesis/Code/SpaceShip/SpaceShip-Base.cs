@@ -32,10 +32,10 @@ namespace TrippingOctoNemesis
         }
 
 
-        public enum DeleteReasons { Destroyed, Debug }
+        public enum DeleteReasons { Destroyed, Debug, SelfDestruction }
         public void Delete(DeleteReasons reason= DeleteReasons.Destroyed)
         {
-            if (reason == DeleteReasons.Destroyed)
+            if (reason == DeleteReasons.Destroyed||reason==DeleteReasons.SelfDestruction)
             {
                 Particle.Add(new Particles.Explosion(Position, (int)this.Sprite.TextureOrigin.Length()));
                 Particle.Add(new Particles.DestroyedShip(Position,Vector2.Zero.Transform(Angle,Speed), Sprite) { Color = Color, Rotation = MathHelper.PiOver2 + Angle });

@@ -16,59 +16,67 @@ namespace TrippingOctoNemesis
 {
     public partial class SpaceShip
     {
-        public SpaceShip TargetShip;
-        public int TargetShipDistanceSquared;
-        public bool AutoTargetShip = true;
-        public bool HasTarget = true;
-        public bool KeepScreenPosition = true;
-
-        public enum KIs { FixedTargetPosition, NearestEnemy }
-        public KIs KI = KIs.FixedTargetPosition;
-
-        public Weapon Weapon;
-
-        public event Action<SpaceShip> ReachedTarget;
-
-
-        private void CalcKI(GameTime gameTime)
+        public abstract class KI
         {
-            switch (KI)
+            protected SpaceShip Owner;
+
+            public KI(SpaceShip owner)
             {
-                case KIs.FixedTargetPosition: return;
+                Owner = owner;
+            }
 
-                case KIs.NearestEnemy:
-                    if (TargetShip == null)
-                        if (Carrier != null)
-                            TargetPosition = Carrier.Position;
-                        else
-                            TargetPosition = Position;
-                    else TargetPosition = TargetShip.Position;
-                    return;
+            public virtual void Update(GameTime gameTime) { }
+            public virtual void LongUpdate(TimeSpan elapsedTime) { }
+        }
 
-                default: throw new NotImplementedException();
+        public class Dumb:KI
+        {
+            public Dumb(SpaceShip owner) : base(owner) { }
+        }
+
+        public class NearestEnemy : KI
+        {
+            public NearestEnemy(SpaceShip owner) : base(owner) { }
+
+            public override void Update(GameTime gameTime)
+            {
+                if (Owner.TargetShip == null && Owner.TargetShip.Hitpoints>0)
+                    if (Owner.Carrier != null)
+                        Owner.TargetPosition = Owner.Carrier.Position;
+                    else
+                        Owner.TargetPosition = Owner.Position;
+                else Owner.TargetPosition = Owner.TargetShip.Position;
             }
         }
 
-        private void TargetNearesEnemy(List<SpaceShip> otherSpaceShips)
+        public class FixedEnemy : NearestEnemy
         {
-                if (AutoTargetShip && (Status != Conditions.InHangar && Status != Conditions.Repairing))
-                {
-                    TargetShip = null;
-                    TargetShipDistanceSquared = int.MaxValue;
-                    int range;
-                    for (int i = 0; i < otherSpaceShips.Count; i++)
-                        if (Fraction.IsEnemy(otherSpaceShips[i].Fraction) && !(
-                            otherSpaceShips[i].Status == Conditions.Repairing || otherSpaceShips[i].Status == Conditions.InHangar))
-                        {
-                            range = (int)Vector2.DistanceSquared(otherSpaceShips[i].Position, Position);
-                            if (range < TargetShipDistanceSquared)
-                            {
-                                Debug.Assert(Status != Conditions.InHangar && Status != Conditions.Repairing);
-                                TargetShip = otherSpaceShips[i];
-                                TargetShipDistanceSquared = range;
-                            }
-                        }
-                }
+            public FixedEnemy(SpaceShip owner, SpaceShip target) : base(owner) 
+            {
+                Owner.TargetShip = target;
+            }
+
+            public override void Update(GameTime gameTime)
+            {
+                if (Owner.TargetShip == null && Owner.TargetShip.Hitpoints > 0)
+                    Owner.Delete(DeleteReasons.SelfDestruction);
+                else
+                    Owner.TargetPosition = Owner.TargetShip.Position;
+            }
         }
+
+
+
+        public SpaceShip TargetShip;
+        
+        public int TargetShipDistanceSquared;
+
+        //public bool AutoTargetShip = true;
+        //public bool HasTarget = true;
+        //public bool KeepScreenPosition = true;
+
+        public KI Ki;
+        public Weapon Weapon;
+        public event Action<SpaceShip> ReachedTarget;
     }
 }

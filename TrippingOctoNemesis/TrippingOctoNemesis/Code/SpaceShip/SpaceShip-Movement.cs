@@ -13,19 +13,7 @@ using X45Game.Extensions;
 
 namespace TrippingOctoNemesis
 {
-    //public class Navigatior
-    //{
-    //    public float Speed { get; protected set; }
-    //    public float Angle { get; protected set; }
-    //    public readonly float DefaultSpeed;
-    //    public readonly float DeploySpeed;
-    //    public readonly float DefaltAngleSpeed;
-    //    public readonly float DeployAngleSpeed;
-
-    //    public Vector2 Direction { get { return new Vector2((float)Math.Cos(Angle), (float)Math.Sin(Angle)); } }
-
-    //    public Navigatior(ü
-    //}
+    //NEXT: Combine movement and targeting, extract KI
 
     public partial class SpaceShip
     {
@@ -96,8 +84,6 @@ namespace TrippingOctoNemesis
 
                 actualDifference *= MathHelper.SmoothStep(0, 1, MathHelper.Clamp((TargetPosition - Position).LengthSquared() / minDistanceForAngleSpeedReduction, 0, 1));
 
-                //var actualDifference = difference * (float)gameTime.ElapsedGameTime.TotalSeconds * AngleSpeed;
-                //actualDifference *= MathHelper.SmoothStep(0, 1, MathHelper.Clamp((TargetPosition - Position).LengthSquared() / minDistanceForAngleSpeedReduction, 0, 1));
                 if (
                     (actualDifference < 0 && actualDifference < difference) ||
                     (actualDifference > 0 && actualDifference > difference))

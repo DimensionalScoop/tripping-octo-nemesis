@@ -22,15 +22,14 @@ namespace TrippingOctoNemesis
         /// <param name="gameTime"></param>
         /// <param name="hud"></param>
         /// <param name="otherSpaceShips"></param>
-        public virtual void Update(GameTime gameTime, Hud hud, List<SpaceShip> otherSpaceShips)
+        public virtual void Update(GameTime gameTime)
         {
             if (DeleteFlag) return;
 
             if (IsAirborne)
             {
                 CalcTrack();
-                CalcKI(gameTime);
-                CalcTargetAngle(gameTime, hud);
+                if (UpdateKi) Ki.Update(gameTime);
                 CalcMovement(gameTime);
                 if (Weapon != null) Weapon.Update(gameTime);
             }
@@ -44,10 +43,10 @@ namespace TrippingOctoNemesis
         /// <param name="elapsedTime"></param>
         /// <param name="hud"></param>
         /// <param name="otherSpaceShips"></param>
-        public virtual void LongUpdate(TimeSpan elapsedTime, Hud hud, List<SpaceShip> otherSpaceShips)
+        public virtual void LongUpdate(TimeSpan elapsedTime)
         {
-            //Debug.Assert(!DeleteFlag);
-            TargetNearesEnemy(otherSpaceShips);
+            Ki.LongUpdate(elapsedTime);
+            TargetNearesEnemy(GameControl.Ships);
         }
     }
 }
