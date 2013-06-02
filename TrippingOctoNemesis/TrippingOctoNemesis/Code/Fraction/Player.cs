@@ -50,6 +50,7 @@ namespace TrippingOctoNemesis
         static readonly TimeSpan showTimeout = TimeSpan.FromSeconds(3);
         static readonly TimeSpan fadeDuration = TimeSpan.FromSeconds(0.4f);
         static readonly float CursorSpeed = 800;
+
         
         //FEATURE: make player's ship modifiable
         public void AssignCarrier(Carrier motherShip)
@@ -58,7 +59,7 @@ namespace TrippingOctoNemesis
             Carrier.HitpointsChanged += Carrier_HitpointsChanged;
         }
 
-        public void AddShipToCarrier(SpaceShip ship)//TODO: make carrier-spaceship interface more clear
+        public void AddShipToCarrier(SpaceShip ship)//TODO: make carrier-spaceship interface more clear (maybe remove slots).
         {
             ship.Carrier = Carrier;
             ship.StatusChanged += ship_StatusChanged;
@@ -158,6 +159,9 @@ namespace TrippingOctoNemesis
             if (ship.Status != SpaceShip.Conditions.ReturningPhase2)
                 for (int i = 0; i < 4; i++)
                     if (Carrier.Slots[i].Flyers.Contains(ship)) showDeploySlotTimer[i] = lastUpdate;
+
+            if (ship.Status == SpaceShip.Conditions.Airborne)//Ship have just finished deployment
+                ship.Ki = new SpaceShip.KeepScreenPosition(ship.TargetPosition+GameControl.Hud.Camera);
         }
 
 

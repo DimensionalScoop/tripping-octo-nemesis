@@ -14,88 +14,109 @@ using System.Diagnostics;
 
 namespace TrippingOctoNemesis
 {
-    public class Weapon              
+    public abstract class Weapon              
     {
         protected static Random Random = new Random();
         protected static Sprite TargetIcon = new Sprite("i\\target");
 
         public SpaceShip Owner;
 
+        public string Name;
+
         public SpaceShip Target;
         public int TargetDistanceSquared;
 
-        public int Damage = 2;
-        public int RangeSquared = (int)Math.Pow(200,2);
-        /// <summary>
-        /// The position from which the lasers, missiles, etc. are emitted from. Only influences the visible effect, not the (e.g. range) calculations.
-        /// </summary>
-        public Vector2 WeaponPosition;
-        public TimeSpan WeaponCooldown = TimeSpan.FromMilliseconds(2500);
+        public int Damage;
+        public int RangeSquared;
+        public TimeSpan Cooldown;
+        public TimeSpan ShellingDuration;
         /// <summary>
         /// If false, the weapon waits when it has reloaded if there is no legal target and fires immediately if a target becomes available.
         /// If true, the weapon does not wait after it has reloaded but cools down as if it had shoot.
         /// Use the former for matter based weapons (bullets, missiles) or weapons with a large cooldown and the latter for energy based weapons (laser, ion).
         /// </summary>
         public bool Cycling;
+        /// <summary>
+        /// The position from which the lasers, missiles, etc. are emitted from. Only influences the visible effect, not the (e.g. range) calculations.
+        /// </summary>
+        public Vector2 WeaponPosition;
+        /// <summary>
+        /// The position of the weapon impact. Only influences the visible effect, not the (e.g. range) calculations.
+        /// </summary>
+        protected Vector2 TargetVarriation;
 
-        protected TimeSpan LastShoot;
-        protected TimeSpan ShootDuration = TimeSpan.FromMilliseconds(150);
-        protected TimeSpan ExplosionDuration = TimeSpan.FromMilliseconds(250);
-        protected Vector2 TargetVariation;
-        protected bool TargetInRange;
-        protected SpaceShip SelectedTarget;
-        protected bool DisplayShoot;
-        protected bool DisplayMiniDerbis;
+        public TimeSpan LastCooldown;
 
-        protected const int ExplosionPixels = 10;
-
-
-        public enum Conditions { CoolingDown, Shelling }
+        public enum Conditions { CoolingDown, StartingShelling, Shelling, EndingShelling }
         public Conditions Status;
+
+        public delegate bool TargetMethod();
+        public TargetMethod TargetSelector;
 
 
         public Weapon(SpaceShip owner)
         {
             Owner = owner;
-            Status=
-            LastShoot =  GameControl.LastUpdate.TotalGameTime + TimeSpan.FromMilliseconds(WeaponCooldown.TotalMilliseconds * Random.NextFloat());
+            Status =  Conditions.CoolingDown;
         }
 
-        bool firstUpdateAfterShootHitTarget;
+        /// <summary>
+        /// Randomizes the initial cooldown (not the cooldown duration). Otherwise all ships with the same weapon created at the same time also shoot at the same time.
+        /// </summary>
+        protected void AssignRandomCooldownPosition()
+        {
+            LastCooldown = GameControl.LastUpdate.TotalGameTime + TimeSpan.FromMilliseconds(Cooldown.TotalMilliseconds * Random.NextFloat());
+        }
+
         public void Update(GameTime gameTime)
         {
-
-
-#if Old
-            if (Owner.TargetShip != null  && Owner.TargetShip.Hitpoints>0 && RangeSquared>=Owner.TargetShipDistanceSquared&&gameTime.TotalGameTime > LastShoot + WeaponCooldown)
+            switch (Status)
             {
-                DisplayShoot = true;
-                DisplayMiniDerbis = false;
-                firstUpdateAfterShootHitTarget = false;
-                TargetInRange = true;
-                SelectedTarget=Owner.TargetShip;
-                TargetVariation = SelectedTarget.Sprite.TextureOrigin.Rotate(Random.NextFloat() * MathHelper.TwoPi) / 2 * Random.NextFloat();
+                case Conditions.CoolingDown:
+                    if (gameTime.TotalGameTime - LastCooldown > Cooldown)
+                        if (Cycling || (Target != null&&TargetDistanceSquared<=RangeSquared))
+                            Status = Conditions.StartingShelling;
+                    break;
+
+                case Conditions.StartingShelling:
+                    StartedShelling(gameTime);
+                    Status = Conditions.Shelling;
+                    break;
+
+                case Conditions.Shelling:
+                    if (gameTime.TotalGameTime - LastCooldown - Cooldown > ShellingDuration)
+                        Status = Conditions.EndingShelling;
+                    break;
+
+                case Conditions.EndingShelling:
+                    EndedShelling(gameTime);
+                    Status = Conditions.CoolingDown;
+                    LastCooldown = gameTime.TotalGameTime;
+                    break;
+
+                default: throw new NotImplementedException();
             }
-            else if (Owner.TargetShip == null && gameTime.TotalGameTime > LastShoot + WeaponCooldown)
-            {
-                TargetInRange = false;
-                SelectedTarget = null;
-            }//  
-
-            if (SelectedTarget!=null && !firstUpdateAfterShootHitTarget && RangeSquared>=Owner.TargetShipDistanceSquared && gameTime.TotalGameTime > LastShoot && gameTime.TotalGameTime < LastShoot + ShootDuration)
-            {
-                DisplayShoot = false;
-                DisplayMiniDerbis = true;
-                SelectedTarget.DealDamage(-Damage, SelectedTarget.Position + TargetVariation);
-                firstUpdateAfterShootHitTarget = true;
-            }
-
-            if(gameTime.TotalGameTime > LastShoot + WeaponCooldown)
-                LastShoot = gameTime.TotalGameTime;
-#endif
         }
 
+        public void LongUpdate(TimeSpan elsapsedTime)
+        {
+            if (Status == Conditions.CoolingDown)
+                TargetSelector();
+        }
 
+        protected virtual void EndedShelling(GameTime gameTime)
+        {
+            if (Target != null&&TargetDistanceSquared<=RangeSquared)
+                Target.DealDamage(-Damage, Target.Position+TargetVarriation);
+        }
+
+        protected virtual void StartedShelling(GameTime gameTime) 
+        {
+            if(Target!=null && TargetDistanceSquared<=RangeSquared)
+            TargetVarriation = Target.Sprite.TextureOrigin.Rotate(Random.NextFloat() * MathHelper.TwoPi) / 2 * Random.NextFloat();
+        }
+
+        #region Targeting
         public bool TargetNearestEnemy()
         {
             return TargetNearest(p => Owner.Fraction.IsEnemy(p.Fraction));
@@ -152,47 +173,28 @@ namespace TrippingOctoNemesis
                 }
 
             if (Target != null)
+            {
+                RangeSquared = (int)Vector2.DistanceSquared(Target.Position, Owner.Position);
                 return true;
+            }
             return false;
         }
 
-
-        public void Draw(SpriteBatch spriteBatch, Hud hud, GameTime gameTime)
+        public SpaceShip SingleTarget;
+        public bool TargetSingle()
         {
-            if (SelectedTarget == null) return;
+            Debug.Assert(SingleTarget != null);
 
-            if (DisplayMiniDerbis && gameTime.TotalGameTime > LastShoot + ShootDuration && gameTime.TotalGameTime < LastShoot + ShootDuration + ExplosionDuration)
+            Target = SingleTarget;
+            if (Target != null)
             {
-                float t = (float)((gameTime.TotalGameTime - LastShoot - ShootDuration).TotalSeconds / ExplosionDuration.TotalSeconds);
-                Debug.Assert(t >= 0 && t <= 1);
-
-                var source = hud.Camera + Owner.Position + WeaponPosition.Rotate(MathHelper.PiOver2 + Owner.Angle);
-                var target = hud.Camera + SelectedTarget.Position + TargetVariation;
-
-                var spos = Vector2.Lerp(source, target, 1+(float)(((gameTime.TotalGameTime - LastShoot).TotalSeconds / ShootDuration.TotalSeconds)-1)/10);
-
-                for (int i = 0; i < ExplosionPixels; i++)
-                    spriteBatch.DrawRectangle(spos + TargetVariation + new Vector2(10, 10) * new Vector2(Random.NextFloat() - 0.5f, Random.NextFloat() - 0.5f), 1, 1,
-                        new Color(Random.NextFloat()*0.5f+t/2f, Random.NextFloat()*0.5f+t/2f, t, 0.5f)
-                        , DrawOrder.Bullet);
+                RangeSquared = (int)Vector2.DistanceSquared(Target.Position, Owner.Position);
+                return true;
             }
-
-            if(DisplayShoot && gameTime.TotalGameTime > LastShoot && gameTime.TotalGameTime < LastShoot + ShootDuration)
-            {
-                var t = (float)((gameTime.TotalGameTime - LastShoot).TotalSeconds / ShootDuration.TotalSeconds);
-                Debug.Assert(t >= 0 && t <= 1);
-
-                var source=hud.Camera + Owner.Position + WeaponPosition.Rotate(MathHelper.PiOver2 + Owner.Angle);
-                var target = hud.Camera + SelectedTarget.Position + TargetVariation;
-
-                var spos=Vector2.Lerp(source,target,t);
-                var tpso = spos.Transform(target.Angle(source), 10);//(target - source)/10+target;//spos.Transform(FireAngle , 15);
-
-                spriteBatch.DrawLine(spos,tpso,
-                    new Color(Owner.Fraction.Color.R,Owner.Fraction.Color.G,Owner.Fraction.Color.B,
-                        1f//(float)Math.Sin(t*MathHelper.TwoPi*3)
-                        ), DrawOrder.Bullet);
-            }
+            return false;
         }
+        #endregion
+
+        public virtual void Draw(SpriteBatch spriteBatch, GameTime gameTime) { }
     }
 }

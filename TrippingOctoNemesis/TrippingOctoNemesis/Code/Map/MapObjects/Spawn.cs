@@ -109,7 +109,7 @@ namespace TrippingOctoNemesis.MapObjects
             foreach (var ship in Ships)
             {
                 if (spawnRelative)
-                {
+                {//FIX: revise
                     ship.Position -= GameControl.Hud.Camera;//assert that ships are always spawned relative to the position of the player
                     ship.TargetPosition -= GameControl.Hud.Camera;
                 }

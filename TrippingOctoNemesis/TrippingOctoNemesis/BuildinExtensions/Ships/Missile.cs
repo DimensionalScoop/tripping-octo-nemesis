@@ -21,9 +21,9 @@ namespace TrippingOctoNemesis
 
         }
 
-        public override void Update(GameTime gameTime, Hud hud, List<SpaceShip> otherSpaceShips)
+        public override void Update(GameTime gameTime)
         {
-            base.Update(gameTime, hud, otherSpaceShips);
+            base.Update(gameTime);
         }
     }
 }

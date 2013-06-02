@@ -100,7 +100,7 @@ namespace TrippingOctoNemesis
             get
             {
                 float returnValue = MaxHitpoints;
-                if (Weapon != null) returnValue *= (float)(Weapon.Damage / Weapon.WeaponCooldown.TotalSeconds);
+                if (Weapon != null) returnValue *= (float)(Weapon.Damage / Weapon.Cooldown.TotalSeconds);
                 returnValue += DCModifier;
 
                 if (Class == ShipClasses.Carrier) returnValue *= 5;

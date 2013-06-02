@@ -134,6 +134,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BuildinExtensions\Weapons\Laser.cs" />
     <Compile Include="Code\Communicator\Character.cs" />
     <Compile Include="Code\Communicator\Speech.cs" />
     <Compile Include="Code\Communicator\TextInterface.cs" />

@@ -7,7 +7,6 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using X45Game;
 using X45Game.Drawing;
-
 using X45Game.Input;
 using X45Game.Extensions;
 
@@ -40,17 +39,17 @@ namespace TrippingOctoNemesis
             Hitpoints = 100;
             MaxHitpoints = 100;
             IntPosition = true;
-            HasTarget = false;
             Status = Conditions.Airborne;
             additionalLayerDepth = -0.02f;
             Weapon = null;
             Carrier = this;
             Class = ShipClasses.Carrier;
+            Ki = new SpaceShip.NoScreenMovement();
         }
 
-        public override void LongUpdate(TimeSpan elapsedTime, Hud hud, List<SpaceShip> otherSpaceShips)
+        public override void LongUpdate(TimeSpan elapsedTime)
         {
-            base.LongUpdate(elapsedTime, hud, otherSpaceShips);
+            base.LongUpdate(elapsedTime);
 
             if (Fuel == 0)
             {

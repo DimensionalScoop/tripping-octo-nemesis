@@ -18,7 +18,7 @@ namespace TrippingOctoNemesis
     public partial class SpaceShip
     {
         public Vector2 Position = new Vector2(100, 100);
-        public Vector2 TargetPosition = new Vector2(500, 500);
+        public Vector2 TargetPosition;
         public float Speed = 120;
         public float AngleSpeed = 5;
         public float NormaleAngleSpeed = 5;
@@ -29,11 +29,15 @@ namespace TrippingOctoNemesis
 
         public bool ActivateEvasion;
 
-        static readonly int targetMarginSquared = 20 ^ 2;
+        static readonly int targetReachedMarginSquared = (int)Math.Pow(10, 2);//XXX: corrected targetReachedMarginSquared. May cause major movement problems.
 
 
         protected void CalcMovement(GameTime gameTime)
         {
+            if (Ki as NoScreenMovement != null) return;
+
+            CalcTargetAngle(gameTime);//XXX: may cause performance issues
+
             if (ActivateEvasion&&Status!= Conditions.ReturningPhase1&&Status!=Conditions.ReturningPhase2)
             {
                 Angle += 0.05f * (float)gameTime.ElapsedGameTime.TotalSeconds * AngleSpeed;
@@ -43,23 +47,18 @@ namespace TrippingOctoNemesis
             Position += Direction * Speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
         }
 
-        protected void CalcTargetAngle(GameTime gameTime, Hud hud)
+        protected void CalcTargetAngle(GameTime gameTime)
         {
-            if (HasTarget)
+            float targetAngle = (float)Math.Atan2((TargetPosition - Position).Y, (TargetPosition - Position).X);
+            float difference = MathHelper.WrapAngle(targetAngle - Angle);
+            CalcNewAngle(gameTime, difference);
+
+
+            if (ReachedTarget != null && Vector2.DistanceSquared(Position, TargetPosition) < targetReachedMarginSquared)
             {
-                float targetAngle = (float)Math.Atan2((TargetPosition - Position).Y, (TargetPosition - Position).X);
-                float difference = MathHelper.WrapAngle(targetAngle - Angle);
-                CalcNewAngle(gameTime, difference);
-
-                if (KeepScreenPosition) TargetPosition -= hud.CameraDelta;
-
-
-                if (ReachedTarget != null && Vector2.DistanceSquared(Position, TargetPosition) < targetMarginSquared)
-                {
-                    var methods = ReachedTarget.GetInvocationList();
-                    ReachedTarget = null;
-                    foreach (var elem in methods) elem.DynamicInvoke(this);
-                }
+                var methods = ReachedTarget.GetInvocationList();
+                ReachedTarget = null;
+                foreach (var elem in methods) elem.DynamicInvoke(this);
             }
         }
 

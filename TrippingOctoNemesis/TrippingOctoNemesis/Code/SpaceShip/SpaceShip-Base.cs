@@ -27,14 +27,17 @@ namespace TrippingOctoNemesis
             SetEngines(Vector2.Zero);
             Fraction = fraction;
             Color = Color.Lerp(Color.White,Fraction.Color,fractionColorBrightness);
-            Weapon = new Weapon(this);
+            Weapon = new Laser(this,Vector2.Zero);
             Class = ShipClasses.Fighter;
+            Ki = new NearestEnemy();
         }
 
 
         public enum DeleteReasons { Destroyed, Debug, SelfDestruction }
         public void Delete(DeleteReasons reason= DeleteReasons.Destroyed)
         {
+            if (DeleteFlag) return;
+
             if (reason == DeleteReasons.Destroyed||reason==DeleteReasons.SelfDestruction)
             {
                 Particle.Add(new Particles.Explosion(Position, (int)this.Sprite.TextureOrigin.Length()));

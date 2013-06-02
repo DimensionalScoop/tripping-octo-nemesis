@@ -29,6 +29,7 @@ namespace TrippingOctoNemesis
             if (IsAirborne)
             {
                 CalcTrack();
+                Ki.Owner = this;
                 if (UpdateKi) Ki.Update(gameTime);
                 CalcMovement(gameTime);
                 if (Weapon != null) Weapon.Update(gameTime);
@@ -46,7 +47,7 @@ namespace TrippingOctoNemesis
         public virtual void LongUpdate(TimeSpan elapsedTime)
         {
             Ki.LongUpdate(elapsedTime);
-            TargetNearesEnemy(GameControl.Ships);
+            if (Weapon != null) Weapon.LongUpdate(elapsedTime);
         }
     }
 }

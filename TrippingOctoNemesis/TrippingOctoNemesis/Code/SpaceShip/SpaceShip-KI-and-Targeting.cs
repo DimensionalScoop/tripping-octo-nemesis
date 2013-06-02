@@ -18,12 +18,7 @@ namespace TrippingOctoNemesis
     {
         public abstract class KI
         {
-            protected SpaceShip Owner;
-
-            public KI(SpaceShip owner)
-            {
-                Owner = owner;
-            }
+            public SpaceShip Owner;
 
             public virtual void Update(GameTime gameTime) { }
             public virtual void LongUpdate(TimeSpan elapsedTime) { }
@@ -31,49 +26,91 @@ namespace TrippingOctoNemesis
 
         public class Dumb:KI
         {
-            public Dumb(SpaceShip owner) : base(owner) { }
         }
 
         public class NearestEnemy : KI
         {
-            public NearestEnemy(SpaceShip owner) : base(owner) { }
-
             public override void Update(GameTime gameTime)
             {
-                if (Owner.TargetShip == null && Owner.TargetShip.Hitpoints>0)
+                //FIX: strange order - ki updated before weapon is created? Debug.Assert(Owner.Weapon == null);
+                if (Owner.Weapon == null) return;
+
+                if (Owner.Weapon.Target==null)
                     if (Owner.Carrier != null)
                         Owner.TargetPosition = Owner.Carrier.Position;
                     else
                         Owner.TargetPosition = Owner.Position;
-                else Owner.TargetPosition = Owner.TargetShip.Position;
+                else Owner.TargetPosition = Owner.Weapon.Target.Position;
             }
         }
 
-        public class FixedEnemy : NearestEnemy
+        public class FixedEnemy : KI
         {
-            public FixedEnemy(SpaceShip owner, SpaceShip target) : base(owner) 
+            SpaceShip target;
+
+            public FixedEnemy(SpaceShip target)
             {
-                Owner.TargetShip = target;
+                this.target = target;
             }
 
             public override void Update(GameTime gameTime)
             {
-                if (Owner.TargetShip == null && Owner.TargetShip.Hitpoints > 0)
+                Owner.Weapon.SingleTarget = target;
+                Owner.Weapon.TargetSelector = Owner.Weapon.TargetSingle;
+
+                if (Owner.Weapon.SingleTarget.DeleteFlag)
                     Owner.Delete(DeleteReasons.SelfDestruction);
                 else
-                    Owner.TargetPosition = Owner.TargetShip.Position;
+                    Owner.TargetPosition = Owner.Weapon.SingleTarget.Position;
             }
         }
 
+        public class KeepScreenPosition : KI
+        {
+            Vector2 ScreenPosition;
 
+            public KeepScreenPosition(Vector2 screenPosition)
+            {
+                ScreenPosition = screenPosition;
+            }
 
-        public SpaceShip TargetShip;
-        
-        public int TargetShipDistanceSquared;
+            public override void Update(GameTime gameTime)
+            {
+                Owner.TargetPosition = ScreenPosition - GameControl.Hud.Camera;//XXX
+            }
+        }
 
-        //public bool AutoTargetShip = true;
-        //public bool HasTarget = true;
-        //public bool KeepScreenPosition = true;
+        public class Patrol : KI
+        {
+            int index;
+            Vector2[] ScreenPositions;
+
+            public Patrol(params Vector2[] screenPositions)
+            {
+                ScreenPositions = screenPositions;
+                index = -1;
+            }
+
+            void Owner_ReachedTarget(SpaceShip obj)
+            {
+                index++;
+                if (index == ScreenPositions.Length) index = 0;
+            }
+
+            public override void Update(GameTime gameTime)
+            {
+                if (index == -1) Owner.ReachedTarget += Owner_ReachedTarget;
+                Owner.TargetPosition = ScreenPositions[index] - GameControl.Hud.Camera;//XXX
+            }
+        }
+
+        public class NoScreenMovement : KI
+        {
+            public override void Update(GameTime gameTime)
+            {
+                Owner.Position -= GameControl.Hud.CameraDelta;
+            }
+        }
 
         public KI Ki;
         public Weapon Weapon;

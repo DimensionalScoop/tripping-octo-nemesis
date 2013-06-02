@@ -108,8 +108,8 @@ namespace TrippingOctoNemesis
         {
             Player[p] = new Player() { Keys = keys };
 
-            var motherShip = new Carrier(Hud, Player[p]) { Position = new Vector2(300 + 300 * p, 500) };
-            Player[p].AssignMotherShip(motherShip);
+            var motherShip = new Carrier(Hud, Player[p]) { Position = new Vector2(300 + 300 * p, 500), Ki = new SpaceShip.NoScreenMovement() };
+            Player[p].AssignCarrier(motherShip);
             Ships.Add(motherShip);
 
             for (int i = 0; i < 4; i++)
@@ -192,13 +192,13 @@ namespace TrippingOctoNemesis
                     lastFirstLongUpdate = gameTime.TotalGameTime;
                 }
 
-                Ships[updaterPosition].LongUpdate(lastLongUpdateDuration, Hud, Ships);
+                Ships[updaterPosition].LongUpdate(lastLongUpdateDuration);
             }
         }
 
         private void UpdateShips(GameTime gameTime)
         {
-            Ships.ForEach(p => p.Update(gameTime, Hud, Ships));
+            Ships.ForEach(p => p.Update(gameTime));
             if (SpaceShip.DeleteableShips) Ships.RemoveAll(p => p.DeleteFlag);
             UpdateShipEvasion();
         }
