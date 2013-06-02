@@ -33,7 +33,7 @@ Player Two
 
 ###Builds
 If you want to give it a try, you can download the Tripping-Octo-Nemesis binaries here:  
-http://sdrv.ms/17WoxtQ
+http://db.tt/0BI1ZwCm
 
 You also need the Microsoft XNA Framework Redistributable 4.0:  
 http://www.microsoft.com/en-us/download/details.aspx?id=20914
