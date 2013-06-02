@@ -96,6 +96,8 @@ namespace TrippingOctoNemesis.MapObjects
                 returnValue += "Supported Convoy";
             else if (Ships.All(p => p.Class == SpaceShip.ShipClasses.Transporter || p.Class == SpaceShip.ShipClasses.Fighter || p.Class == SpaceShip.ShipClasses.Supporter || p.Class == SpaceShip.ShipClasses.Carrier))
                 returnValue += "Heavy Convoy";
+            else if (Ships.All(p => p.Class == SpaceShip.ShipClasses.Missile))
+                returnValue += "Missile Strike";
             else
                 returnValue += "Ships";
 
