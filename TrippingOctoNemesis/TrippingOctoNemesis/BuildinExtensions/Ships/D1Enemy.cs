@@ -46,7 +46,7 @@ namespace TrippingOctoNemesis
 
             if (availableFlyer > 0 && gameTime.TotalGameTime > lastDeploy + deployCooldown + TimeSpan.FromMilliseconds((packSize - currentPackSize) * deployDuration.TotalMilliseconds))
             {
-                var ship = new OctoJelly(Fraction) { Carrier = this, Ki=new NearestEnemy() };
+                var ship = new OctoJelly(Fraction) { Carrier = this, Ki = new NearestEnemy(), Status = SpaceShip.Conditions.InHangar };
                 GameControl.Ships.Add(ship);
                 ship.Deploy(Position, Vector2.Zero, gameTime);
                 availableFlyer--;

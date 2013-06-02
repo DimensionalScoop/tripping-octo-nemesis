@@ -61,7 +61,7 @@ namespace TrippingOctoNemesis
                 if (Owner.Weapon.SingleTarget.DeleteFlag)
                     Owner.Delete(DeleteReasons.SelfDestruction);
                 else
-                    Owner.TargetPosition = Owner.Weapon.SingleTarget.Position;
+                    Owner.TargetPosition = target.Position;
             }
         }
 

@@ -10,6 +10,7 @@ using X45Game.Drawing;
 
 using X45Game.Input;
 using X45Game.Extensions;
+using System.Diagnostics;
 
 namespace TrippingOctoNemesis
 {
@@ -46,6 +47,8 @@ namespace TrippingOctoNemesis
         {
             CameraDelta = CameraSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
             Camera += CameraDelta;
+
+            if (Key.KeysStroked.Contains(Keys.B)) Debugger.Break();
         }
 
         public override void Draw(GameTime gameTime)

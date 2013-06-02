@@ -39,7 +39,7 @@ namespace TrippingOctoNemesis.Particles
             {
                 Add(new Particles.SmallBlast(
                     Origin.Transform(MathHelper.PiOver2,i / particlesPerLength/20).Transform(Angle, i / particlesPerLength).Transform(MathHelper.TwoPi * Random.NextFloat(), smallBlastVarriation * Random.NextFloat())
-                    ) { DelayFlag = TimeSpan.FromMilliseconds(delaymsPerLength.Random * i / particlesPerLength) }
+                    ) {Color=Color, DelayFlag = TimeSpan.FromMilliseconds(delaymsPerLength.Random * i / particlesPerLength) }
                     );
             }
 
@@ -48,7 +48,7 @@ namespace TrippingOctoNemesis.Particles
             for (int i = 0; i < blasts; i++)
             {
                 Add(new Particles.Blast(
-                    blastOrigin.Transform(MathHelper.PiOver2, Length/20).Transform(MathHelper.TwoPi * Random.NextFloat(), Random.NextFloat() * blastRange)) { DelayFlag = TimeSpan.FromMilliseconds(blastDelaymsVarriation * Random.NextFloat() - blastDelaymsVarriation + delaymsPerLength.Base * Length) });
+                    blastOrigin.Transform(MathHelper.PiOver2, Length/20).Transform(MathHelper.TwoPi * Random.NextFloat(), Random.NextFloat() * blastRange)) { Color=Color,DelayFlag = TimeSpan.FromMilliseconds(blastDelaymsVarriation * Random.NextFloat() - blastDelaymsVarriation + delaymsPerLength.Base * Length) });
             }
 
             base.Delete();

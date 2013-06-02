@@ -22,6 +22,9 @@ namespace TrippingOctoNemesis
         public bool DeleteFlag { get; private set; }
         public event Action<SpaceShip> DeleteFlagSet;
 
+        public bool IsSpawned;
+        public event Action<SpaceShip> WasSpawned;
+
         public SpaceShip(Fraction fraction)
         {
             SetEngines(Vector2.Zero);
@@ -32,12 +35,16 @@ namespace TrippingOctoNemesis
             Ki = new NearestEnemy();
         }
 
+        public virtual void Spawn() 
+        {
+            IsSpawned = true;
+            if (WasSpawned != null) WasSpawned(this);
+        }
 
         public enum DeleteReasons { Destroyed, Debug, SelfDestruction }
-        public void Delete(DeleteReasons reason= DeleteReasons.Destroyed)
+        public virtual void Delete(DeleteReasons reason= DeleteReasons.Destroyed)
         {
             if (DeleteFlag) return;
-
             if (reason == DeleteReasons.Destroyed||reason==DeleteReasons.SelfDestruction)
             {
                 Particle.Add(new Particles.Explosion(Position, (int)this.Sprite.TextureOrigin.Length()));

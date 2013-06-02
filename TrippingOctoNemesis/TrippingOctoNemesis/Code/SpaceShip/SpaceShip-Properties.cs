@@ -16,10 +16,20 @@ namespace TrippingOctoNemesis
 {
     public partial class SpaceShip
     {
-        public enum ShipClasses { None, Fighter, Carrier, Supporter, Transporter, Special }
-        public enum Conditions { InHangar, Airborne, Deployed, ReturningPhase1, ReturningPhase2, Repairing }
+        public enum ShipClasses { None, Fighter, Carrier, Supporter, Transporter, Special, Missile }
+        public enum Conditions { Undefined,InHangar, Airborne, Deployed, ReturningPhase1, ReturningPhase2, Repairing }
 
-        public Conditions Status = Conditions.InHangar;
+        private Conditions __status= Conditions.Undefined;
+        public Conditions Status
+        {
+            get { return __status; }
+            set
+            {
+                if (__status == value) return;
+                __status = value;
+                if(StatusChanged!=null)StatusChanged(this);
+            }
+        }
         public bool IsAirborne
         {
             get

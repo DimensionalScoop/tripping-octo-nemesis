@@ -112,6 +112,7 @@ namespace TrippingOctoNemesis.MapObjects
                 {//FIX: revise
                     ship.Position -= GameControl.Hud.Camera;//assert that ships are always spawned relative to the position of the player
                     ship.TargetPosition -= GameControl.Hud.Camera;
+                    ship.Spawn();
                 }
                 GameControl.Ships.Add(ship);
             }

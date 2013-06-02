@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using X45Game;
 using X45Game.Drawing;
-
+using System.Diagnostics;
 using X45Game.Input;
 using X45Game.Extensions;
 
@@ -29,6 +29,8 @@ namespace TrippingOctoNemesis
 
         public bool ActivateEvasion;
 
+        public bool PreciseAngleSpeed;
+
         static readonly int targetReachedMarginSquared = (int)Math.Pow(10, 2);//XXX: corrected targetReachedMarginSquared. May cause major movement problems.
 
 
@@ -38,7 +40,7 @@ namespace TrippingOctoNemesis
 
             CalcTargetAngle(gameTime);//XXX: may cause performance issues
 
-            if (ActivateEvasion&&Status!= Conditions.ReturningPhase1&&Status!=Conditions.ReturningPhase2)
+            if (!PreciseAngleSpeed && ActivateEvasion&&Status!= Conditions.ReturningPhase1&&Status!=Conditions.ReturningPhase2)
             {
                 Angle += 0.05f * (float)gameTime.ElapsedGameTime.TotalSeconds * AngleSpeed;
                 ActivateEvasion = false;
@@ -53,7 +55,7 @@ namespace TrippingOctoNemesis
             float difference = MathHelper.WrapAngle(targetAngle - Angle);
             CalcNewAngle(gameTime, difference);
 
-
+            
             if (ReachedTarget != null && Vector2.DistanceSquared(Position, TargetPosition) < targetReachedMarginSquared)
             {
                 var methods = ReachedTarget.GetInvocationList();
@@ -66,6 +68,16 @@ namespace TrippingOctoNemesis
         readonly static float minDistanceForAngleSpeedReduction = (float)Math.Pow(200, 2);
         private void CalcNewAngle(GameTime gameTime, float difference)
         {
+            if (PreciseAngleSpeed)
+            {
+                //float poss = (float)gameTime.ElapsedGameTime.TotalSeconds * AngleSpeed;
+
+                //if (difference < 0) poss = -poss;
+                //Angle = MathHelper.WrapAngle(Angle + poss);
+                Angle += difference;
+                return;
+            }
+
             if (Status == Conditions.ReturningPhase1 || Status == Conditions.ReturningPhase2)
             {
                 Angle = MathHelper.WrapAngle(Angle + difference * (float)gameTime.ElapsedGameTime.TotalSeconds * AngleSpeed / 2);

@@ -85,7 +85,7 @@ namespace TrippingOctoNemesis
                 float f = i / (float)trackLength;
                 spriteBatch.DrawRectangle(track[i] + hud.Camera, 1, 1, new Color(f, 0.5f * f, 0, f), DrawOrder.Flyer-0.01f + additionalLayerDepth);
             }
-            if (Weapon != null) Weapon.Draw(spriteBatch, gameTime);
+            if (Weapon != null) Weapon.Draw(spriteBatch, gameTime); 
         }
     }
 }

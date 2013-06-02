@@ -24,6 +24,8 @@ namespace TrippingOctoNemesis
         /// <param name="otherSpaceShips"></param>
         public virtual void Update(GameTime gameTime)
         {
+            Debug.Assert(Status != Conditions.Undefined);
+
             if (DeleteFlag) return;
 
             if (IsAirborne)

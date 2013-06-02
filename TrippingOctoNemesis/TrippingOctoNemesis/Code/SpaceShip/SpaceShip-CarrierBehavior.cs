@@ -31,7 +31,6 @@ namespace TrippingOctoNemesis
                 if (gameTime.TotalGameTime > LaunchTime + LaunchDuration)
                 {
                     Status = Conditions.Airborne;
-                    if (StatusChanged != null) StatusChanged(this);
                     Speed = NormalSpeed;
                     AngleSpeed = NormaleAngleSpeed;
                 }
@@ -49,7 +48,6 @@ namespace TrippingOctoNemesis
         public void Deploy(Vector2 origin, Vector2 target, GameTime gameTime)
         {
             Status = Conditions.Deployed;
-            if(StatusChanged!=null) StatusChanged(this);
             Position = origin;
             TargetPosition = target;
             Angle=-MathHelper.PiOver2;
@@ -61,7 +59,6 @@ namespace TrippingOctoNemesis
         public void Return()
         {
             Status = Conditions.ReturningPhase1;
-            if (StatusChanged != null) StatusChanged(this);
             TargetPosition = Carrier.Position + new Vector2(0, 100);
             ReachedTarget += ReturningPhase1End;
         }
@@ -69,7 +66,6 @@ namespace TrippingOctoNemesis
         void ReturningPhase1End(SpaceShip none)
         {
             Status = Conditions.ReturningPhase2;
-            if (StatusChanged != null) StatusChanged(this);
             TargetPosition = Carrier.Position + new Vector2(0, Carrier.Sprite.TextureOrigin.Y/2);
             ReachedTarget += ReturningPhase2End;
         }
@@ -77,7 +73,6 @@ namespace TrippingOctoNemesis
         void ReturningPhase2End(SpaceShip none)
         {
             Status = Conditions.InHangar;
-            if (StatusChanged != null) StatusChanged(this);
             track.Clear();
         }
     }

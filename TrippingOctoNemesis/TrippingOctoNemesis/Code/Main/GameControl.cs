@@ -114,7 +114,7 @@ namespace TrippingOctoNemesis
 
             for (int i = 0; i < 4; i++)
             {
-                var ship = new SpaceShip(Player[p]) { Carrier = motherShip };
+                var ship = new SpaceShip(Player[p]) { Carrier = motherShip,Status= SpaceShip.Conditions.InHangar };
                 Player[p].AddShipToCarrier(ship);
                 Ships.Add(ship);
                 motherShip.Slots[i] = new DeploySlots(ship);
