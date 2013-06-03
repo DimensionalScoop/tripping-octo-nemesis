@@ -46,13 +46,13 @@ namespace TrippingOctoNemesis
             Entities.AddRange(new MapObject[]{
 
                 new Warp(1),
-                new Wait(1),
-                new Warp(0,1),
+                new Wait(4),
+                new Warp(0,1.5f),
                 new Wait(1),
                 new Spawn(new Predator(GameControl.Enemys[1],p=>GameControl.Player[0].Carrier){Position=new Vector2(100,-10),Status= SpaceShip.Conditions.Airborne},
-                new Predator(GameControl.Enemys[1],p=>GameControl.Player[0].Carrier){Position=new Vector2(300,-10),Status= SpaceShip.Conditions.Airborne},
-                new Predator(GameControl.Enemys[1],p=>GameControl.Player[1].Carrier){Position=new Vector2(500,-10),Status= SpaceShip.Conditions.Airborne},
-                new Predator(GameControl.Enemys[1],p=>GameControl.Player[1].Carrier){Position=new Vector2(800,-10),Status= SpaceShip.Conditions.Airborne}),
+                new Predator(GameControl.Enemys[1],p=>GameControl.Player[0].Carrier){Position=new Vector2(300,-100),Status= SpaceShip.Conditions.Airborne},
+                new Predator(GameControl.Enemys[1],p=>GameControl.Player[1].Carrier){Position=new Vector2(500,-200),Status= SpaceShip.Conditions.Airborne},
+                new Predator(GameControl.Enemys[1],p=>GameControl.Player[1].Carrier){Position=new Vector2(800,-300),Status= SpaceShip.Conditions.Airborne}),
                 new Spawn(new SpaceShip(GameControl.Enemys[1]){Position=new Vector2(100,-300),Status= SpaceShip.Conditions.Airborne},
                     new SpaceShip(GameControl.Enemys[1]){Position=new Vector2(200,-300),Status= SpaceShip.Conditions.Airborne},
                     new SpaceShip(GameControl.Enemys[1]){Position=new Vector2(300,-300),Status= SpaceShip.Conditions.Airborne},

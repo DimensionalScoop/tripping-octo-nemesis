@@ -47,7 +47,7 @@ namespace TrippingOctoNemesis
                 Down = Keys.Down,
                 Left = Keys.Left,
                 Right = Keys.Right,
-                Control = Keys.NumPad0,
+                Control = Keys.RightShift,
                 ActionOk = Keys.LeftControl,
                 NumberKeys=new Keys[]{Keys.NumPad1,Keys.NumPad2,Keys.NumPad3,Keys.NumPad4}
             };

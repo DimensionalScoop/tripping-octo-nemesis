@@ -29,7 +29,7 @@ namespace TrippingOctoNemesis
             graphics.SynchronizeWithVerticalRetrace = true;
             IsMouseVisible = true;
 #if DEBUG
-            TargetElapsedTime = TimeSpan.FromMilliseconds(35);
+            TargetElapsedTime = TimeSpan.FromMilliseconds(30);
 #else
             TargetElapsedTime = TimeSpan.FromMilliseconds(30);
 #endif

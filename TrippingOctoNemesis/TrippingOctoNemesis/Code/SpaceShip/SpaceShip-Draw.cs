@@ -46,6 +46,15 @@ namespace TrippingOctoNemesis
         /// </summary>
         Vector2[] EnginePositions;
 
+        public bool IsVisible
+        {
+            get
+            {
+                var pos = Position + GameControl.Hud.Camera;
+                return !(pos.X < 0 || pos.Y < 0 || pos.X > GameControl.Hud.ScreenSize.X || pos.Y > GameControl.Hud.ScreenSize.Y);
+            }
+        }
+
 
         protected void SetEngines(params Vector2[] positions)
         { SetEngines(50, positions); }
@@ -83,9 +92,9 @@ namespace TrippingOctoNemesis
             for (int i = 0; i < track.Count; i++)
             {
                 float f = i / (float)trackLength;
-                spriteBatch.DrawRectangle(track[i] + hud.Camera, 1, 1, new Color(f, 0.5f * f, 0, f), DrawOrder.Flyer-0.01f + additionalLayerDepth);
+                spriteBatch.DrawRectangle(track[i] + hud.Camera, 1, 1, new Color(f, 0.5f * f, 0, f), DrawOrder.Flyer - 0.01f + additionalLayerDepth);
             }
-            if (Weapon != null) Weapon.Draw(spriteBatch, gameTime); 
+            if (Weapon != null) Weapon.Draw(spriteBatch, gameTime);
         }
     }
 }

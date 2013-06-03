@@ -118,7 +118,19 @@ namespace TrippingOctoNemesis
         {
             base.Draw(spriteBatch, hud, gameTime);
 
-            spriteBatch.DrawText(Position - TargetPosition + "\n" + (int)(Position - TargetPosition).Length(), GameControl.Hud.Camera+ Position + new Vector2(20, -8), false, font, new Color(255,200,200), DrawOrder.UI);
+
+            var pos = Position+GameControl.Hud.Camera+ new Vector2(20, -8);
+            var text="Incoming Missile\nETA " + (int)((Position - TargetPosition).Length() / Speed * 10) + " t";
+
+            if (!IsVisible)
+            {
+                if (pos.X < 0) pos.X = 0;
+                if (pos.Y < 0) pos.Y = 0;
+                if (pos.Y > GameControl.Hud.ScreenSize.Y - font.SpriteFont.LineSpacing * 2) pos.Y = GameControl.Hud.ScreenSize.Y - font.SpriteFont.LineSpacing * 2;
+                if (pos.X > GameControl.Hud.ScreenSize.X - font.SpriteFont.MeasureString(text).X) pos.X = GameControl.Hud.ScreenSize.X - font.SpriteFont.MeasureString(text).X;
+            }
+
+            spriteBatch.DrawText(text, pos, false, font, new Color(255, 150, 150), DrawOrder.UI);
         }
         Font font = new Font("font");
     }
