@@ -14,7 +14,7 @@ You are the captain of an heavy spacecraft carrier alongside another carrier con
 When combat becomes to complex, invite some more friends to take over control of the flyers - you just need enough keyboards or gamepads.
 
 Besides combat you also develop new ships, weapons and improvements to keep your fleet up-to-date. Discover new ship types or improvements like anti-missile systems, energy shields and afterburners. However don't neglect to maintain your fleet: Shiny new missiles might lacerate the heavy enemy carrier you're facing but those fast fighters will pierce your hull in no time without a proper air defence!
-View the [Feature List](/wiki/Feature-List) for a more detailed description.
+View the [Feature List](https://github.com/Elayn/tripping-octo-nemesis/wiki/Feature-List) for a more detailed description.
 
 ![Properties of a carrier](doc/bprint1.png)
 
