@@ -26,12 +26,10 @@ Content\s\transporter.xnb
 Content\s\Tripping-Octo-Jelly_spritesheet.xnb
 Content\s\Tripping-Octo-Nemesis-Base.xnb
 Content\font.xnb
+Input\Nuclex.Input.dll
 Network\Lidgren.Network.dll
 Drawing\Resources\input_bar.png
 Drawing\Resources\point.png
 Drawing\Resources\sel_bar.png
 Drawing\Resources\sel_sel_bar.png
-Drawing\resources\input_bar.png
-Drawing\resources\point.png
-Drawing\resources\sel_bar.png
-Drawing\resources\sel_sel_bar.png
+Input\SlimDX.dll
