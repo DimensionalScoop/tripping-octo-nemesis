@@ -3,6 +3,7 @@ Content\c\mechanic.xnb
 Content\c\merchant.xnb
 Content\c\player-1.xnb
 Content\c\player-2.xnb
+Content\font.xnb
 Content\i\engine-bar.xnb
 Content\i\engine.xnb
 Content\i\hull-point.xnb
@@ -25,11 +26,9 @@ Content\s\scrapper.xnb
 Content\s\transporter.xnb
 Content\s\Tripping-Octo-Jelly_spritesheet.xnb
 Content\s\Tripping-Octo-Nemesis-Base.xnb
-Content\font.xnb
 Input\Nuclex.Input.dll
 Network\Lidgren.Network.dll
 Drawing\Resources\input_bar.png
 Drawing\Resources\point.png
 Drawing\Resources\sel_bar.png
 Drawing\Resources\sel_sel_bar.png
-Input\SlimDX.dll

@@ -11,9 +11,11 @@ namespace NewSpaceShipSystem
         public float MaxShieldPower;
         public float CurrentShieldPower;
 
-        public Shields(float maxShieldPower):base(5,"Shields")
+        public Shields(float maxShieldPower):base(5,5,"Shield")
         {
             MaxShieldPower = maxShieldPower;
+            
+            StatusReport.Write(
         }
 
         public void Damage(float amountOfDamage)

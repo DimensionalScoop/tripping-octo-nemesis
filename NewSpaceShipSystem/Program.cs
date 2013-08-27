@@ -12,14 +12,6 @@ namespace NewSpaceShipSystem
         {
             var test = new Main();
             var random = new Random();
-            for (int i = 0; i < 10; i++)
-            {
-                test.AddSubsystem(new Subsystem() { Priority = random.Next(10) });
-            }
-            //foreach (var item in test.Subsystems)
-            //{
-            //    Console.WriteLine(item.Priority);
-            //}
         }
     }
 }
