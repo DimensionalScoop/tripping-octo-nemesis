@@ -11,14 +11,19 @@ using X45Game.Drawing;
 using X45Game.Effect;
 using X45Game.Input;
 using X45Game.Extensions;
+using TrippingOctoNemesis;
 
 namespace NewSpaceShipSystem
 {
     public class Main
     {
-        protected List<Subsystem> Subsystems = new List<Subsystem>();
+        public List<Subsystem> Subsystems = new List<Subsystem>();
         
         public bool DeleteFlag;
+        public Fraction Fraction;
+        public float MaxAvailableEnergy { get { return FindAllSubsystems<IGenerator>().Sum(p => p.EnergyGeneration); } }
+        public float AssignedEnergy;
+        public float CurrentAvailableEnergy { get { return MaxAvailableEnergy - AssignedEnergy; } }
 
 
         public void AddSubsystem(Subsystem item)
@@ -33,6 +38,25 @@ namespace NewSpaceShipSystem
             var returnValue=Subsystems.Find(p => p is Interface && p.Priority <= maxPriority);
             if (returnValue == null) throw new Exception("Ship interface data not handled!");
             return returnValue as Interface;
+        }
+
+        public List<Interface> FindAllSubsystems<Interface>()
+            where Interface : class
+        {
+            var returnValue = Subsystems.FindAll(p => p is Interface);
+            return returnValue.Select(p => p as Interface).ToList();
+        }
+
+        /// <summary>
+        /// Returns list of all subsystems with specified interface, ordered by priority.
+        /// </summary>
+        /// <typeparam name="Interface"></typeparam>
+        /// <returns></returns>
+        public List<Subsystem> FindAllPrioritySubsystems<Interface>()
+            where Interface : class
+        {
+            var returnValue = Subsystems.FindAll(p => p is Interface);
+            return returnValue;
         }
 
         public void Destroy(string reason)

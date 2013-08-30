@@ -9,10 +9,43 @@ namespace NewSpaceShipSystem
 {
     public class Subsystem
     {
+        [Flags()]
+        public enum Properties
+        {
+            None = 0,
+            /// <summary>
+            /// Subsystem is not online in normal situations, but can be activated in an emergency
+            /// </summary>
+            Fallback = 1 << 0,
+            /// <summary>
+            /// Subsystem is only online if activated by the user (opposed to activation by the energy management)
+            /// </summary>
+            UserActivated=1<<1,
+            /// <summary>
+            /// Subsystem will be preferred over others of the same kind
+            /// </summary>
+            Primary=1<<2,
+            /// <summary>
+            /// Subsystem will be activated only if all other (non-fallback) systems are powered.
+            /// </summary>
+            NonPrimary=1<<3,
+            /// <summary>
+            /// Force subsystem activation
+            /// </summary>
+            OverwriteOn=1<<4,
+            /// <summary>
+            /// Force subsystem deactivation
+            /// </summary>
+            OverwriteOff=1<<5,
+        }
+
         public readonly string Name;
+        public Properties Characteristics;
+        public bool HasCharacteristic(Properties item) { return (Characteristics & item) == item; }
         public readonly int Priority;
         public readonly int Importance;
         public readonly ExtendedString StatusReport;
+        public readonly float MaxOverload;
 
         public float AvailableEnergy;
         public float MinEnergyDemand;
@@ -22,29 +55,77 @@ namespace NewSpaceShipSystem
 
         protected readonly Main Parant;
 
-        public Subsystem(int priority, int importance, string name)
+        public Subsystem(int priority, int importance, string name, int MaxOverload=1)
         {
             Priority = priority;
             Importance = importance;
             Name = name;
             StatusReport = new ExtendedString();
-            StatusReport.Write(name + " subsystem status report\n");
-            StatusReport.Write("Energy: ");
-            StatusReport.Write(() => "" + (int)AvailableEnergy, EnergyDemandColor);
-            StatusReport.Write(() => "/" + MinEnergyDemand + " (" + (int)(EnergyOverload * 100) + "% overload");
+            StatusReport.Write(()=>name + " status report\n",CharacteristicsColor);
+
+            StatusReport.Write(() => MinEnergyDemand != 0 ? "Energy: " : "");
+            StatusReport.Write(() => MinEnergyDemand != 0 ? "" + (int)AvailableEnergy : "", EnergyDemandColor);
+            StatusReport.Write(() => MinEnergyDemand != 0 ? "/" + MinEnergyDemand + " (" + (int)(EnergyOverload * 100) + "/"+MaxOverload*100+"% overload)\n" : "");
         }
 
         Color EnergyDemandColor()
         {
-            if (AvailableEnergy<MinEnergyDemand) return Color.Red;
-            if (AvailableEnergy < MinEnergyDemand*1.2f) return Color.Yellow;
+            if (AvailableEnergy < MinEnergyDemand) return Color.Red;
+            if (AvailableEnergy < MinEnergyDemand * 1.2f) return Color.Yellow;
             if (AvailableEnergy > MinEnergyDemand * 2) return Color.Green;
             return Color.White;
         }
+
+        Color CharacteristicsColor()
+        {
+            if (HasCharacteristic(Properties.OverwriteOff)) return Color.DimGray;
+            if (HasCharacteristic(Properties.OverwriteOn)) return Color.GreenYellow;
+            if (HasCharacteristic(Properties.UserActivated)) return Color.Yellow;
+            if (HasCharacteristic(Properties.Fallback)) return Color.Tomato;
+            if (HasCharacteristic(Properties.Primary)) return Color.Orange;
+
+            return Color.White;
+        }
+
+        public virtual void DepowerSubsystem()
+        {
+            Parant.AssignedEnergy -= AvailableEnergy;
+            AvailableEnergy = 0;
+        }
+        public virtual void PowerSubsystem()
+        {
+            if (AvailableEnergy >= MinEnergyDemand) return;
+            if (Parant.CurrentAvailableEnergy < MinEnergyDemand) return;
+            Parant.AssignedEnergy += MinEnergyDemand;
+            AvailableEnergy = MinEnergyDemand;
+        }
+        public virtual void OverloadSubsystem(float by)
+        {
+            float totalEnergy = MinEnergyDemand * by;
+            float requestedEnergy = totalEnergy - AvailableEnergy;
+
+            if (requestedEnergy > Parant.CurrentAvailableEnergy || requestedEnergy <= 0) return;
+            Parant.AssignedEnergy += requestedEnergy;
+            AvailableEnergy = totalEnergy;
+        }
+
+        public virtual void Update(GameTime gameTime) { }
     }
 
     public interface IDamage
     {
+        /// <summary>
+        /// Transfers an amount of damage on this subsystem.
+        /// </summary>
+        /// <param name="amountOfDamage"></param>
         void Damage(float amountOfDamage);
+        /// <summary>
+        /// Measures the ability to take damage without being destroyed. 
+        /// E.g.: The damage suppression of a hull is it's maxHullPoints;
+        /// the damage suppression of a shield is e.g. maxShieldPower*shieldRegenerationPerSecond
+        /// as a shield damage can be regenerated as opposed to hull damage.
+        /// </summary>
+        /// <returns></returns>
+        float DamageSuppression();
     }
 }

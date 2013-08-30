@@ -45,12 +45,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EnergyDistributor.cs" />
+    <Compile Include="Engines.cs" />
     <Compile Include="Hull.cs" />
+    <Compile Include="InfoModule.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Shields.cs" />
     <Compile Include="Subsystem.cs" />
+    <Compile Include="Weapon.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -59,6 +63,10 @@
     <ProjectReference Include="..\..\..\x45game\X45Game\X45Game.csproj">
       <Project>{980d56e7-9844-48a8-b789-a1abc25a1c13}</Project>
       <Name>X45Game</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TrippingOctoNemesis\TrippingOctoNemesis\TrippingOctoNemesis.csproj">
+      <Project>{668e256b-3a83-47ff-a555-5f20e3b7e693}</Project>
+      <Name>TrippingOctoNemesis</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
