@@ -25,12 +25,16 @@ namespace NewSpaceShipSystem
         public float AssignedEnergy;
         public float CurrentAvailableEnergy { get { return MaxAvailableEnergy - AssignedEnergy; } }
 
+        public Vector2 Position;
+        public float Heading;
+
 
         public void AddSubsystem(Subsystem item)
         {
             Subsystems.Add(item);
             Subsystems.Sort(new Comparison<Subsystem>((p, q) => q.Priority - p.Priority));//high priority first
         }
+
 
         public Interface FindSubsystem<Interface>(int maxPriority=int.MaxValue)
             where Interface: class
@@ -62,6 +66,12 @@ namespace NewSpaceShipSystem
         public void Destroy(string reason)
         {
             DeleteFlag = true;
+        }
+
+
+        public void Update(GameTime gameTime)
+        {
+            Subsystems.ForEach(p => p.Update(gameTime));
         }
     }
 }

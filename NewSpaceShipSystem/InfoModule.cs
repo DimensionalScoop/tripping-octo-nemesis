@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using X45Game.Drawing;
 
 namespace NewSpaceShipSystem
 {
     public enum ShipClasses { None, Fighter, Carrier, Supporter, Transporter, Special, Missile }
 
-    public class InfoModule:Subsystem,IInfo
+    public class InfoModule:Subsystem
     {
         public ShipClasses ShipClass;
         /// <summary>
@@ -31,6 +32,10 @@ namespace NewSpaceShipSystem
                 return returnValue;
             }
         }
+        /// <summary>
+        /// The ship icon displayed in the carrier ui.
+        /// </summary>
+        public Sprite Icon = new Sprite("i\\inc-point");
 
 
         public InfoModule(ShipClasses shipClass,float dcModifier=0)
@@ -39,11 +44,6 @@ namespace NewSpaceShipSystem
             ShipClass = shipClass;
             DCModifier = dcModifier;
         }
-
-    }
-
-    interface IInfo
-    {
 
     }
 }

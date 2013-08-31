@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,34 +7,41 @@ using System.Threading.Tasks;
 
 namespace NewSpaceShipSystem
 {
-    public class Engines:Subsystem,IGenerator,IMovementProvider
+    public class Engines:Subsystem,IGenerator,IEngine
     {
-        public float EnergyGeneration;
+        #region IGenerator
+        public float EnergyGeneration=100;
         float IGenerator.EnergyGeneration
         {
             get { return EnergyGeneration; }
         }
+        #endregion
 
-        public bool Online;
 
         public Engines()
             : base(5, 5, "Engines")
         {
 
         }
-    }
 
-    interface IMovementProvider
-    {
+        public override void Update(GameTime gameTime)
+        {
 
-    }
 
-    interface IGenerator
-    {
-        /// <summary>
-        /// How much energy this systems makes available to the spaceship.
-        /// </summary>
-        /// <returns></returns>
-        float EnergyGeneration { get; }
+            base.Update(gameTime);
+        }
+
+
+
+
+        public float MinSpeed
+        {
+            get { throw new NotImplementedException(); }
+        }
+
+        public float MaxSpeed
+        {
+            get { throw new NotImplementedException(); }
+        }
     }
 }

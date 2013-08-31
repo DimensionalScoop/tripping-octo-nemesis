@@ -9,7 +9,7 @@ namespace NewSpaceShipSystem
 {
     public class EnergyDistributor:Subsystem
     {
-        public enum Techniques { Normal, Aggressive, Defensive, Fast }
+        public enum Techniques { Normal, Aggressive, Defensive, Speed }
         public Techniques Technique;
 
         public EnergyDistributor()
@@ -18,7 +18,8 @@ namespace NewSpaceShipSystem
             StatusReport.Write(() => "Distribution technique: " + Enum.GetName(typeof(Techniques), Technique) + "\n");
             StatusReport.Write(() => "Unused energy: " + Parant.CurrentAvailableEnergy + "/" + Parant.MaxAvailableEnergy + "e/s");
             StatusReport.Write(() => " (" + (int)(Parant.AssignedEnergy / Parant.MaxAvailableEnergy * 100) + " % efficiency) ");
-            StatusReport.Write(()=>
+            StatusReport.AddBarGraph(15, () => Parant.CurrentAvailableEnergy / Parant.MaxAvailableEnergy, () => Color.Yellow, ()=>Color.CornflowerBlue);
+            StatusReport.Write("\n");
         }
 
         public override void Update(GameTime gameTime)
@@ -37,7 +38,7 @@ namespace NewSpaceShipSystem
             var overwriteOn = all.FindAll(p => p.HasCharacteristic(Properties.OverwriteOn));
             others.RemoveAll(p => p.HasCharacteristic(Properties.OverwriteOn));
 
-            var engines = others.FindAll(p => p is IMovementProvider);
+            var engines = others.FindAll(p => p is IEngine);
             var weapons = others.FindAll(p => p is IWeapon);
             var shields = others.FindAll(p => p is IDamage);
 
@@ -104,7 +105,7 @@ namespace NewSpaceShipSystem
                         weapons.ForEach(p => p.PowerSubsystem());
                     } break;
 
-                case Techniques.Fast:
+                case Techniques.Speed:
                     {
                         engines.ForEach(p => p.PowerSubsystem());
                         shields.ForEach(p => p.PowerSubsystem());

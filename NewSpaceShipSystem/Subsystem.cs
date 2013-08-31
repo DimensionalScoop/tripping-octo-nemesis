@@ -55,17 +55,25 @@ namespace NewSpaceShipSystem
 
         protected readonly Main Parant;
 
-        public Subsystem(int priority, int importance, string name, int MaxOverload=1)
+        public Subsystem(int priority, int importance, string name, int maxOverload=1)
         {
             Priority = priority;
             Importance = importance;
             Name = name;
+            MaxOverload = maxOverload;
             StatusReport = new ExtendedString();
-            StatusReport.Write(()=>name + " status report\n",CharacteristicsColor);
+
+            InitStatusReport();
+        }
+
+        protected void InitStatusReport()
+        {
+            StatusReport.Clear();
+            StatusReport.Write(() => Name + " status report\n", CharacteristicsColor);
 
             StatusReport.Write(() => MinEnergyDemand != 0 ? "Energy: " : "");
             StatusReport.Write(() => MinEnergyDemand != 0 ? "" + (int)AvailableEnergy : "", EnergyDemandColor);
-            StatusReport.Write(() => MinEnergyDemand != 0 ? "/" + MinEnergyDemand + " (" + (int)(EnergyOverload * 100) + "/"+MaxOverload*100+"% overload)\n" : "");
+            StatusReport.Write(() => MinEnergyDemand != 0 ? "/" + MinEnergyDemand + " (" + (int)(EnergyOverload * 100) + "/" + MaxOverload * 100 + "% overload)\n" : "");
         }
 
         Color EnergyDemandColor()
@@ -110,22 +118,5 @@ namespace NewSpaceShipSystem
         }
 
         public virtual void Update(GameTime gameTime) { }
-    }
-
-    public interface IDamage
-    {
-        /// <summary>
-        /// Transfers an amount of damage on this subsystem.
-        /// </summary>
-        /// <param name="amountOfDamage"></param>
-        void Damage(float amountOfDamage);
-        /// <summary>
-        /// Measures the ability to take damage without being destroyed. 
-        /// E.g.: The damage suppression of a hull is it's maxHullPoints;
-        /// the damage suppression of a shield is e.g. maxShieldPower*shieldRegenerationPerSecond
-        /// as a shield damage can be regenerated as opposed to hull damage.
-        /// </summary>
-        /// <returns></returns>
-        float DamageSuppression();
     }
 }
