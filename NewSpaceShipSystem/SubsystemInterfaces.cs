@@ -37,7 +37,8 @@ namespace NewSpaceShipSystem
     {
         float MinSpeed { get; }
         float MaxSpeed{get;}
-
+        float MaxTurnSpeed { get; }
+        float EngineAcceleration { get; }
     }
 
     interface IStorage

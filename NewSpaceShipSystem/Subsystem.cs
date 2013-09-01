@@ -46,6 +46,7 @@ namespace NewSpaceShipSystem
         public readonly int Importance;
         public readonly ExtendedString StatusReport;
         public readonly float MaxOverload;
+        public bool Online = true;
 
         public float AvailableEnergy;
         public float MinEnergyDemand;
@@ -99,6 +100,7 @@ namespace NewSpaceShipSystem
         {
             Parant.AssignedEnergy -= AvailableEnergy;
             AvailableEnergy = 0;
+            if (MinEnergyDemand > 0) Online = false;
         }
         public virtual void PowerSubsystem()
         {
@@ -106,6 +108,7 @@ namespace NewSpaceShipSystem
             if (Parant.CurrentAvailableEnergy < MinEnergyDemand) return;
             Parant.AssignedEnergy += MinEnergyDemand;
             AvailableEnergy = MinEnergyDemand;
+            if (MinEnergyDemand > 0) Online = true;
         }
         public virtual void OverloadSubsystem(float by)
         {

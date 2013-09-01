@@ -71,7 +71,7 @@ namespace NewSpaceShipSystem
 
         public void Update(GameTime gameTime)
         {
-            Subsystems.ForEach(p => p.Update(gameTime));
+            Subsystems.FindAll(p=>p.Online).ForEach(p =>p.Update(gameTime));
         }
     }
 }
