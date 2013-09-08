@@ -85,6 +85,9 @@
     <NoWin32Manifest>true</NoWin32Manifest>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="LzmaSharp">
+      <HintPath>..\..\..\..\..\Nuklex-xna-4.0-x86\LzmaSharp.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Xna.Framework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
       <Private>False</Private>
     </Reference>
@@ -115,6 +118,58 @@
     <Reference Include="mscorlib">
       <Private>False</Private>
     </Reference>
+    <Reference Include="NMock.StrongNamed">
+      <HintPath>..\..\..\..\..\Nuklex-xna-4.0-x86\NMock.StrongNamed.dll</HintPath>
+    </Reference>
+    <Reference Include="Nuclex.Audio">
+      <HintPath>..\..\..\..\..\Nuklex-xna-4.0-x86\Nuclex.Audio.dll</HintPath>
+    </Reference>
+    <Reference Include="Nuclex.Fonts">
+      <HintPath>..\..\..\..\..\Nuklex-xna-4.0-x86\Nuclex.Fonts.dll</HintPath>
+    </Reference>
+    <Reference Include="Nuclex.Fonts.Content.TrueTypeImporter">
+      <HintPath>..\..\..\..\..\Nuklex-xna-4.0-x86\Nuclex.Fonts.Content.TrueTypeImporter.dll</HintPath>
+    </Reference>
+    <Reference Include="Nuclex.Game">
+      <HintPath>..\..\..\..\..\Nuklex-xna-4.0-x86\Nuclex.Game.dll</HintPath>
+    </Reference>
+    <Reference Include="Nuclex.Geometry">
+      <HintPath>..\..\..\..\..\Nuklex-xna-4.0-x86\Nuclex.Geometry.dll</HintPath>
+    </Reference>
+    <Reference Include="Nuclex.Graphics">
+      <HintPath>..\..\..\..\..\Nuklex-xna-4.0-x86\Nuclex.Graphics.dll</HintPath>
+    </Reference>
+    <Reference Include="Nuclex.Graphics.SpecialEffects">
+      <HintPath>..\..\..\..\..\Nuklex-xna-4.0-x86\Nuclex.Graphics.SpecialEffects.dll</HintPath>
+    </Reference>
+    <Reference Include="Nuclex.Input, Version=4.0.0.0, Culture=neutral, PublicKeyToken=96bb577564343f16, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\Nuklex-xna-4.0-x86\Nuclex.Input.dll</HintPath>
+    </Reference>
+    <Reference Include="Nuclex.Math">
+      <HintPath>..\..\..\..\..\Nuklex-xna-4.0-x86\Nuclex.Math.dll</HintPath>
+    </Reference>
+    <Reference Include="Nuclex.Networking">
+      <HintPath>..\..\..\..\..\Nuklex-xna-4.0-x86\Nuclex.Networking.dll</HintPath>
+    </Reference>
+    <Reference Include="Nuclex.Support">
+      <HintPath>..\..\..\..\..\Nuklex-xna-4.0-x86\Nuclex.Support.dll</HintPath>
+    </Reference>
+    <Reference Include="Nuclex.Testing.Xna">
+      <HintPath>..\..\..\..\..\Nuklex-xna-4.0-x86\Nuclex.Testing.Xna.dll</HintPath>
+    </Reference>
+    <Reference Include="Nuclex.UserInterface">
+      <HintPath>..\..\..\..\..\Nuklex-xna-4.0-x86\Nuclex.UserInterface.dll</HintPath>
+    </Reference>
+    <Reference Include="Nuclex.Windows.Forms">
+      <HintPath>..\..\..\..\..\Nuklex-xna-4.0-x86\Nuclex.Windows.Forms.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.framework">
+      <HintPath>..\..\..\..\..\Nuklex-xna-4.0-x86\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="SlimDX.DirectInput">
+      <HintPath>..\..\..\..\..\Nuklex-xna-4.0-x86\SlimDX.DirectInput.dll</HintPath>
+    </Reference>
     <Reference Include="System">
       <Private>False</Private>
     </Reference>
@@ -134,10 +189,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BuildinExtensions\Ships\CapshipMissile.cs" />
-    <Compile Include="BuildinExtensions\Ships\Predator.cs" />
-    <Compile Include="BuildinExtensions\Weapons\DummyWeapon.cs" />
-    <Compile Include="BuildinExtensions\Weapons\Laser.cs" />
+    <Compile Include="BuildinExtensions\Ships\Airstrike.cs" />
+    <Compile Include="BuildinExtensions\Ships\Carrier.cs" />
     <Compile Include="Code\Communicator\Character.cs" />
     <Compile Include="Code\Communicator\Speech.cs" />
     <Compile Include="Code\Communicator\TextInterface.cs" />
@@ -156,6 +209,24 @@
     <Compile Include="Code\Fraction\ControlKeySettings.cs" />
     <Compile Include="Code\Main\GameControl.cs" />
     <Compile Include="BuildinExtensions\Maps\TestMap.cs" />
+    <Compile Include="Code\NewSpaceShip\Autopilot.cs" />
+    <Compile Include="Code\NewSpaceShip\EnergyDistributor.cs" />
+    <Compile Include="Code\NewSpaceShip\EngineDrawer.cs" />
+    <Compile Include="Code\NewSpaceShip\Engines.cs" />
+    <Compile Include="Code\NewSpaceShip\Gear.cs" />
+    <Compile Include="Code\NewSpaceShip\Hull.cs" />
+    <Compile Include="Code\NewSpaceShip\HullDrawer.cs" />
+    <Compile Include="Code\NewSpaceShip\InfoModule.cs" />
+    <Compile Include="Code\NewSpaceShip\Item.cs" />
+    <Compile Include="Code\NewSpaceShip\CarrierPilot.cs" />
+    <Compile Include="Code\NewSpaceShip\LandingSlot.cs" />
+    <Compile Include="Code\NewSpaceShip\SpaceShip.cs" />
+    <Compile Include="Code\NewSpaceShip\Shields.cs" />
+    <Compile Include="Code\NewSpaceShip\Storage.cs" />
+    <Compile Include="Code\NewSpaceShip\Subsystem.cs" />
+    <Compile Include="Code\NewSpaceShip\SubsystemInterfaces.cs" />
+    <Compile Include="Code\NewSpaceShip\TargetingAI.cs" />
+    <Compile Include="Code\NewSpaceShip\Weapon.cs" />
     <Compile Include="Code\Particles\Blast.cs" />
     <Compile Include="Code\Particles\DestroyedShip.cs" />
     <Compile Include="Code\Particles\Explosion.cs" />
@@ -164,23 +235,11 @@
     <Compile Include="Code\Particles\SmallBlast.cs" />
     <Compile Include="Code\Particles\PartialExplosion.cs" />
     <Compile Include="Code\Particles\Text.cs" />
-    <Compile Include="Code\SpaceShip\DeploySlots.cs" />
     <Compile Include="Code\Main\Hud.cs" />
-    <Compile Include="BuildinExtensions\Ships\D1Enemy.cs" />
     <Compile Include="Code\Main\Game1.cs" />
     <Compile Include="Code\Fraction\Fraction.cs" />
-    <Compile Include="BuildinExtensions\Ships\Missile.cs" />
-    <Compile Include="BuildinExtensions\Ships\Carrier.cs" />
-    <Compile Include="BuildinExtensions\Ships\OctoJelly.cs" />
+    <Compile Include="BuildinExtensions\Ships\Carrier[old].cs" />
     <Compile Include="Code\Fraction\Player.cs" />
-    <Compile Include="Code\SpaceShip\SpaceShip-CarrierBehavior.cs" />
-    <Compile Include="Code\SpaceShip\SpaceShip-Draw.cs" />
-    <Compile Include="Code\SpaceShip\SpaceShip-KI-and-Targeting.cs" />
-    <Compile Include="Code\SpaceShip\SpaceShip-Movement.cs" />
-    <Compile Include="Code\SpaceShip\SpaceShip-Properties.cs" />
-    <Compile Include="Code\SpaceShip\SpaceShip-Update.cs" />
-    <Compile Include="Code\SpaceShip\SpaceShip-Base.cs" />
-    <Compile Include="Code\SpaceShip\Weapon.cs" />
     <Compile Include="Code\Misc\DrawOrder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Code\Main\Program.cs" />
@@ -226,6 +285,7 @@
     <None Include="TrippingOctoNemesis_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="BuildinExtensions\Weapons\" />
     <Folder Include="Extensions\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

@@ -61,6 +61,7 @@
     <Compile Include="Storage.cs" />
     <Compile Include="Subsystem.cs" />
     <Compile Include="SubsystemInterfaces.cs" />
+    <Compile Include="TargetingAI.cs" />
     <Compile Include="Weapon.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -1,24 +1,15 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NewSpaceShipSystem
+namespace TrippingOctoNemesis.SPS
 {
     public enum GearConditions { Landed, Landing, Launching, Airborne }
-    /// <summary>
-    /// Steers spaceship during landing and takeoff. Also manages ship while landed.
-    /// </summary>
-    public interface IGear
-    {
-        GearConditions Status { get; }
-        void Land(ILandingSlot location);
-        void Launch();
-    }
-
-
+    
     /// <summary>
     /// Steers spaceship during flight.
     /// </summary>
@@ -32,6 +23,12 @@ namespace NewSpaceShipSystem
 
     }
 
+    public interface IDrawable
+    {
+        void Show();
+        void Hide();
+        void Draw(GameTime gameTime, SpriteBatch spriteBatch);
+    }
 
     public interface IEngine
     {
@@ -66,9 +63,21 @@ namespace NewSpaceShipSystem
     /// </summary>
     public interface ILandingSlot
     {
-
+        int Capacity { get; }
+        bool HasCapacityLeft { get; }
+        Vector2 ReceiveLandingSlot(SpaceShip ship);
+        Vector2 LeaveLandingSlot(SpaceShip ship);
     }
 
+    /// <summary>
+    /// Steers spaceship during landing and takeoff. Also manages ship while landed.
+    /// </summary>
+    public interface IGear
+    {
+        GearConditions Status { get; }
+        void Land(ILandingSlot location);
+        void Launch();
+    }
 
     /// <summary>
     /// Absorbs and manages damage.

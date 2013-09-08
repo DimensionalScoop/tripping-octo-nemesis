@@ -4,8 +4,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
+using X45Game;
+using X45Game.Drawing;
+using X45Game.Effect;
+using X45Game.Input;
+using X45Game.Extensions;
 
-namespace NewSpaceShipSystem
+namespace TrippingOctoNemesis.SPS
 {
     public class Engines:Subsystem,IGenerator,IEngine
     {
@@ -75,6 +83,8 @@ namespace NewSpaceShipSystem
                     }
                     consumption-=storage[i].GetItem(Item.GetFuel(consumption)).Amount;
                 }
+
+                Parant.Position=Parant.Position.Transform(Parant.Heading, CurrentSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds);
             }
 
             base.Update(gameTime);

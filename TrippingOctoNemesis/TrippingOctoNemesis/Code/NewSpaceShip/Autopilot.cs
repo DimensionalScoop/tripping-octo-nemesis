@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NewSpaceShipSystem
+namespace TrippingOctoNemesis.SPS
 {
     public class Autopilot:Subsystem,IPilot
     {

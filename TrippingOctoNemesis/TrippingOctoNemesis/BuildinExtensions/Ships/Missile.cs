@@ -12,7 +12,7 @@ using X45Game.Input;
 using X45Game.Extensions;
 using System.Diagnostics;
 
-namespace TrippingOctoNemesis
+namespace TrippingOctoNemesis.SPS
 {
     public abstract class Missile : SpaceShip
     {

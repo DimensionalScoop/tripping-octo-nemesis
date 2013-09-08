@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NewSpaceShipSystem
+namespace TrippingOctoNemesis.SPS
 {
-    public class Autopilot:Subsystem,IPilot
+    public class CarrierPilot:Subsystem,IPilot
     {
         public virtual void SetTarget(Func<Vector2> position)
         {
@@ -67,13 +67,12 @@ namespace NewSpaceShipSystem
         const float SlowDownDelta = 50;
 
 
-        public Autopilot()
-            : base(2, 10, "Auto pilot")
+        public CarrierPilot()
+            : base(2, 0, "Semi-automatic carrier pilot")
         {
             StatusReport.Write(() => "Velocity: " + ActualSpeed.ToString("0.0") + "px/s (" + TargetSpeed.ToString("0.0") + "px/s ) " + MinSpeed.ToString("0.0") + "/" + MaxSpeed.ToString("0.0") + "px/s\n");
-            StatusReport.Write(() => "Heading: " + (int)MathHelper.ToDegrees(Parant.Heading) + "° (" + (int)MathHelper.ToDegrees(targetHeading)+"° "+((int)MathHelper.ToDegrees(turnAcceleration)).ToString("+") + "°/s)\n");
-            StatusReport.Write(() => "Distance to target: " + (int)DistanceToTarget + "px\n");
-            StatusReport.Write(() => "Estimated time to target: " + (IsApproachingTarget?(int)(DistanceToTarget/TargetSpeed) + "s\n":"-/\n"));
+
+            TargetSpeed = MinSpeed;
         }
 
 
@@ -82,7 +81,6 @@ namespace NewSpaceShipSystem
             GetEngineSpeed();
             CorrectSpeed(gameTime);
             CalculateEngineAcceleration(gameTime);
-            CorrectHeading(gameTime);
 
             base.Update(gameTime);
         }
@@ -109,29 +107,6 @@ namespace NewSpaceShipSystem
             MaxTurnSpeed = weightedTurnSpeeds / MaxSpeed;
         }
 
-        protected void CorrectHeading(GameTime gameTime)
-        {
-            float currentHeading = MathHelper.WrapAngle(Parant.Heading);
-            targetHeading = MathHelper.WrapAngle((float)Math.Atan2((Target - Parant.Position).Y, (Target - Parant.Position).X));
-            float difference = MathHelper.WrapAngle(targetHeading - currentHeading);
-
-            float turnSpeed=MaxTurnSpeed*(float)gameTime.ElapsedGameTime.TotalSeconds;
-
-            if (Math.Abs(difference) < turnSpeed)
-            {
-                Parant.Heading = targetHeading;
-                turnAcceleration = 0;
-                return;
-            }
-
-            if (MathHelper.WrapAngle(currentHeading - targetHeading - turnSpeed) < difference)
-                Parant.Heading -= turnSpeed;
-            else
-                Parant.Heading += turnSpeed;
-
-            turnAcceleration = turnSpeed;
-        }
-
         protected void CalculateEngineAcceleration(GameTime gameTime)
         {
             if (TargetSpeed != ActualSpeed)
@@ -147,15 +122,17 @@ namespace NewSpaceShipSystem
             }
         }
 
-        protected void CorrectSpeed(GameTime gameTime)
+        protected void CorrectHeading(GameTime gameTime)
         {
-            if (IsApproachingTarget)
-                if (DistanceToTarget < SlowDownDelta + RadiusOfInfluence)
-                    TargetSpeed = CurrentMinSpeed;
+            if (Target.X != Parant.Position.X)
+            {
+                float speed = (MaxSpeed - ActualSpeed)*(float)gameTime.ElapsedGameTime.TotalSeconds;
+                if (Math.Abs(Target.X - Parant.Position.X) <= speed) Parant.Position.X = Target.X;
+                else if (Target.X - Parant.Position.X - speed < Target.X - Parant.Position.X + speed)
+                    Parant.Position.X += speed;
                 else
-                    TargetSpeed = CurrentMaxSpeed;
-            else
-                TargetSpeed = CurrentMaxSpeed;
+                    Parant.Position.X -= speed;
+            }
         }
     }
 }

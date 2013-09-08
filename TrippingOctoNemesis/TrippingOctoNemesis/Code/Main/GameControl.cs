@@ -35,6 +35,9 @@ namespace TrippingOctoNemesis
         ParticleProvider particles;
         public static StarField Stars;
 
+        public static PrimitiveDraw FrontPlotter;
+        public static PrimitiveDraw BackPlotter;
+
         DirectoryInfo path = new DirectoryInfo(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location));
 
         
@@ -49,6 +52,8 @@ namespace TrippingOctoNemesis
             input = new InputProvider(game);
             particles = new ParticleProvider();
             Stars = new StarField(game, 2, 1, 0.5f);
+            FrontPlotter = new PrimitiveDraw(game);
+            BackPlotter = new PrimitiveDraw(game);
 
             Hud = new Hud(game);
             text = new TextInterface(game, new Vector2(1360, 730));
@@ -64,6 +69,8 @@ namespace TrippingOctoNemesis
             InitExtensions(Game);
             InitFractions();
             InitDebug();
+
+            FrontPlotter.SetCamera(
 
             base.LoadContent();
         }

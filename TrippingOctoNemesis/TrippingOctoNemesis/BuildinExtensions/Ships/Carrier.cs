@@ -2,60 +2,44 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using TrippingOctoNemesis.SPS;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using X45Game;
 using X45Game.Drawing;
+using X45Game.Effect;
 using X45Game.Input;
 using X45Game.Extensions;
 
-namespace TrippingOctoNemesis
+namespace TrippingOctoNemesis.BuildinExtensions.Ships
 {
     public class Carrier:SpaceShip
     {
-        public DeploySlots[] Slots = new DeploySlots[4];
-        public Vector2 CursorPosition;
-        //LADY ESMERELDA THE NECROMANCER QUEEN OF THE POORLY LIT LANDS
-        public float Fuel = 100;
-        public float MaxFuel = 100;
-        public float FuelConsumptionPerSecond = 1;
-        public float FuelSpeed = 100;
-        
-
-        public Carrier(Hud hud, Fraction fraction)
+        public Carrier(Fraction fraction)
             : base(fraction)
         {
-            Sprite = new SpriteSheet("s\\mothership");
-            Speed = hud.CameraSpeed.Y;
-            Angle = -MathHelper.PiOver2;
+            AddSubsystem(new Hull(80));
+            AddSubsystem(new Shields(5f));
+            AddSubsystem(new EnergyDistributor());
+            AddSubsystem(new HullDrawer() { Sprite = new SpriteSheet("s\\mothership") });
+            AddSubsystem(new EngineDrawer());
+            AddSubsystem(new InfoModule(ShipClasses.Carrier));
+            AddSubsystem(new Storage(10));
+            AddSubsystem(new CarrierPilot());
+            AddSubsystem(new Gear());
+            AddSubsystem(new LandingSlot("Carrier Landing Bay"));
+            AddSubsystem(new Engines());
 
-            SetEngines(150,
-            new Vector2(-Sprite.TextureOrigin.Y + 2, -18),
-            new Vector2(-Sprite.TextureOrigin.Y + 2, 18),
-            new Vector2(-Sprite.TextureOrigin.Y + 2, -16),
-            new Vector2(-Sprite.TextureOrigin.Y + 2, 16));
-            
-            Hitpoints = 100;
-            MaxHitpoints = 100;
-            IntPosition = true;
-            Status = Conditions.Airborne;
-            additionalLayerDepth = -0.02f;
-            Weapon = null;
-            Carrier = this;
-            Class = ShipClasses.Carrier;
-            Ki = new SpaceShip.NoScreenMovement();
-        }
+            var hullDrawer=FindSubsystem<HullDrawer>();
+            var engineDrawer = FindSubsystem<EngineDrawer>();
+            engineDrawer.Trails.AddLast(new Trail() { Position = new Vector2(-18, hullDrawer.Sprite.TextureOrigin.Y - 2) });
+            engineDrawer.Trails.AddLast(new Trail() { Position = new Vector2(-16, hullDrawer.Sprite.TextureOrigin.Y - 2) });
+            engineDrawer.Trails.AddLast(new Trail() { Position = new Vector2(18, hullDrawer.Sprite.TextureOrigin.Y - 2) });
+            engineDrawer.Trails.AddLast(new Trail() { Position = new Vector2(16, hullDrawer.Sprite.TextureOrigin.Y - 2) });
 
-        public override void LongUpdate(TimeSpan elapsedTime)
-        {
-            base.LongUpdate(elapsedTime);
-
-            if (Fuel == 0)
-            {
-                FuelSpeed = 25;
-                SetEngines(50);
-            }
+            hullDrawer.IntPosition = true;
+            hullDrawer.AdditionalLayerDepth = -0.02f;
         }
     }
 }
